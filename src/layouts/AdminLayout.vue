@@ -1,7 +1,7 @@
 <template>
     <div class="flex">
         <Sidebar :top-menu-options="topMenuOptions" :bottom-menu-options="bottomMenuOptions" :on-menu-select="handleMenuClick" />
-        <main class="flex-grow h-screen overflow-y-auto">
+        <main class="flex-grow h-screen overflow-y-auto px-4 sm:px-6 lg:px-8">
             <router-view />
         </main>
     </div>
@@ -11,12 +11,9 @@
     import Sidebar from '@/components/common/Sidebar.vue';
     import  { DashboardFilled, BookFilled, PeopleAltFilled, HomeFilled, PersonFilled, LogOutFilled } from '@vicons/material';
     import { useRouter } from 'vue-router';
+    import renderIcon from '@/utils/RenderIcon.js';
 
     const router = useRouter();
-
-    function renderIcon(icon) {
-        return icon;
-    }
 
     const topMenuOptions = [
         { label: 'Panel General', key: 'dashboard', icon: renderIcon(DashboardFilled) },
