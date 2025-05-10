@@ -31,9 +31,9 @@
             />
           </div>
           <div class="flex flex-col mt-10">
-            <button type="submit" class="bg-sky-800 rounded-sm text-white p-2" @click="login">Iniciar Sesión</button>
+            <button type="submit" class="cursor-pointer bg-sky-800 rounded-sm text-white p-2" @click="login">Iniciar Sesión</button>
             <br/>
-            <button type="button" class="text-blue-500">Olvide mi contraseña</button>
+            <button type="button" class="cursor-pointer text-blue-500">Olvide mi contraseña</button>
           </div>
         </form>
       </section>

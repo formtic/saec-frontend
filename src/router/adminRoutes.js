@@ -6,6 +6,10 @@ export default [
             {
                 path: "",
                 component: () => import("@/views/admin/AdminDashboard.vue")
+            },
+            {
+                path: "courses",
+                component:()=> import("@/views/evaluator/ListCourses.vue")
             }
         ]
     }
