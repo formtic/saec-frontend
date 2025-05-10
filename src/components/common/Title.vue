@@ -23,7 +23,7 @@
             <span v-if="index < breadcrumbs.length - 1">/</span>
           </template>
         </nav>
-        <h1 class="text-5xl font-bold text-[#0D5A79]">
+        <h1 class="text-4xl md:text-5xl font-bold text-[#0D5A79]">
           {{ title }}
         </h1>
       </div>
