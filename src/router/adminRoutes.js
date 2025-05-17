@@ -1,16 +1,28 @@
 export default [
-    {
-        path: "/admin",
-        component: () => import("@/layouts/AdminLayout.vue"),
+  {
+    path: "/admin",
+    component: () => import("@/layouts/AdminLayout.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("@/views/admin/AdminDashboard.vue"),
+      },
+      {
+        path: "courses",
+        component: () => import("@/views/evaluator/ViewListCourses.vue"),
         children: [
-            {
-                path: "",
-                component: () => import("@/views/admin/AdminDashboard.vue")
-            },
-            {
-                path: "courses",
-                component:()=> import("@/views/evaluator/ListCourses.vue")
-            }
-        ]
-    }
-]
+          {
+            path:"",
+            name:"course-list",
+            component: () => import("@/components/evaluator/ListCourses.vue")
+          },
+          {
+            path: "exams",
+            name: "course-exams",
+            component: () => import("@/views/evaluator/ListExams.vue"),
+          },
+        ],
+      },
+    ],
+  },
+];
