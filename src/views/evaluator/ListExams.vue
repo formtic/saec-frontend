@@ -1,11 +1,12 @@
 <template>
   <div>
     <!-- Título -->
-    <div class="grid grid-cols-2">
-        <button><component :is="ArrowBackFilled" class="md:w-15 md:h-15 w-10 h-10 text-neutral-900"/></button>
-      <p class="sm:text-[20px] lg:text-[55px] md:text-[40px] mt-4 text-sky-700">
+    <div class="grid grid-cols-3">
+        <button class="ml-3"><component :is="ArrowBackFilled" class="md:w-10 md:h-10 w-10 h-10 text-neutral-900"/></button>
+      <p class="text-center sm:text-[20px] lg:text-[55px] md:text-[40px] mt-4 text-sky-700">
         Lista de exámenes
       </p>
+
     </div>
 
     <!-- Filtros -->

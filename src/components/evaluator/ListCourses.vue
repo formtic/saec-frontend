@@ -2,7 +2,7 @@
   <div style="height: 100dvh">
     <div class="text-center">
       <p class="lg:text-[55px] md:text-[40px] text-[28px] mt-4 text-sky-700">
-        Lista de departamentos
+        Lista de cursos
       </p>
     </div>
 
@@ -15,7 +15,7 @@
     >
       <div class="text-center">
         <p class="lg:text-[35px] md:text-[30px] text-[25px] pr-5">
-          No hay departamentos disponibles o asignados
+          No hay cursos disponibles o asignados
         </p>
       </div>
       <div class="justify-center flex">
@@ -27,12 +27,12 @@
     </div>
     <div v-else class="grid p-4 justify-items-strech">
       <div class="md:my-8 mb-4 mx-5">
-        <label for="iptSearch">Buscar departamento:</label>
+        <label for="iptSearch">Buscar curso:</label>
         <input
           id="iptSearch"
           class="w-full md:text-xl text-sm py-1 pl-2 focus:border-sky-700 rounded-sm border-1"
           type="text"
-          placeholder="Nombre del departamento"
+          placeholder="Nombre del curso"
         />
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 gap-4 p-4">
@@ -54,11 +54,11 @@ import Spinner from '@/components/common/Spinner.vue';
 import { AllInboxFilled } from '@vicons/material';
 
 const cursos = ref([
-    {id: 1, name: 'Departamento 1'},
-    {id: 2, name: 'Departamento 2'},
-    {id: 3, name: 'Departamento 3'},
-    {id: 4, name: 'Departamento 4'},
-    {id: 5, name: 'Departamento 5'},
+    {id: 1, name: 'MTI-123.4 Manejo de troquelado'},
+    {id: 2, name: 'curso 2'},
+    {id: 3, name: 'curso 3'},
+    {id: 4, name: 'curso 4'},
+    {id: 5, name: 'curso 5'},
 ])
 
 const loading = ref(false)
