@@ -1,13 +1,17 @@
 <template>
-    <div class="flex">
-        <Sidebar :top-menu-options="topMenuOptions" :bottom-menu-options="bottomMenuOptions" :on-menu-select="handleMenuClick" />
-        <main class="flex-grow h-screen overflow-y-auto px-4 sm:px-6 lg:px-8">
-            <router-view />
-        </main>
+    <div class="flex flex-col h-screen">
+        <Navbar  :menuOptions="[...topMenuOptions, ...bottomMenuOptions]" :on-menu-click="handleMenuClick"/>
+        <div class="flex flex-grow overflow-hidden">
+            <Sidebar :top-menu-options="topMenuOptions" :bottom-menu-options="bottomMenuOptions" :on-menu-select="handleMenuClick" />
+            <main class="flex-grow h-screen overflow-y-auto px-4 sm:px-6 lg:px-8">
+                <router-view />
+            </main>
+        </div>
     </div>
 </template>
 
 <script setup>
+    import Navbar from '@/components/common/Navbar.vue';
     import Sidebar from '@/components/common/Sidebar.vue';
     import  { DashboardFilled, BookFilled, PeopleAltFilled, HomeFilled, PersonFilled, LogOutFilled } from '@vicons/material';
     import { useRouter } from 'vue-router';
