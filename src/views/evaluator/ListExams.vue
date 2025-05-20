@@ -10,9 +10,8 @@
       </p>
     </div>
 
-    <p class="text-center mb-4"><b>Curso:</b> {{ title }}</p>
+    <p class="ml-4 mb-4"><b>Curso:</b> {{ title }}</p>
 
-    <!-- Filtros -->
     <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 mb-6 gap-4 px-4">
       <div>
         <label for="iptSearchExam">Buscar examen:</label>
@@ -35,7 +34,7 @@
         />
       </div>
       <div>
-        <label for="iptSearchDate">Fecha:</label>
+        <label for="iptSearchDate">Ordernar por fecha:</label>
         <select
           id="iptSearchDate"
           v-model="sortOrder"
@@ -47,36 +46,31 @@
         </select>
       </div>
     </div>
+    
 
-    <!-- Tabs -->
-    <div class="flex justify-center gap-4 mb-2">
+    <div class="border rounded-lg border-sky-800 mx-2">
+      <div class="flex justify-center">
       <button
-        class="py-2 px-4 font-semibold rounded-t"
-        :class="selectedTab === 'sinCalificar' ? 'bg-sky-700 text-white' : 'bg-sky-200 text-sky-800'"
+        class="font-semibold rounded-tl-lg p-2 w-1/2"
+        :class="selectedTab === 'sinCalificar' ? 'bg-sky-700 text-white' : 'bg-sky-500/20 text-sky-800'"
         @click="selectedTab = 'sinCalificar'"
       >
         Exámenes sin calificar
       </button>
       <button
-        class="py-2 px-4 font-semibold rounded-t"
-        :class="selectedTab === 'calificados' ? 'bg-sky-700 text-white' : 'bg-sky-200 text-sky-800'"
+        class="font-semibold rounded-tr-lg p-2 w-1/2"
+        :class="selectedTab === 'calificados' ? 'bg-sky-700 text-white' : 'bg-sky-500/20 text-sky-800'"
         @click="selectedTab = 'calificados'"
       >
         Exámenes calificados
       </button>
     </div>
 
-    <!-- Contenedor Scrollable con Tabla simulada -->
-    <div class="border rounded-lg border-sky-800 mx-4">
-      <div class="h-4 bg-sky-700 rounded-t-lg"></div>
-
       <div class="relative p-4 overflow-x-auto max-h-[50vh] sm:overflow-x-hidden sm:overflow-y-auto">
-        <!-- Spinner -->
         <div v-if="loading" class="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 z-10">
           <Spinner />
         </div>
 
-        <!-- Mensaje si no hay exámenes -->
         <div
           v-else-if="filteredExams.length === 0"
           class="grid content-center gap-4 justify-center min-h-[20vh]"
@@ -89,7 +83,6 @@
           </div>
         </div>
 
-        <!-- Lista de exámenes -->
         <div v-else class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <CardExam
             v-for="exam in paginatedExams"
@@ -99,7 +92,6 @@
         </div>
       </div>
 
-      <!-- Paginador -->
       <div class="bg-sky-700 rounded-b-lg py-2 justify-center flex gap-2">
         <button
           class="px-3 py-1 rounded bg-sky-700 text-white hover:bg-sky-800 disabled:opacity-50"
@@ -137,8 +129,10 @@ import { ref, computed, onMounted } from 'vue';
 import { ArrowBackFilled, AllInboxFilled } from '@vicons/material';
 import Spinner from '@/components/common/Spinner.vue';
 import CardExam from '@/components/evaluator/CardExam.vue';
+import { useRoute, useRouter } from 'vue-router';
 
-const title = 'Curso de Ejemplo';
+const route = useRoute();
+const title = route.params.title;
 const loading = ref(false);
 const selectedTab = ref('sinCalificar');
 
@@ -147,7 +141,7 @@ const searchEmployee = ref('');
 const sortOrder = ref('');
 
 const currentPage = ref(1);
-const perPage = 6;
+const perPage = 8;
 
 // Simulación de datos
 const exams = ref([]);
@@ -156,11 +150,17 @@ function fetchExams() {
   loading.value = true;
   setTimeout(() => {
     exams.value = [
-      { id: 1, name: 'Examen A', employee: 'Juan', date: '2024-05-01', status: 'sinCalificar' },
-      { id: 2, name: 'Examen B', employee: 'Ana', date: '2024-05-05', status: 'calificados' },
-      { id: 3, name: 'Examen C', employee: 'Pedro', date: '2024-05-03', status: 'sinCalificar' },
-      { id: 4, name: 'Examen D', employee: 'Luis', date: '2024-04-28', status: 'calificados' },
-      // Agrega más para probar scroll/paginación
+      { id: 1, title: 'Examen A', employee: 'Juan', date: '2024-05-01', status: 'sinCalificar' },
+      { id: 2, title: 'Examen B', employee: 'Ana', date: '2024-05-05', status: 'calificados' },
+      { id: 3, title: 'Examen C', employee: 'Pedro', date: '2024-05-03', status: 'sinCalificar' },
+      { id: 4, title: 'Examen D', employee: 'Luis', date: '2024-04-28', status: 'calificados' },
+      { id: 5, title: 'MIT-123.07 Troquelado para mancuarnas', employee: 'Pedro', date: '2024-05-03', status: 'sinCalificar' },
+      { id: 6, title: 'Examen', employee: 'Pedro', date: '2024-05-03', status: 'sinCalificar' },
+      { id: 7, title: 'Examen', employee: 'Pedro', date: '2024-05-03', status: 'sinCalificar' },
+      { id: 8, title: 'Examen', employee: 'Pedro', date: '2024-05-03', status: 'sinCalificar' },
+      { id: 9, title: 'Examen', employee: 'Pedro', date: '2024-05-03', status: 'sinCalificar' },
+      { id: 10, title: 'Examen', employee: 'Pedro', date: '2024-05-03', status: 'sinCalificar' },
+      { id: 11, title: 'Examen', employee: 'Pedro', date: '2024-05-20', status: 'sinCalificar' },
     ];
     loading.value = false;
   }, 700);
@@ -168,8 +168,9 @@ function fetchExams() {
 
 onMounted(fetchExams);
 
+const router=useRouter();
 function goBack() {
-  window.history.back();
+  router.back();
 }
 
 // Filtrado, ordenamiento y paginación

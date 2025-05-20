@@ -19,18 +19,15 @@
         />
       </div>
 
-      <!-- Tabla simulada con scroll y spinner interno -->
+      <!-- Tabla de contenido-->
       <div class="border rounded-lg border-sky-800">
         <div class="h-4 bg-sky-700 rounded-t-lg"></div>
 
-        <!-- CONTENEDOR SCROLLABLE DE LA "TABLA" -->
         <div class="relative p-4 overflow-x-auto max-h-[50vh] sm:overflow-x-hidden sm:overflow-y-auto">
-          <!-- SPINNER -->
           <div v-if="loading" class="absolute inset-0 flex justify-center items-center bg-white bg-opacity-70 z-10">
             <Spinner />
           </div>
 
-          <!-- MENSAJE CUANDO NO HAY CURSOS -->
           <div v-else-if="cursos.length === 0" class="grid content-center gap-4 justify-center min-h-[20vh]">
             <p class="lg:text-[35px] md:text-[30px] text-[25px] pr-5 text-center">
               No hay cursos disponibles o asignados
@@ -43,7 +40,6 @@
             </div>
           </div>
 
-          <!-- CARDS DE CURSOS -->
           <div v-else class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             <CardCourse
               v-for="curso in cursos"
@@ -107,21 +103,19 @@ const pagination = ref({
 function fetchCursos(page = 1) {
   loading.value = true;
 
-  // Aquí llamarías a tu backend real
   setTimeout(() => {
-    // Ejemplo: el backend te regresa 5 cursos por página
     const todos = [
       { id: 1, name: "MTI-123.4 Manejo de troquelado" },
       { id: 2, name: "MLA-1234.34.96 Limpieza en area de montacarga" },
       { id: 3, name: "curso 3" },
       { id: 4, name: "curso 4" },
-      { id: 5, name: "curso 5" },
-      { id: 5, name: "curso 5" },
-      { id: 5, name: "curso 5" },
-      { id: 5, name: "curso 5" },
+      { id: 5, name: "curso 6" },
+      { id: 5, name: "curso 7" },
+      { id: 5, name: "curso 8" },
+      { id: 5, name: "curso 9" },
     ];
 
-    const perPage = 8;
+    const perPage = 6;
     const totalPages = Math.ceil(todos.length / perPage);
     const start = (page - 1) * perPage;
     const end = page * perPage;
@@ -139,6 +133,5 @@ function goToPage(page) {
   fetchCursos(page);
 }
 
-// Inicial
 fetchCursos();
 </script>

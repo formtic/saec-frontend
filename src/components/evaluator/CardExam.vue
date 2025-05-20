@@ -1,5 +1,5 @@
 <template>
-    <div @click="goToExam" class=" p-2 cursor-pointer border rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+    <div @click="goToExam(exam)" class=" p-2 cursor-pointer border rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
         <div class="mb-2">
             <p class="">{{ exam.title }}</p>
         </div>
@@ -17,7 +17,7 @@ defineProps({
 })
 
 const router = useRouter();
-function goToExam(){
-    
+function goToExam(exam){
+    console.log(exam.title);
 }
 </script>
