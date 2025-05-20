@@ -17,7 +17,7 @@ export default [
             component: () => import("@/components/evaluator/ListCourses.vue")
           },
           {
-            path: "exams",
+            path: "exams/:id/:title",
             name: "course-exams",
             component: () => import("@/views/evaluator/ListExams.vue"),
           },

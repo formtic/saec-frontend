@@ -1,5 +1,10 @@
 <template>
-  <aside :class="['bg-[#0D5A79] sticky top-0 flex flex-col transition-all duration-300 ease-in-out overscroll-none',isCollapsed ? 'w-16' : 'w-60']" style="height: 100dvh;">
+  <aside
+    :class="[ 
+      'bg-[#0D5A79] h-screen sticky top-0 hidden md:flex flex-col transition-all duration-300 ease-in-out',
+      isCollapsed ? 'w-16' : 'w-60'
+    ]"
+  >
     <div class="p-4">
       <img :src="logo" alt="Logo" class="w-2/4" v-if="!isCollapsed" />
       <img :src="logo" alt="Logo" class="w-8 mx-auto" v-else />
