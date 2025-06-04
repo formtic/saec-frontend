@@ -1,5 +1,9 @@
 <template>
     <div>
-        <h1>Lista de departamentos</h1>
+        <SimpleCardItem :title="'Departamento'"></SimpleCardItem>
     </div>
 </template>
+<script setup>
+import SimpleCardItem from '../../components/common/listable/SimpleCardItem.vue';
+
+</script>
