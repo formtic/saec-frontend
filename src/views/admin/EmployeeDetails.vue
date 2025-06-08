@@ -1,17 +1,38 @@
 <template>
     <div style="padding-left: 1rem; padding-right: 1rem;">
+
+        <!-- modal para cambiar contraseña -->
+         <n-modal v-model:show="showModalPassword" :icon="iconWarning" :mask-closable="false" preset="dialog" style="border-radius: 15px;" title="Recuperar contraseña">
+                <n-space vertical size="large">
+                    <n-p depth="3">Escribe la nueva contraseña del usuario</n-p>
+                    <n-form>
+                        <n-form-item label="Contraseña" required>
+                            <n-input type="password" placeholder="Ingrese la nueva contraseña"/>
+                        </n-form-item>
+                        <n-button type="info" style="width: 100%; border-radius: 10px;">Cambiar contraseña</n-button>
+                    </n-form>
+                </n-space>
+         </n-modal>
+
+        <!-- cabecera  -->
         <div class="admin-header">
-            <n-breadcrumb class="admin-breadcumb">
-                <n-breadcrumb-item @click="goBack">
-                    <n-icon :component="PeopleAltFilled" />
-                    Empleados
-                </n-breadcrumb-item>
-                <n-breadcrumb-item>
-                    <n-icon :component="TimelineFilled" />
-                    Record histórico
-                </n-breadcrumb-item>
-            </n-breadcrumb>
-            <h1 class="admin-title">Record Histórico</h1>
+            <n-grid cols="1 m:2 l:2" item-responsive responsive="screen">
+                <n-grid-item style="display: flex; align-items: center;">
+                    <n-breadcrumb class="admin-breadcumb">
+                        <n-breadcrumb-item @click="goBack">
+                            <n-icon :component="PeopleAltFilled" />
+                            Empleados
+                        </n-breadcrumb-item>
+                        <n-breadcrumb-item>
+                            <n-icon :component="TimelineFilled" />
+                            Record histórico
+                        </n-breadcrumb-item>
+                    </n-breadcrumb>
+                </n-grid-item>
+                <n-grid-item style="display: flex; justify-content: end;">
+                    <h1 class="admin-title">Record Histórico</h1>
+                </n-grid-item>
+            </n-grid>
         </div>
 
         <n-space vertical size="large" style="margin-bottom: 15px;">
@@ -31,8 +52,8 @@
                     <br/>
                     <n-space vertical>
                         <n-button type="info" style="width: 100%; border-radius: 10px;">Editar perfil</n-button>
-                        <n-button type='info' style="width: 100%; border-radius: 10px;">Actualizar contraseña</n-button>
-                        <n-button type="info" style="width: 100%; border-radius: 10px;">Suspender acceso</n-button>
+                        <n-button @click="showModalPassword=true" type="info" style="width: 100%; border-radius: 10px;">Actualizar contraseña</n-button>
+                        <n-button @click="handleSuspend" type="info" style="width: 100%; border-radius: 10px;">Suspender acceso</n-button>
                     </n-space>
                     <br/>
                     <n-space vertical style="border: 1px solid #0D5A79; padding: 10px; border-radius: 10px;">
@@ -58,16 +79,16 @@
                     </n-space>
                 </n-grid-item>
 
-                <n-grid-item span="1 m:4 l:4" style="margin-left: 2rem;">
+                <n-grid-item span="1 m:4 l:4" class="styleList">
                     <n-space vertical>
-                        <n-infinite-scroll style="height: 42rem">
+                        <n-infinite-scroll class="styleScrollInfinite">
                             <n-card v-for="exam in data" hoverable :bordered="false" class="styleCard">
                                 {{ exam.name }}
                             </n-card>
                         </n-infinite-scroll>
                     </n-space>
-                    <n-space style="background-color: #0D5A79; padding-top: 5px; padding-bottom: 5px;" justify="center">
-                        <n-pagination :page-count="8"/>
+                    <n-space class="stylePagination" justify="center">
+                        <n-pagination :page-count="8" :page-slot="5"/>
                     </n-space>
                 </n-grid-item>
             </n-grid>
@@ -77,9 +98,9 @@
 </template>
 
 <script scoped>
-import {defineComponent} from "vue";
-import {NBreadcrumb,NBreadcrumbItem,NIcon,NSpace,NLayout,NLayoutSider,NLayoutContent,NTag,NGrid, NGi, NGridItem, NButton, NFormItem, NInput, NSelect, NDatePicker, NInputGroup, NInfiniteScroll, NPagination} from "naive-ui";
-import { PeopleAltFilled,TimelineFilled,CheckFilled, SearchFilled, ExpandMoreFilled} from "@vicons/material";
+import {defineComponent,ref,h} from "vue";
+import {NBreadcrumb,NBreadcrumbItem,NIcon,NSpace,NLayout,NLayoutSider,NLayoutContent,NTag,NGrid, NGi, NGridItem, NButton, NFormItem, NInput, NSelect, NDatePicker, NInputGroup, NInfiniteScroll, NPagination, useDialog,useMessage, NCard, NModal, NForm, NP} from "naive-ui";
+import { PeopleAltFilled,TimelineFilled,CheckFilled, SearchFilled, WarningAmberFilled} from "@vicons/material";
 import {useRouter} from "vue-router";
 
 export default defineComponent({
@@ -102,6 +123,10 @@ export default defineComponent({
         NFormItem,
         NInput,
         NSelect,
+        NForm,
+        NCard,
+        NModal,
+        NP,
         NDatePicker
     },
     setup(){
@@ -119,23 +144,89 @@ export default defineComponent({
             {name:'Ensamble de sondas (3009)(3016)'},
             {name:'MIT-106.02.02.1 Adaptador con aguja Cal. 20X38 o 18X38'}
         ]
+
+        // funcion para retroceder de ruta para el breadcrum
         const router = useRouter();
         function goBack(){
             router.back()
         }
+
+        // funcion para gestionar el estado de cuenta de un empleado,
+        // la logica debe cambiar de acuerdo al estado que se encuentre la cuenta del empledado
+        const message = useMessage();
+        const dialog = useDialog();
+        function handleSuspend(){
+            dialog.warning({
+                title:"Confirmacion",
+                content:"¿Esta seguro de suspender el acceso al usuario?",
+                positiveText:"Sí",
+                negativeText:"Cancelar",
+                onPositiveClick:()=>{
+                    message.success("Acceso suspendido");
+                },
+                onNegativeClick:()=>{
+                    message.error("Acceso no suspendido");
+                }
+            })
+        }
+
+        const showModalPassword = ref(false);
+        // renderizado de icono para modal
+        const iconWarning = () => h(WarningAmberFilled, { style: 'color: #F0A020; font-size: 25px;' })
+
         return{
             goBack,
             PeopleAltFilled,
             TimelineFilled,
             CheckFilled,
             SearchFilled,
-            data
+            data,
+            handleSuspend,
+            showModalPassword,
+            iconWarning,
         }
     }
 })
 </script>
 
 <style>
+.stylePagination{
+    background-color: #0D5A79;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+@media(max-width:425px){
+    .stylePagination{
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+}
+
+.styleScrollInfinite{
+    height: 42rem;
+}
+
+@media(max-width:425px){
+    .styleScrollInfinite{
+        height: 30rem;
+    }
+}
+
+@media(max-width:425px){
+    .styleList{
+        margin-top: 2rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}
+
+@media(min-width:768px){
+    .styleList{
+        margin-left: 2rem;
+    } 
+}
+
 .styleCard{
 margin-bottom: 10px;
 border:1px solid #0D5A79;
@@ -148,13 +239,23 @@ border-radius: 10px;
     align-items: center;
 }
 
-.search-input {
-    flex-grow: 1;
+@media(max-width:425px){
+    .admin-header{
+        padding-top: 15px;
+    }
 }
 
 .admin-title {
-    font-size: 3.5rem;
-    font-weight: bold;
-    color: #0D5A79;
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #0D5A79;
 }
+
+@media (max-width: 425px) {
+  .admin-title {
+    font-size: 2.6rem;
+    text-align: center;
+  }
+}
+
 </style>
