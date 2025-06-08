@@ -1,14 +1,63 @@
 <template>
     <div style="padding-left: 1rem; padding-right: 1rem;">
+        <!-- cabecera -->
         <div class="admin-header">
-            <n-breadcrumb class="admin-breadcumb">
-                <n-breadcrumb-item>
-                    <n-icon :component="PeopleAltFilled" />
-                    Empleados
-                </n-breadcrumb-item>
-            </n-breadcrumb>
-            <h1 class="admin-title">Empleados</h1>
+            <n-grid cols="1 m:2 l:2" item-responsive responsive="screen">
+                <n-grid-item style="display: flex; align-items: center; padding-top: 10px;">
+                    <n-breadcrumb>
+                        <n-breadcrumb-item>
+                            <n-icon :component="PeopleAltFilled" />
+                            Empleados
+                        </n-breadcrumb-item>
+                    </n-breadcrumb>
+                </n-grid-item>
+                <n-grid-item>
+                    <h1 class="admin-title">Empleados</h1>
+                </n-grid-item>
+            </n-grid>
         </div>
+
+        <!-- filtros de busqueda -->
+         <n-space size="large" vertical>
+            <n-grid cols="1 m:8 l:8" item-responsive responsive="screen">
+                <n-grid-item span="1 m:2 l:2">
+                    <n-form-item label="Buscar empleado">
+                        <n-input-group>
+                            <n-input placeholder="Nombre de empleado" clearable/>
+                            <n-button type="info"><n-icon :component="SearchFilled "/></n-button>
+                        </n-input-group>
+                    </n-form-item>
+                </n-grid-item>
+                <n-grid-item span="1 m:2 l:2">
+                    <n-form-item label="Filtro por departamento">
+                        <n-input-group>
+                            <n-select :options="departmentOptions" placeholder="Departamento"/>
+                            <n-button type="info"><n-icon :component="SearchFilled"/></n-button>
+                        </n-input-group>
+                    </n-form-item>
+                </n-grid-item>
+                <n-grid-item span="1 m:2 l:2">
+                    <n-form-item label="Filtro por puestos">
+                        <n-input-group>
+                            <n-select :options="jobsOptions" placeholder="Puesto de trabajo"/>
+                            <n-button type="info"><n-icon :component="SearchFilled"/></n-button>
+                        </n-input-group>
+                    </n-form-item>
+                </n-grid-item>
+                <n-grid-item class="styleContentButton" span="1">
+                    <n-button class="styleButton"  @click="toggleSortOrder" type="info">
+                        <span style="color:white">A-Z</span>
+                        <n-icon :component="sortAscending ? TrendingUpFilled : TrendingDownFilled" color="#ffffff" size="20" />
+                    </n-button>
+                </n-grid-item>
+                <n-grid-item span="0 m:1 l:1" class="styleContentButton">
+                    <n-button class="styleButton" @click="toggleSortOrder" type="info">
+                        <span style="color:white">Nuevo Empleado</span>
+                    </n-button>
+                </n-grid-item>
+            </n-grid>
+         </n-space>
+
         <div style="display: flex; gap: 1rem; justify-content: space-between; align-items: center;">
             <n-form-item label="Buscar Empleado" style="width: 100%">
                 <n-input v-model="searchQuery" placeholder="Nombre o número del empleado" clearable
@@ -36,7 +85,8 @@
                 <span style="color: white">Nuevo Empleado</span>
             </n-button>
         </div>
-        <div style="width: 100%; padding-top: 1rem; padding-bottom: 1rem; background-color: #0D5A79; margin-bottom: 3rem;" />
+
+        <!-- lista de contenido -->
         <n-grid cols="2 s:1 m:2 l:2" x-gap="12" y-gap="12">
             <n-gi v-for="employee in paginatedEmployees" :key="employee.id">
                 <n-card class="compact-employee-card">
@@ -62,15 +112,17 @@
                 </n-card>
             </n-gi>
         </n-grid>
-        <n-pagination v-model:page="currentPage" :page-count="totalPages" :on-update:page="changePage"
-            class="pagination" :theme-overrides="paginationTheme" />
+        <n-pagination v-model:page="currentPage" :page-count="totalPages" :on-update:page="changePage" class="pagination" :theme-overrides="paginationTheme" />
+        <n-float-button :bottom="20" :right="20" width="50" height="50" type="primary">
+            <n-icon :component="PlusFilled" size="20" />
+        </n-float-button>
     </div>
 </template>
 
 <script scoped>
 import { defineComponent, ref, computed } from "vue";
-import { NBreadcrumb, NBreadcrumbItem, NIcon, NForm, NFormItem, NInput, NButton, NSelect, NGrid, NGi, NCard, NPagination } from "naive-ui";
-import { PeopleAltFilled, SearchFilled, TrendingUpFilled, TrendingDownFilled, MoreVertFilled } from "@vicons/material";
+import { NBreadcrumb, NBreadcrumbItem, NIcon, NForm, NFormItem, NInput, NButton, NSelect, NGrid, NGi, NCard, NPagination, NGridItem, NSpace, NInputGroup, NFloatButton } from "naive-ui";
+import { PeopleAltFilled, SearchFilled, TrendingUpFilled, TrendingDownFilled, MoreVertFilled,PlusFilled } from "@vicons/material";
 
 export default defineComponent({
     components: {
@@ -78,15 +130,19 @@ export default defineComponent({
         NBreadcrumbItem,
         NIcon,
         NForm,
+        NGridItem,
         NFormItem,
         NInput,
+        NFloatButton,
+        NInputGroup,
         NButton,
         SearchFilled,
         NSelect,
         NGrid,
         NGi,
         NCard,
-        NPagination
+        NPagination,
+        NSpace,
     },
     setup() {
         const searchQuery = ref('');
@@ -149,6 +205,7 @@ export default defineComponent({
 
         return {
             PeopleAltFilled,
+            PlusFilled,
             SearchFilled,
             searchQuery,
             TrendingUpFilled,
@@ -171,6 +228,20 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.styleButton{
+    border-radius: 5px;
+}
+@media(max-width:425px){
+    .styleButton{
+        width: 100%;
+        margin: 5px;
+    }
+}
+.styleContentButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .admin-header {
     display: flex;
     justify-content: space-between;
@@ -186,18 +257,22 @@ export default defineComponent({
 }
 
 .admin-title {
-    font-size: 3.5rem;
-    font-weight: bold;
-    color: #0D5A79;
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #0D5A79;
+  text-align: end;
 }
 
-@media(max-width: 886px) {
-    .admin-header {
-        justify-content: center;
-    }
+@media (max-width: 425px) {
+  .admin-title {
+    font-size: 2.6rem;
+    text-align: center;
+  }
+}
 
-    .admin-breadcumb {
-        display: none;
+@media(max-width:425px){
+    .admin-header{
+        padding-top: 15px;
     }
 }
 
