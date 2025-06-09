@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 .admin-title {
   font-size:3.5rem; font-weight: bold; color: #0D5A79
 }
@@ -14,6 +16,14 @@
   height: 100%;
 }
 
+.bg-primary-900 {
+  background-color: #0d5a79;
+}
+
+.bg-primary-700 {
+  background-color: #187dac;
+}
+
 @media(max-width: 886px) {
   .card-container{
     flex-direction: column;
@@ -24,9 +34,6 @@
   }
   .admin-breadcumb{
     display: none;
-  }
-  .admin-header{
-    justify-content: center;
   }
   
   /* Responsive para el grid */
