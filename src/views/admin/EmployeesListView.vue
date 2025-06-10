@@ -263,11 +263,4 @@ export default defineComponent({
     align-items: flex-start;
 }
 
-.pagination {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
-    background-color: #0D5A79;
-    padding: 1rem 0 1rem 0;
-}
 </style>

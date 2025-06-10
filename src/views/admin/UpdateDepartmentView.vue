@@ -13,7 +13,7 @@
             <h1 class="admin-title">Actualizar departamento</h1>
         </div>
         <n-flex class="w-full items-center align-center justify-center">
-            <n-config-provider :theme-overrides="themeOverrides">
+            <n-config-provider :theme-overrides="theme">
                 <n-form ref="formRef" :model="model" :rules="rules">
                     <n-form-item path="name" label="Nombre del departamento" class="w-md mb-2">
                         <n-input placeholder="Departamento" @keydown.enter.prevent v-model:value="model.name"></n-input>
@@ -27,11 +27,11 @@
     </div>
 </template>
 <script setup>
-import { ref, defineProps, onMounted, computed } from 'vue';
+import { ref, defineProps, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { HomeFilled } from '@vicons/material';
 import { NBreadcrumb, NBreadcrumbItem, NIcon, NConfigProvider, NForm, NFormItem, NInput, NButton } from 'naive-ui';
-import themeOverrides from '../../theme/filterInputsTheme.js';
+import theme from '../../theme/theme.js';
 import { findById, update } from '../../service/DepartmentService.js';
 
 function validateName(rule, value) {
