@@ -5,6 +5,7 @@ import CoursesListView from "../views/admin/CoursesListView.vue";
 import DepartmentsListView from "../views/admin/DepartmentsListView.vue";
 import ProfileView from "../views/admin/ProfileView.vue";
 import NewCourseView from "../views/admin/NewCourseView.vue";
+import CreateCourse from "../views/admin/CreateCourse.vue";
 
 export default [
   {
@@ -33,7 +34,7 @@ export default [
       },
       {
         path: "courses/new-course",
-        component: NewCourseView
+        component: CreateCourse
       }
     ],
     
