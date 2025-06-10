@@ -1,6 +1,6 @@
 <template>
-    <div style="padding-left: 1rem; padding-right: 1rem;">
-        <div class="admin-header">
+    <div class="pr-4 pl-4">
+        <div class="admin-header pt-4 pb-4">
             <n-breadcrumb class="admin-breadcumb">
                 <n-breadcrumb-item>
                     <n-icon :component="PeopleAltFilled" />
@@ -263,11 +263,4 @@ export default defineComponent({
     align-items: flex-start;
 }
 
-.pagination {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
-    background-color: #0D5A79;
-    padding: 1rem 0 1rem 0;
-}
 </style>
