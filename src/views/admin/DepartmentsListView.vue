@@ -23,7 +23,7 @@
                     <span>A-Z</span>
                     <n-icon :component="sortAscending ? TrendingUpFilled : TrendingDownFilled" size="18"></n-icon>
                 </n-button>
-                <n-button type="primary" style="margin-left: auto;" @click="findAllDepartments">
+                <n-button type="primary" style="margin-left: auto;" @click="createNewDepartment()">
                     Nuevo departamento
                 </n-button>
             </n-flex>
@@ -54,7 +54,9 @@ import {
 } from 'naive-ui';
 import themeOverrides from '../../theme/filterInputsTheme.js';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { findAll } from '../../service/DepartmentService.js';
+const router = useRouter();
 const sortAscending = ref(true);
 const departments = ref([]);
 const nameFilter = ref('');
@@ -68,6 +70,10 @@ const findAllDepartments = async () => {
 
 const findDepartmentsByFilter = () => {
     console.log(nameFilter.value);
+}
+
+const createNewDepartment = () => {
+    router.push('/admin/departments/create')
 }
 
 onMounted(() => {
