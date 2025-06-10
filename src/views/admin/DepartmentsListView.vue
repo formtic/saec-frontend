@@ -32,7 +32,7 @@
         </div>
         <n-grid cols="1 400:1 640:2 :2 1024:4" x-gap="12" y-gap="12">
             <n-grid-item v-for="d in departments" :key=d.id>
-                <SimpleCardItem :title="d.name" :colorClass="'bg-cyan-600'" @click="console.log('pene')" />
+                <SimpleCardItem :title="d.name" :colorClass="'bg-cyan-600'" @click="router.push({name: 'updateDepartment', params: {id: d.id}})" />
             </n-grid-item>
         </n-grid>
     </div>

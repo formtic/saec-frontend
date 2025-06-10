@@ -6,6 +6,7 @@ import DepartmentsListView from "../views/admin/DepartmentsListView.vue";
 import ProfileView from "../views/admin/ProfileView.vue";
 import NewCourseView from "../views/admin/NewCourseView.vue";
 import CreateDepartment from "../views/admin/CreateDepartment.vue";
+import UpdateDepartmentView from "../views/admin/UpdateDepartmentView.vue";
 
 export default [
   {
@@ -31,6 +32,12 @@ export default [
       {
         path: "departments/create",
         component: CreateDepartment
+      },
+      {
+        path: "departments/update/:id",
+        name: 'updateDepartment',
+        component: UpdateDepartmentView,
+        props: true
       },
       {
         path: "profile",
