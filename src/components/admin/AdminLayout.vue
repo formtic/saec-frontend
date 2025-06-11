@@ -100,6 +100,7 @@ import {
 } from "@vicons/material";
 import logo from "../../assets/svg/logoDarkmode.svg";
 import { useRouter, useRoute } from "vue-router";
+import { logout } from "../../service/authService";
 
 export default defineComponent({
   components: {
@@ -196,7 +197,7 @@ export default defineComponent({
           router.push('/admin/profile');
           break;
         case 'logout':
-          window.location.href = '/';
+          logout();
           break;
       }
       showMobileMenu.value = false;

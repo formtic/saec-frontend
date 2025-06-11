@@ -108,6 +108,7 @@ import {
 import { defineComponent, ref } from "vue";
 import logo from "../../assets/svg/logo.svg";
 import { useRouter } from "vue-router";
+import { login } from "../../service/authService";
 
 export default defineComponent({
   components: {
@@ -177,15 +178,20 @@ export default defineComponent({
       formRef.value.validate((errors) => {
         if (!errors) {
           loading.value = true;
-          setTimeout(() => {
-            loading.value = false;
-            router.push(`/${modelRef.value.username}`);
-            modelRef.value.username = "";
-            modelRef.value.password = "";
-          }, 3000);
+          signIn();
         }
       });
     };
+
+    const signIn = async() => {
+      const payload = {
+        username: modelRef.value.username,
+        password: modelRef.value.password
+      }
+      await login(payload).finally(() => {
+        loading.value = false;
+      });
+    }
 
     const handleModalSubmit = () => {
       modalFormRef.value.validate((errors) => {
