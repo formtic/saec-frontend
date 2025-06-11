@@ -1,23 +1,24 @@
 import api from '../config/interceptor.js';
 const BASE_URL = import.meta.env.VITE_SPRING_API_URL;
-const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZG1pbiIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTc0OTU5NTU1NywiZXhwIjoxNzQ5NTk5MTU3fQ.CrPu-Tw-yp-thLo1Sz8dcNuuZ40ZeBi4cw_l7mqsl3A"
 
 
 export function findAll() {
+    const token = localStorage.getItem('authToken');
     return api.get(`${BASE_URL}/department/list`,
         {
             headers: {
-                'Content-Type': 'Application/json',
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         });
 }
 
 export function findById(id) {
+    const token = localStorage.getItem('authToken');
     return api.get(`${BASE_URL}/department/findbyid/${id}`,
         {
             headers: {
-                'Content-Type': 'Application/json',
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
@@ -25,10 +26,11 @@ export function findById(id) {
 }
 
 export function filter(name, page, pageSize, sortDirection) {
+    const token = localStorage.getItem('authToken');
     return api.get(`${BASE_URL}/department/filter`,
         {
             headers: {
-                'Content-Type': 'Application/json',
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
             params: {
@@ -42,11 +44,12 @@ export function filter(name, page, pageSize, sortDirection) {
 }
 
 export function create(payload) {
+    const token = localStorage.getItem('authToken');
     return api.post(`${BASE_URL}/department/create`,
         payload,
         {
             headers: {
-                'Content-Type': 'Application/json',
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
@@ -54,10 +57,11 @@ export function create(payload) {
 }
 
 export function update(payload, id) {
+    const token = localStorage.getItem('authToken');
     return api.put(`${BASE_URL}/department/update/${id}`, payload,
         {
             headers: {
-                'Content-Type': 'Application/json',
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
