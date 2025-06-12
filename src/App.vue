@@ -1,13 +1,19 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+  <n-config-provider>
+    <n-dialog-provider>
+      <n-message-provider>
+        <n-notification-provider>
+          <router-view />
+        </n-notification-provider>
+      </n-message-provider>
+    </n-dialog-provider>
+  </n-config-provider>
 </template>
 
 <script>
-  export default {
-    name: 'App'
-  };
+export default {
+  name: 'App'
+};
 </script>
 
 <style>
