@@ -31,7 +31,7 @@
             </div>
             <n-grid cols="1 400:1 640:2 :2 1024:4" x-gap="12" y-gap="12">
                 <n-grid-item v-for="j in jobs" :key=j.id>
-                    <SimpleCardItem :title="j.name" :colorClass="'bg-cyan-600'" />
+                    <SimpleCardItem :title="j.name" :colorClass="'bg-cyan-600'" @click="router.push({ name: 'updateJob', params: { id: j.id } })"/>
                 </n-grid-item>
             </n-grid>
             <n-pagination class="pagination" v-model:page="model.currentPage" :page-count="model.pagesCount" :on-update:page="paginate"/>

@@ -28,3 +28,25 @@ export function create(payload) {
         }
     );
 }
+
+export function update(payload, id) {
+    const token = localStorage.getItem('authToken');
+    return api.put(`${BASE_URL}/job/update/${id}`, payload,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+    );
+}
+
+export function findById(id) {
+    const token = localStorage.getItem('authToken');
+    return api.get(`${BASE_URL}/job/findbyid/${id}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+}
