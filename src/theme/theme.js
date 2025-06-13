@@ -1,5 +1,5 @@
 // theme.js
-export const themeOverrides = {
+export default {
     Layout: {
         siderToggleButtonColor: '#0D5A79', // Color de fondo del botón
         siderToggleButtonIconColor: '#f1f1f1', // Color del ícono (flecha)
@@ -48,11 +48,10 @@ export const themeOverrides = {
 
     },
     Input: {
-        borderRadius: '8px',
-        paddingSmall: '10px 12px',
-        paddingMedium: '12px 16px',
-        color: '#ffffff',
-        colorFocus: '#e8f5e9'
+        border: 'solid 1px #0D5A79',
+        borderHover: 'solid 1px #0d5a79',
+        borderFocus: 'solid 1px #1d8ec6',
+        boxShadowFocus: '0 0 0 2px rgba(29, 142, 198, 0.2)'
     },
     Dialog: {
         titleFontSize: '22px',
@@ -78,42 +77,30 @@ export const themeOverrides = {
         fontWeightActive: '450'
     },
     Pagination: {
-        buttonColor: '#0D5A79',
-        buttonIconColor: '#f1f1f1',
-        itemBorder: '1px solid #f1f1f1',
-        itemBorderActive: '1px solid',
-        itemColorDisabled: '#0D5A79',
-
-        buttonColorHover: '#229DDC',
-        buttonIconColorHover: '#f1f1f1',
-
-        itemTextColor: '#f1f1f1',
-        itemTextColorHover: '#f1f1f1',
-        itemTextColorActive: '#f1f1f1',
-
-        itemColor: '#0D5A79',
-        itemColorHover: '#229DDC',
-        itemColorActive: '#0D5A79',
-        itemColorActiveHover: '#187DAC',
-
-        buttonBorder: '1px solid',
-        itemBorderRadius: '50px'
+        itemTextColorActive: '#fff',
+        itemBorderActive: 'solid 1px #fff',
+        itemColorActive: '#136c93',
+        itemTextColor: '#fff',
+        itemTextColorHover: '#fff',
+        itemColorHover: '#136c93',
+        buttonIconColor: '#fff',
+        buttonBorder: 'solid 1px #fff',
+        buttonIconColorHover: '#fff',
+        buttonColorHover: '#136c93'
     },
     DatePicker: {
         itemColorActive: '#229DDC',
         itemBorderRadius: '50px'
     },
     Button: {
-        textColor: '#f1f1f1',
-        textColorHover: '#f1f1f1',
-        color: '#0D5A79',
-        colorHover: '#229DDC',
-        borderHover: '0px solid',
-
-        borderRadiusTiny: '5px',
-        borderRadiusSmall: '5px',
-        borderRadiusMedium: '5px',
-        borderRadiusLarge: '5px',
+        colorPrimary: '#0D5A79',
+        colorHoverPrimary: '#187dac',
+        colorPressedPrimary: '#136c93',
+        colorFocusPrimary: '#136c93',
+        borderPrimary: '#0D5A79',
+        borderHoverPrimary: '#0D5A79',
+        borderPressedPrimary: '#0D5A79',
+        borderFocusPrimary: '#0D5A79'
     },
     Checkbox: {
         colorChecked: '#0D5A79',

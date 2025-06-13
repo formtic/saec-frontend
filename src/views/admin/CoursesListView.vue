@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
-        <div class="admin-header">
-            <n-breadcrumb class="admin-breadcrumb">
+    <div class="pr-4 pl-4">
+        <div class="admin-header pt-4 pb-4">
+            <n-breadcrumb class="admin-breadcumb">
                 <n-breadcrumb-item>
                     <n-icon :component="BookFilled" />
                     Cursos
