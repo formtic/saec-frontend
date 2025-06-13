@@ -16,3 +16,15 @@ export function filter(name, page, pageSize, sortDirection) {
         }
     });
 }
+
+export function create(payload) {
+    const token = localStorage.getItem('authToken');
+    return api.post(`${BASE_URL}/job/create`, payload,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+    );
+}

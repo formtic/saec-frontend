@@ -8,6 +8,7 @@ import NewCourseView from "../views/admin/NewCourseView.vue";
 import CreateDepartment from "../views/admin/CreateDepartment.vue";
 import UpdateDepartmentView from "../views/admin/UpdateDepartmentView.vue";
 import JobsListView from "../views/admin/JobsListView.vue";
+import CreateJobview from "../views/admin/CreateJobview.vue";
 
 export default [
   {
@@ -43,6 +44,11 @@ export default [
       {
         path: 'jobs',
         component: JobsListView
+      },
+      {
+        path: 'jobs/create',
+        name: 'createJob',
+        component: CreateJobview,
       },
       {
         path: "profile",

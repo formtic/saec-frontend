@@ -23,7 +23,7 @@
                     <span>A-Z</span>
                     <n-icon :component="model.sortAscending ? TrendingUpFilled : TrendingDownFilled"></n-icon>
                 </n-button>
-                <n-button type="primary" style="margin-left: auto;">
+                <n-button type="primary" style="margin-left: auto;" @click="router.push('/admin/jobs/create')">
                     Nuevo puesto
                 </n-button>
             </n-flex>
@@ -45,6 +45,7 @@ import { onMounted, ref } from 'vue';
 import themeOverrides from '../../theme/theme';
 import SimpleCardItem from '../../components/common/listable/SimpleCardItem.vue';
 import { filter } from '../../service/jobService.js';
+import { useRouter } from 'vue-router';
 import {
     NConfigProvider,
     NBreadcrumb,
@@ -59,6 +60,7 @@ import {
     NPagination
 } from 'naive-ui';
 
+const router = useRouter();
 const jobs = ref([
     {
         id: '123456',
