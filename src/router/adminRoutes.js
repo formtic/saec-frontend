@@ -7,6 +7,7 @@ import ProfileView from "../views/admin/ProfileView.vue";
 import NewCourseView from "../views/admin/NewCourseView.vue";
 import CreateDepartment from "../views/admin/CreateDepartment.vue";
 import UpdateDepartmentView from "../views/admin/UpdateDepartmentView.vue";
+import JobsListView from "../views/admin/JobsListView.vue";
 
 export default [
   {
@@ -38,6 +39,10 @@ export default [
         name: 'updateDepartment',
         component: UpdateDepartmentView,
         props: true
+      },
+      {
+        path: 'jobs',
+        component: JobsListView
       },
       {
         path: "profile",
