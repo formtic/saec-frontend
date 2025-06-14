@@ -2,7 +2,7 @@
 <n-config-provider :theme-overrides="themeOverrides">
   <div class="px-4">
     <div class="admin-header pt-4 pb-4 w-full">
-      <n-breadcrumb class="admin-breadcrumb">
+      <n-breadcrumb class="admin-breadcumb">
         <n-breadcrumb-item>
           <n-icon :component="HomeFilled" />
           Departamentos

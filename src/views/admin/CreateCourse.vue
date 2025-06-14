@@ -1,70 +1,51 @@
 <template>
-  <div class="form-container">
-    <div style="padding: 1rem; width: 100%;">
-      <!-- Encabezado -->
-      <div class="admin-header">
-        <n-breadcrumb class="admin-breadcumb">
-          <n-breadcrumb-item @click="navigateBack">
-            <n-icon :component="BookFilled" />
-            Empleados
-          </n-breadcrumb-item>
-          <n-breadcrumb-item>
-            Cursos
-          </n-breadcrumb-item>
-          <n-breadcrumb-item>
-            Nuevo curso
-          </n-breadcrumb-item>
-        </n-breadcrumb>
-        <h1 class="admin-title">Nuevo curso</h1>
-      </div>
-
-      <!-- Formulario -->
-      <n-form>
-        <n-form-item label="Nombre" required>
-          <n-input
-            placeholder="Ej. Introducción"
-            v-model:value="nombre"
-          />
-        </n-form-item>
-
-        <n-form-item label="Descripción" required>
-          <n-input
-            type="textarea"
-            placeholder="Ej. MPF-113 GEN-03 Procedimiento de limpieza para las áreas de manufactura"
-            v-model:value="descripcion"
-            :autosize="{ minRows: 6 }"
-          />
-        </n-form-item>
-
-        <n-form-item label="Docente" required>
-          <n-select
-            placeholder="Seleccionar docente"
-            :options="docentes"
-            v-model:value="docente"
-          />
-        </n-form-item>
-
-        <n-form-item label="Examen">
-          <n-select
-            placeholder="Seleccionar examen"
-            :options="examenes"
-            v-model:value="examen"
-          />
-        </n-form-item>
-
-        <div class="form-button">
-          <n-button
-            type="primary"
-            color="#0D5A79"
-            size="large"
-            @click="registrarCurso"
-          >
-            Registrar curso
-          </n-button>
+  <n-config-provider :theme-overrides="themeOverrides">
+    <div class="form-container">
+      <div style="padding: 1rem; width: 100%;">
+        <!-- Encabezado -->
+        <div class="admin-header">
+          <n-breadcrumb class="admin-breadcumb">
+            <n-breadcrumb-item @click="router.push('/admin/courses')">
+              <n-icon :component="BookFilled" />
+              Cursos
+            </n-breadcrumb-item>
+            <n-breadcrumb-item>
+              <n-icon :component="AddOutlined" />
+              Nuevo curso
+            </n-breadcrumb-item>
+          </n-breadcrumb>
+          <h1 class="admin-title">Nuevo curso</h1>
         </div>
-      </n-form>
+
+        <!-- Formulario -->
+        <n-form>
+          <n-form-item label="Nombre" required>
+            <n-input placeholder="Ej. Introducción" v-model:value="nombre" />
+          </n-form-item>
+
+          <n-form-item label="Descripción" required>
+            <n-input type="textarea"
+              placeholder="Ej. MPF-113 GEN-03 Procedimiento de limpieza para las áreas de manufactura"
+              v-model:value="descripcion" :autosize="{ minRows: 6 }" />
+          </n-form-item>
+
+          <n-form-item label="Docente" required>
+            <n-select placeholder="Seleccionar docente" :options="docentes" v-model:value="docente" />
+          </n-form-item>
+
+          <n-form-item label="Examen">
+            <n-select placeholder="Seleccionar examen" :options="examenes" v-model:value="examen" />
+          </n-form-item>
+
+          <div class="form-button">
+            <n-button type="primary" color="#0D5A79" size="large" @click="registrarCurso">
+              Registrar curso
+            </n-button>
+          </div>
+        </n-form>
+      </div>
     </div>
-  </div>
+  </n-config-provider>
 </template>
 
 <script setup>
@@ -78,9 +59,10 @@ import {
   NSelect,
   NButton,
   NIcon,
+  NConfigProvider
 } from 'naive-ui';
-import { BookFilled } from '@vicons/material';
-
+import { AddOutlined, BookFilled } from '@vicons/material';
+import themeOverrides from '../../theme/theme.js';
 const router = useRouter();
 const navigateBack = () => router.replace('/admin/employees');
 

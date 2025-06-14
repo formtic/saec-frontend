@@ -1,68 +1,66 @@
 <template>
-    <div class="pr-4 pl-4">
-        <div class="admin-header pt-4 pb-4">
-            <n-breadcrumb class="admin-breadcumb">
-                <n-breadcrumb-item>
-                    <n-icon :component="BookFilled" />
-                    Cursos
-                </n-breadcrumb-item>
-            </n-breadcrumb>
-            <h1 class="admin-title">Cursos</h1>
-        </div>
+    <n-config-provider :theme-overrides="themeOverrides">
+        <div class="px-4">
+            <div class="admin-header pt-4 pb-4 w-full">
+                <n-breadcrumb class="admin-breadcumb">
+                    <n-breadcrumb-item>
+                        <n-icon :component="BookFilled" />
+                        Cursos
+                    </n-breadcrumb-item>
+                </n-breadcrumb>
+                <h1 class="admin-title">Cursos</h1>
+            </div>
+            <n-flex class="items-center gap-1">
+                <n-form>
+                    <n-form-item label="Buscar Empleado" class="w-100">
+                        <n-input v-model="searchQuery" placeholder="Nombre o número del empleado" />
+                        <n-button type="primary">
+                            <n-icon :component="SearchFilled" size="18" />
+                        </n-button>
+                    </n-form-item>
+                </n-form>
 
-              <div style="display: flex; gap: 1rem; justify-content: space-between; align-items: center;">
-            <n-form-item label="Buscar Empleado" style="width: 100%">
-                <n-input v-model="searchQuery" placeholder="Nombre o número del empleado" clearable
-                    class="search-input" />
-                <n-button color="#0D5A79" class="search-button">
-                    <template #icon>
-                        <n-icon color="#ffffff">
-                            <SearchFilled />
-                        </n-icon>
-                    </template>
+                <n-button type="primary" @click="toggleSortOrder" class="m-auto">
+                    <span>A-Z</span>
+                    <n-icon :component="sortAscending ? TrendingUpFilled : TrendingDownFilled" size="20" />
                 </n-button>
-            </n-form-item>
+                <n-button @click="navigateToNewCourse" type="primary" style="margin-left: auto;">
+                    <span>Nuevo Curso</span>
+                </n-button>
+            </n-flex>
 
-            <n-button color="#0D5A79" @click="toggleSortOrder"
-                style="display: flex; align-items: center; gap: 1rem; border-radius: 8px;">
-                <span style="color:white">A-Z</span>
-                <n-icon :component="sortAscending ? TrendingUpFilled : TrendingDownFilled" color="#ffffff" size="20" />
-            </n-button>
-            <n-button color="#0D5A79" @click="navigateToNewCourse">
-                <span style="color: white">Nuevo Curso</span>
-            </n-button>
-        </div>
+            <div class="w-full pt-4 pb-4 bg-primary-900 mb-4" />
 
-        <div
-            style="width: 100%; padding-top: 1rem; padding-bottom: 1rem; background-color: #0D5A79; margin-bottom: 3rem;" />
-
-        <n-grid cols="1 s:1 m:2 l:3" x-gap="12" y-gap="12" responsive="screen">
-            <n-gi v-for="course in paginatedCourses" :key="course.id">
-                <n-card class="compact-employee-card">
-                    <div class="card-content">
-                        <div class="employee-info">
-                            <div class="name-code-row">
-                                <span class="employee-name clamped-text">{{ course.name }}</span>
+            <n-grid cols="1 s:1 m:2 l:3" x-gap="12" y-gap="12" responsive="screen">
+                <n-gi v-for="course in paginatedCourses" :key="course.id">
+                    <n-card class="compact-employee-card">
+                        <div class="card-content">
+                            <div class="employee-info">
+                                <div class="name-code-row">
+                                    <span class="employee-name clamped-text">{{ course.name }}</span>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <n-button text>
+                                    <n-icon size="20" color="#000000">
+                                        <MoreVertFilled />
+                                    </n-icon>
+                                </n-button>
                             </div>
                         </div>
-                        <div class="actions">
-                            <n-button text>
-                                <n-icon size="20" color="#000000">
-                                    <MoreVertFilled />
-                                </n-icon>
-                            </n-button>
-                        </div>
-                    </div>
-                </n-card>
-            </n-gi>
-        </n-grid>
+                    </n-card>
+                </n-gi>
+            </n-grid>
 
-        <!-- Paginador -->
-        <n-pagination v-model:page="currentPage" :page-count="pageCount" class="pagination" :theme-overrides="paginationTheme" />
-    </div>
+            <!-- Paginador -->
+            <n-pagination v-model:page="currentPage" :page-count="pageCount" class="pagination"
+                :theme-overrides="paginationTheme" />
+        </div>
+    </n-config-provider>
+
 </template>
 
-<script scoped>
+<script>
 import { defineComponent, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import {
@@ -83,8 +81,10 @@ import {
     NGi,
     NCard,
     NPagination,
+    NFlex
 } from "naive-ui";
 
+import themeOverrides from '../../theme/theme.js';
 export default defineComponent({
     components: {
         NBreadcrumb,
@@ -102,6 +102,7 @@ export default defineComponent({
         TrendingUpFilled,
         TrendingDownFilled,
         MoreVertFilled,
+        NFlex,
     },
     setup() {
         const searchQuery = ref("");
@@ -182,49 +183,15 @@ export default defineComponent({
             paginatedCourses,
             currentPage,
             pageCount,
-            paginationTheme
-            
+            paginationTheme,
+            themeOverrides
+
         };
     },
 });
 </script>
 
 <style scoped>
-.container {
-    padding: 1rem;
-}
-
-.admin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.admin-title {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #0d5a79;
-}
-
-.toolbar {
-    display: flex;
-    gap: 1rem;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-    flex-wrap: wrap;
-}
-
-.toolbar-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 8px;
-}
-
-
-
 .compact-employee-card {
     padding: 12px;
 }
@@ -241,11 +208,6 @@ export default defineComponent({
     flex-direction: column;
 }
 
-.name-code-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 .employee-name {
     font-weight: bold;
@@ -260,34 +222,5 @@ export default defineComponent({
     text-overflow: ellipsis;
     line-height: 1.3rem;
     max-height: calc(1.3rem * 3);
-}
-
-.actions {
-    display: flex;
-    align-items: flex-start;
-}
-
-.pagination {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
-    background-color: #0d5a79;
-    padding: 1rem 0;
-}
-
-@media (max-width: 886px) {
-    .admin-header {
-        justify-content: center;
-        text-align: center;
-    }
-
-    .admin-breadcrumb {
-        display: none;
-    }
-
-    .toolbar {
-        flex-direction: column;
-        align-items: stretch;
-    }
 }
 </style>
