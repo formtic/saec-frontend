@@ -11,10 +11,10 @@
                 <h1 class="admin-title">Cursos</h1>
             </div>
             <n-flex class="items-center gap-1">
-                <n-form>
+                <n-form @submit.prevent="searchByName">
                     <n-form-item label="Buscar Empleado" class="w-100">
-                        <n-input v-model="searchQuery" placeholder="Nombre o número del empleado" />
-                        <n-button type="primary">
+                        <n-input v-model:value="searchQuery" placeholder="Nombre o número del empleado" />
+                        <n-button type="primary" @click="searchByName">
                             <n-icon :component="SearchFilled" size="18" />
                         </n-button>
                     </n-form-item>
@@ -32,7 +32,7 @@
             <div class="w-full pt-4 pb-4 bg-primary-900 mb-4" />
 
             <n-grid cols="1 s:1 m:2 l:3" x-gap="12" y-gap="12" responsive="screen">
-                <n-gi v-for="course in paginatedCourses" :key="course.id">
+                <n-gi v-for="course in courses" :key="course.id">
                     <n-card class="compact-employee-card">
                         <div class="card-content">
                             <div class="employee-info">
@@ -54,14 +54,15 @@
 
             <!-- Paginador -->
             <n-pagination v-model:page="currentPage" :page-count="pageCount" class="pagination"
-                :theme-overrides="paginationTheme" />
+            :on-update:page="paginate"
+            />
         </div>
     </n-config-provider>
 
 </template>
 
 <script>
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import {
     BookFilled,
@@ -74,6 +75,7 @@ import {
     NBreadcrumb,
     NBreadcrumbItem,
     NIcon,
+    NForm,
     NFormItem,
     NInput,
     NButton,
@@ -81,15 +83,18 @@ import {
     NGi,
     NCard,
     NPagination,
-    NFlex
+    NFlex,
+    NConfigProvider
 } from "naive-ui";
 
 import themeOverrides from '../../theme/theme.js';
+import { filter } from "../../service/courseService.js";
 export default defineComponent({
     components: {
         NBreadcrumb,
         NBreadcrumbItem,
         NIcon,
+        NForm,
         NFormItem,
         NInput,
         NButton,
@@ -103,72 +108,52 @@ export default defineComponent({
         TrendingDownFilled,
         MoreVertFilled,
         NFlex,
+        NConfigProvider
     },
     setup() {
         const searchQuery = ref("");
         const sortAscending = ref(true);
         const currentPage = ref(1);
-        const pageSize = 6;
+        const pageSize = 12;
         const router = useRouter();
 
         const toggleSortOrder = () => {
             sortAscending.value = !sortAscending.value;
+            findCoursesByFilter();
         };
+
+        const paginate = (page) => {
+            currentPage.value = page;
+            findCoursesByFilter();
+        };
+
+        const searchByName = () => {
+            currentPage.value = 1;
+            findCoursesByFilter();
+        }
+
 
         const navigateToNewCourse = () => {
             router.push("/admin/courses/new-course");
         };
 
-        const courses = ref([
-            { id: 1, name: "MOR-122.1 Gerente de producción. MOR-122.2 Jefe de proyectos" },
-            { id: 2, name: "ALM - 105 Movimiento de materia prima y producto terminado" },
-            { id: 3, name: "MPC-109.2 Buenas prácticas de fabricación" },
-            { id: 4, name: "MPC-109.3 Buenas prácticas de documentación" },
-            { id: 5, name: "MOR-122.3 Jefe de producción" },
-            { id: 6, name: "MOR-122.4 Gerente de proyectos" },
-            { id: 7, name: "ALM - 105.1 Manejo de inventarios" },
-            { id: 8, name: "ALM - 105.2 Control de calidad" },
-            { id: 9, name: "MPC-109.4 Buenas prácticas de seguridad" },
-            { id: 10, name: "MTA-130 Prueba de hermeticidad en dispositivos médicos" },
-            { id: 12, name: "MPC-109.5 Buenas prácticas de higiene" },
-            { id: 13, name: "Formato PRO - 05 Nota de entrega de producto terminado" },
-            { id: 14, name: "MPC - 105.2 Control de cambios" },
-            { id: 15, name: "MPF-113 GEN-03 Procedimiento de limpieza para las áreas de manufactura" },
-            { id: 16, name: "MIT-016.08.1.2 Kit para conexión y desconexión de fístula (4095, 4093)" },
-        ]);
+        const courses = ref([]);
 
-        const filteredCourses = computed(() => {
-            let filtered = courses.value;
-            if (searchQuery.value) {
-                filtered = filtered.filter((course) =>
-                    course.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-                );
-            }
+        const pageCount = ref(1);
 
-            return filtered.slice().sort((a, b) =>
-                sortAscending.value ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
-            );
-        });
-
-        const pageCount = computed(() =>
-            Math.ceil(filteredCourses.value.length / pageSize)
-        );
-
-        const paginatedCourses = computed(() => {
-            const start = (currentPage.value - 1) * pageSize;
-            return filteredCourses.value.slice(start, start + pageSize);
-        });
-
-        const paginationTheme = {
-            itemColor: '#0D5A79',
-            itemColorActive: 'white',
-            itemTextColor: 'white',
-            itemTextColorActive: '#0D5A79',
-            itemTextColorHover: 'white',
-            itemColorHover: 'rgba(255,255,255,0.1)',
-            borderRadius: '6px',
-            itemSize: '32px'
+        const findCoursesByFilter = async() => {
+            await filter(searchQuery.value, currentPage.value -1, pageSize, sortAscending.value ? 'ASC' : 'DESC')
+            .then(response => {
+                const data = response.data;
+                courses.value = data.content;
+                pageCount.value = data.totalPages;
+            });
         }
+
+        onMounted(() => {
+            findCoursesByFilter();
+        });
+
         return {
             BookFilled,
             SearchFilled,
@@ -179,12 +164,12 @@ export default defineComponent({
             toggleSortOrder,
             sortAscending,
             navigateToNewCourse,
-            filteredCourses,
-            paginatedCourses,
+            courses,
             currentPage,
             pageCount,
-            paginationTheme,
-            themeOverrides
+            themeOverrides,
+            paginate,
+            searchByName
 
         };
     },
