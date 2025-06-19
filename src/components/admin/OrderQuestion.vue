@@ -38,7 +38,7 @@
   export default defineComponent({
     name: "OrderQuestion",
     components: {
-      draggable, // Cambiado de VueDraggable: VueDraggableNext
+      draggable, 
       NInput,
       NButton,
       NIcon,
@@ -96,7 +96,6 @@
   </script>
   
   <style scoped>
-  /* Tus estilos permanecen igual */
   .draggable-item {
     display: flex;
     align-items: center;
