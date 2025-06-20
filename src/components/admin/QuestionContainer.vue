@@ -48,7 +48,10 @@ import IdentifierQuestion from "./IdentifierQuestion.vue";
 import SimpleSelectionQuestion from "./SimpleSelectionQuestion.vue";
 import MultipleSelectionQuestion from "./MultipleSelectionQuestion.vue";
 import OrderQuestion from "./OrderQuestion.vue";
-
+import SimpleMatchQuestion from "./SimpleMatchQuestion.vue";
+import MultipleMatchQuestion from "./MultipleMatchQuestion.vue";
+import SimpleOpenQuestion from "./SimpleOpenQuestion.vue";
+import MultipleOpenQuestion from "./MultipleOpenQuestion.vue";
 export default defineComponent({
     name: 'QuestionContainer',
     components: {
@@ -66,7 +69,11 @@ export default defineComponent({
         IdentifierQuestion,
         SimpleSelectionQuestion,
         MultipleSelectionQuestion,
-        OrderQuestion
+        OrderQuestion,
+        SimpleMatchQuestion,
+        MultipleMatchQuestion,
+        SimpleOpenQuestion,
+        MultipleOpenQuestion
     },
     setup(){
         const questionTypes = [
@@ -76,8 +83,8 @@ export default defineComponent({
             { label: 'Pregunta de ordenamiento', value: 'orderQuestion'},
             { label: 'Emparejamiento simple', value: 'simpleMatchQuestion'},
             { label: 'Emparejamiento múltiple', value: 'multipleMatchQuestion'},
-            { label: 'Pregunta abierta', value: 'openQuestion'},
-            { label: 'Pregunta abierta múltiple', value: 'openMultipleQuestion'}
+            { label: 'Pregunta abierta', value: 'simpleOpenQuestion'},
+            { label: 'Pregunta abierta múltiple', value: 'multipleOpenQuestion'}
         ];
         const selectedQuestionType = ref('identifierQuestion');
         const elements = ref([{
@@ -90,10 +97,10 @@ export default defineComponent({
             simpleSelectionQuestion: 'SimpleSelectionQuestion',
             multipleSelectionQuestion: 'MultipleSelectionQuestion',
             orderQuestion: 'OrderQuestion',
-            simpleMatchQuestion: 'simpleMatchQuestion',
+            simpleMatchQuestion: 'SimpleMatchQuestion',
             multipleMatchQuestion: 'multipleMatchQuestion',
-            openQuestion: 'openQuestion',
-            openMultipleQuestion: 'openMultipleQuestion'
+            simpleOpenQuestion: 'SimpleOpenQuestion',
+            multipleOpenQuestion: 'multipleOpenQuestion'
         }
 
         const currentQuestionComponent = computed(() => {
