@@ -44,6 +44,7 @@
 
 <script>
 import { defineComponent, ref, computed, onMounted } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import {
     BookFilled,
@@ -56,6 +57,7 @@ import {
     NBreadcrumb,
     NBreadcrumbItem,
     NIcon,
+    NForm,
     NFormItem,
     NInput,
     NButton,
@@ -63,16 +65,19 @@ import {
     NGi,
     NCard,
     NPagination,
-    NFlex
+    NFlex,
+    NConfigProvider
 } from "naive-ui";
 import SimpleCardItem from "../../components/common/listable/SimpleCardItem.vue";
 import themeOverrides from '../../theme/theme.js';
+import { filter } from "../../service/courseService.js";
 import { filter } from "../../service/courseService.js";
 export default defineComponent({
     components: {
         NBreadcrumb,
         NBreadcrumbItem,
         NIcon,
+        NForm,
         NFormItem,
         NInput,
         NButton,
@@ -140,6 +145,7 @@ export default defineComponent({
             toggleSortOrder,
             sortAscending,
             navigateToNewCourse,
+            courses,
             courses,
             currentPage,
             pageSize,
