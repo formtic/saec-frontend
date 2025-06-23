@@ -1,5 +1,4 @@
 <template>
-<n-config-provider :theme-overrides="themeOverrides">
   <div class="px-4">
     <div class="admin-header pt-4 pb-4 w-full">
       <n-breadcrumb class="admin-breadcumb">
@@ -10,7 +9,7 @@
       </n-breadcrumb>
       <h1 class="admin-title">Departamentos</h1>
     </div>
-    
+
     <n-flex class="items-center gap-1">
       <n-form @submit.prevent="searchByName">
         <n-form-item label="Buscar departamento" class="w-100">
@@ -28,42 +27,37 @@
         Nuevo departamento
       </n-button>
     </n-flex>
-    
+
     <div class="w-full pt-4 pb-4 bg-primary-900 mb-4">
     </div>
 
     <n-grid cols="1 400:1 640:2 :2 1024:4" x-gap="12" y-gap="12">
       <n-grid-item v-for="d in departments" :key=d.id>
-        <SimpleCardItem
-          :title="d.name"
-          :colorClass="'bg-cyan-600'"
-          @click="router.push({ name: 'updateDepartment', params: { id: d.id } })"
-        />
+        <SimpleCardItem :title="d.name" :colorClass="'bg-cyan-600'"
+          @click="router.push({ name: 'updateDepartment', params: { id: d.id } })" />
       </n-grid-item>
     </n-grid>
 
-    <n-pagination class="pagination" v-model:page="model.currentPage" :page-count="model.pagesCount" :on-update:page="paginate"></n-pagination>
+    <n-pagination class="pagination" v-model:page="model.currentPage" :page-count="model.pagesCount"
+      :on-update:page="paginate"></n-pagination>
   </div>
-</n-config-provider>
 
 </template>
 <script setup>
 import SimpleCardItem from '../../components/common/listable/SimpleCardItem.vue';
 import { HomeFilled, SearchFilled, TrendingUpFilled, TrendingDownFilled } from '@vicons/material';
 import {
-    NConfigProvider,
-    NBreadcrumb,
-    NBreadcrumbItem,
-    NForm,
-    NFormItem,
-    NInput,
-    NButton,
-    NIcon,
-    NGrid,
-    NGridItem,
-    NPagination
+  NBreadcrumb,
+  NBreadcrumbItem,
+  NForm,
+  NFormItem,
+  NInput,
+  NButton,
+  NIcon,
+  NGrid,
+  NGridItem,
+  NPagination
 } from 'naive-ui';
-import themeOverrides from '../../theme/theme.js';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { filter } from '../../service/DepartmentService.js';
@@ -71,8 +65,8 @@ const router = useRouter();
 const departments = ref([]);
 const itemsPerPage = 12;
 const toggleSortOrder = () => {
-    model.value.sortAscending = !model.value.sortAscending;
-    findDepartmentsByFilter();
+  model.value.sortAscending = !model.value.sortAscending;
+  findDepartmentsByFilter();
 }
 
 const paginate = (page) => {
@@ -88,7 +82,7 @@ const searchByName = () => {
 const findDepartmentsByFilter = async () => {
   await filter(
     model.value.name ?? '',
-    model.value.currentPage -1,
+    model.value.currentPage - 1,
     itemsPerPage,
     model.value.sortAscending ? 'ASC' : 'DESC'
   ).then(response => {
@@ -100,18 +94,18 @@ const findDepartmentsByFilter = async () => {
 
 
 const createNewDepartment = () => {
-    router.push('/admin/departments/create')
+  router.push('/admin/departments/create')
 }
 
 const model = ref({
-    name: null,
-    sortAscending: true,
-    currentPage: 1,
-    pagesCount: 1
+  name: null,
+  sortAscending: true,
+  currentPage: 1,
+  pagesCount: 1
 });
 
 onMounted(() => {
-    findDepartmentsByFilter();
+  findDepartmentsByFilter();
 });
 
 </script>
