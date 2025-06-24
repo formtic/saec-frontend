@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3 style="text-align: center; width: 100%; font-weight: 400">
-      El empleado verá la lista de respuestas aleatoriamente y divididas en dos columnas lac cuales se podran ordenar.
+      El empleado verá la lista de respuestas aleatoriamente y divididas en dos columnas las cuales se podrán ordenar.
     </h3>
 
     <div class="rows-container">
@@ -10,11 +10,15 @@
           v-model:value="element.textA"
           placeholder="Elemento A"
           class="input"
+          :status="isValid(element.textA) ? 'success' : 'error'"
+          @input="(val) => onInput(val, element.id, 'textA')"
         />
         <n-input
           v-model:value="element.textB"
           placeholder="Elemento B"
           class="input"
+          :status="isValid(element.textB) ? 'success' : 'error'"
+          @input="(val) => onInput(val, element.id, 'textB')"
         />
         <n-button color="red" @click="removeItem(element.id)">
           <template #icon>
@@ -52,6 +56,20 @@ export default defineComponent({
 
     const nextId = ref(3);
 
+    const allowedRegex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]*$/;
+
+    const onInput = (val, id, field) => {
+      const filtered = val.replace(/[^a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]/g, '');
+      const index = items.value.findIndex((item) => item.id === id);
+      if (index !== -1) {
+        items.value[index][field] = filtered;
+      }
+    };
+
+    const isValid = (text) => {
+      return text.trim() !== "" && allowedRegex.test(text);
+    };
+
     const addRow = () => {
       items.value.push({
         id: nextId.value++,
@@ -81,6 +99,8 @@ export default defineComponent({
       items,
       addRow,
       removeItem,
+      onInput,
+      isValid,
       DeleteFilled,
       MenuFilled,
     };

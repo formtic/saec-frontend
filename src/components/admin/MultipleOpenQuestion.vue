@@ -1,12 +1,37 @@
 <template>
   <div>
-    <h3 class="text-center w-full font-normal n-mb-6 " style="color: #778C96;">
-      La respuesta correcta es solamente una propuesta, la respuesta debera ser revisada manualmente.
+    <h3 class="text-center w-full font-normal n-mb-6" style="color: #778C96;">
+      La respuesta correcta es solamente una propuesta, la respuesta deberá ser revisada manualmente.
     </h3>
+
     <div class="rows-container">
       <div v-for="element in items" :key="element.id" class="question-row">
-        <n-input v-model:value="element.textA" placeholder="Sub-pregunta" class="input" />
-        <n-input v-model:value="element.textB" placeholder="Respuesta" class="input" />
+        <div class="input-group">
+          <n-input
+            v-model:value="element.textA"
+            placeholder="Sub-pregunta"
+            class="input"
+            :status="getStatus(element.textA)"
+            @input="(value) => onInput(value, element, 'textA')"
+          />
+          <p v-if="!isValidText(element.textA)" class="error-message">
+            El texto no debe estar vacío y solo debe contener letras, números y signos permitidos.
+          </p>
+        </div>
+
+        <div class="input-group">
+          <n-input
+            v-model:value="element.textB"
+            placeholder="Respuesta"
+            class="input"
+            :status="getStatus(element.textB)"
+            @input="(value) => onInput(value, element, 'textB')"
+          />
+          <p v-if="!isValidText(element.textB)" class="error-message">
+            El texto no debe estar vacío y solo debe contener letras, números y signos permitidos.
+          </p>
+        </div>
+
         <n-button color="red" @click="removeItem(element.id)" :disabled="items.length <= 2">
           <template #icon>
             <n-icon :component="DeleteFilled" />
@@ -14,7 +39,7 @@
         </n-button>
       </div>
     </div>
-    
+
     <div class="add-button-container">
       <n-button color="#0D5A79" @click="addRow">Agregar sub-pregunta</n-button>
     </div>
@@ -36,6 +61,8 @@ export default defineComponent({
     MenuFilled,
   },
   setup() {
+    const allowedRegex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]*$/;
+
     const items = ref([
       { id: 1, textA: "", textB: "", order: 1 },
       { id: 2, textA: "", textB: "", order: 2 },
@@ -68,12 +95,28 @@ export default defineComponent({
       });
     };
 
+    const onInput = (value, obj, key) => {
+      const filtered = value.replace(/[^a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]/g, "");
+      obj[key] = filtered;
+    };
+
+    const isValidText = (text) => {
+      return text.trim() !== "" && allowedRegex.test(text);
+    };
+
+    const getStatus = (text) => {
+      return isValidText(text) ? "success" : "error";
+    };
+
     return {
       items,
       addRow,
       removeItem,
       DeleteFilled,
       MenuFilled,
+      onInput,
+      isValidText,
+      getStatus,
     };
   },
 });
@@ -86,7 +129,7 @@ export default defineComponent({
 
 .question-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   padding: 10px;
   flex-wrap: wrap;
@@ -97,8 +140,16 @@ export default defineComponent({
   min-width: 150px;
 }
 
-.handle {
-  cursor: default;
+.input-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
 }
 
 .add-button-container {

@@ -1,0 +1,411 @@
+[1mdiff --git a/src/components/admin/IdentifierQuestion.vue b/src/components/admin/IdentifierQuestion.vue[m
+[1mindex 385f801..7077a5b 100644[m
+[1m--- a/src/components/admin/IdentifierQuestion.vue[m
+[1m+++ b/src/components/admin/IdentifierQuestion.vue[m
+[36m@@ -1,26 +1,37 @@[m
+ <template>[m
+[31m-    <div>[m
+[31m-        <n-grid :cols="2" v-for="(element, index) in elements":key="index">[m
+[31m-            <n-gi style="margin-right: 2.5px">[m
+[31m-                <n-form-item label="Elemento" required>[m
+[31m-                    <n-input v-model:value="element.name" placeholder="Elemento" />[m
+[31m-                </n-form-item>[m
+[31m-            </n-gi>[m
+[31m-            <n-gi style="margin-left: 2.5px; display: flex; gap: 5px; align-items: center;">[m
+[31m-                <n-form-item label="Valor" required style="width: 100%">[m
+[31m-                    <n-input v-model:value="element.value" placeholder="Valor" />[m
+[31m-                </n-form-item>[m
+[31m-                <n-button color="red" @click="removeElement(index)">[m
+[31m-                    <template #icon>[m
+[31m-                        <n-icon :component="DeleteFilled" />[m
+[31m-                    </template>[m
+[31m-                </n-button>[m
+[31m-            </n-gi>[m
+[31m-        </n-grid>[m
+[31m-        <div style="width: calc(100% - 1rem); display: flex; justify-content: center;">[m
+[31m-            <n-button size="large" color="#0D5A79" @click="addElement">Agregar Elemento</n-button>[m
+[31m-        </div>[m
+[32m+[m[32m  <div>[m
+[32m+[m[32m    <n-grid :cols="2" v-for="(element, index) in elements" :key="index">[m
+[32m+[m[32m      <n-gi style="margin-right: 2.5px">[m
+[32m+[m[32m        <n-form-item label="Elemento" required :feedback="getFeedback(element.name)">[m
+[32m+[m[32m          <n-input[m
+[32m+[m[32m            v-model:value="element.name"[m
+[32m+[m[32m            placeholder="Elemento"[m
+[32m+[m[32m            :status="isValid(element.name) ? 'success' : 'error'"[m
+[32m+[m[32m            @input="(val) => onInput(val, index, 'name')"[m
+[32m+[m[32m          />[m
+[32m+[m[32m        </n-form-item>[m
+[32m+[m[32m      </n-gi>[m
+[32m+[m[32m      <n-gi style="margin-left: 2.5px; display: flex; gap: 5px; align-items: center;">[m
+[32m+[m[32m        <n-form-item label="Valor" required style="width: 100%" :feedback="getFeedback(element.value)">[m
+[32m+[m[32m          <n-input[m
+[32m+[m[32m            v-model:value="element.value"[m
+[32m+[m[32m            placeholder="Valor"[m
+[32m+[m[32m            :status="isValid(element.value) ? 'success' : 'error'"[m
+[32m+[m[32m            @input="(val) => onInput(val, index, 'value')"[m
+[32m+[m[32m          />[m
+[32m+[m[32m        </n-form-item>[m
+[32m+[m[32m        <n-button color="red" @click="removeElement(index)">[m
+[32m+[m[32m          <template #icon>[m
+[32m+[m[32m            <n-icon :component="DeleteFilled" />[m
+[32m+[m[32m          </template>[m
+[32m+[m[32m        </n-button>[m
+[32m+[m[32m      </n-gi>[m
+[32m+[m[32m    </n-grid>[m
+[32m+[m
+[32m+[m[32m    <div style="width: calc(100% - 1rem); display: flex; justify-content: center;">[m
+[32m+[m[32m      <n-button size="large" color="#0D5A79" @click="addElement">Agregar Elemento</n-button>[m
+     </div>[m
+[32m+[m[32m  </div>[m
+ </template>[m
+ [m
+ <script>[m
+[36m@@ -29,32 +40,51 @@[m [mimport { NGrid, NGi, NFormItem, NInput, NButton, NIcon } from "naive-ui";[m
+ import { DeleteFilled } from "@vicons/material";[m
+ [m
+ export default defineComponent({[m
+[31m-    components: {[m
+[31m-        NGrid,[m
+[31m-        NGi,[m
+[31m-        NFormItem,[m
+[31m-        NInput,[m
+[31m-        NButton,[m
+[31m-        NIcon[m
+[31m-    },[m
+[31m-    setup() {[m
+[31m-[m
+[31m-        const elements = ref([{name: '', value:''}]);[m
+[31m-        const addElement = () => {[m
+[31m-            elements.value.push({ name: '', value: ''});[m
+[31m-        };[m
+[31m-[m
+[31m-        const removeElement = (index) => {[m
+[31m-            if (elements.value.length > 1) {[m
+[31m-                elements.value.splice(index, 1);[m
+[31m-            }[m
+[31m-        }[m
+[31m-        return {[m
+[31m-            elements,[m
+[31m-            addElement,[m
+[31m-            removeElement,[m
+[31m-            DeleteFilled[m
+[31m-        }[m
+[31m-    }[m
+[31m-})[m
+[31m-</script>[m
+\ No newline at end of file[m
+[32m+[m[32m  components: {[m
+[32m+[m[32m    NGrid,[m
+[32m+[m[32m    NGi,[m
+[32m+[m[32m    NFormItem,[m
+[32m+[m[32m    NInput,[m
+[32m+[m[32m    NButton,[m
+[32m+[m[32m    NIcon[m
+[32m+[m[32m  },[m
+[32m+[m[32m  setup() {[m
+[32m+[m[32m    const elements = ref([{ name: '', value: '' }]);[m
+[32m+[m
+[32m+[m[32m    const allowedRegex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]*$/;[m
+[32m+[m
+[32m+[m[32m    const onInput = (val, index, field) => {[m
+[32m+[m[32m      const filtered = val.replace(/[^a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]/g, '');[m
+[32m+[m[32m      elements.value[index][field] = filtered;[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    const isValid = (text) => {[m
+[32m+[m[32m      return text.trim() !== '' && allowedRegex.test(text);[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    const getFeedback = (text) => {[m
+[32m+[m[32m      return isValid(text) ? '' : 'Solo letras, números y signos permitidos';[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    const addElement = () => {[m
+[32m+[m[32m      elements.value.push({ name: '', value: '' });[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    const removeElement = (index) => {[m
+[32m+[m[32m      if (elements.value.length > 1) {[m
+[32m+[m[32m        elements.value.splice(index, 1);[m
+[32m+[m[32m      }[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    return {[m
+[32m+[m[32m      elements,[m
+[32m+[m[32m      addElement,[m
+[32m+[m[32m      removeElement,[m
+[32m+[m[32m      onInput,[m
+[32m+[m[32m      isValid,[m
+[32m+[m[32m      getFeedback,[m
+[32m+[m[32m      DeleteFilled[m
+[32m+[m[32m    };[m
+[32m+[m[32m  }[m
+[32m+[m[32m});[m
+[32m+[m[32m</script>[m
+[1mdiff --git a/src/components/admin/MultipleMatchQuestion.vue b/src/components/admin/MultipleMatchQuestion.vue[m
+[1mindex 0c3bad0..321b8c0 100644[m
+[1m--- a/src/components/admin/MultipleMatchQuestion.vue[m
+[1m+++ b/src/components/admin/MultipleMatchQuestion.vue[m
+[36m@@ -24,7 +24,17 @@[m
+                 <n-icon class="handle cursor-move flex-shrink-0" size="20">[m
+                   <MenuFilled />[m
+                 </n-icon>[m
+[31m-                <n-input v-model:value="element.text" placeholder="Escribe una opción" class="flex-grow min-w-0" />[m
+[32m+[m[32m                <div class="flex-grow min-w-0">[m
+[32m+[m[32m                  <n-input[m
+[32m+[m[32m                    v-model:value="element.text"[m
+[32m+[m[32m                    placeholder="Escribe una opción"[m
+[32m+[m[32m                    :status="getOptionStatus(element.text)"[m
+[32m+[m[32m                    @input="(value) => onInput(value, element, 'text')"[m
+[32m+[m[32m                  />[m
+[32m+[m[32m                  <p v-if="!isValidText(element.text)" style="color: red; font-size: 14px;">[m
+[32m+[m[32m                    El texto es obligatorio y solo perimte caracteres alfanuméricos.[m
+[32m+[m[32m                  </p>[m
+[32m+[m[32m                </div>[m
+                 <n-button color="red" @click="removeOption(element.id)" class="flex-shrink-0">[m
+                   <template #icon>[m
+                     <n-icon :component="DeleteFilled" />[m
+[36m@@ -43,7 +53,7 @@[m
+         </n-button>[m
+       </n-space>[m
+ [m
+[31m-      <div class="n-card n-card n-mb-4">[m
+[32m+[m[32m      <div class="n-card n-mb-4">[m
+         <draggable v-model="columns" group="columns" item-key="id" handle=".column-handle" :animation="150" :class="[[m
+           'columns-grid',[m
+           columns.length === 1 && 'single-item',[m
+[36m@@ -56,17 +66,33 @@[m
+                   <n-icon class="column-handle cursor-move flex-shrink-0" size="20">[m
+                     <MenuFilled />[m
+                   </n-icon>[m
+[31m-                  <n-input v-model:value="element.title" placeholder="Título de columna" class="flex-grow min-w-0" />[m
+[31m-                  <n-button color="red" @click="removeColumn(element.id)" :disabled="columns.length <= 1"[m
+[31m-                    class="flex-shrink-0">[m
+[32m+[m[32m                  <div class="flex-grow min-w-0">[m
+[32m+[m[32m                    <n-input[m
+[32m+[m[32m                      v-model:value="element.title"[m
+[32m+[m[32m                      placeholder="Título de columna"[m
+[32m+[m[32m                      :status="getOptionStatus(element.title)"[m
+[32m+[m[32m                      @input="(value) => onInput(value, element, 'title')"[m
+[32m+[m[32m                    />[m
+[32m+[m[32m                    <p v-if="!isValidText(element.title)" style="color: red; font-size: 14px;">[m
+[32m+[m[32m                      El texto no debe estar vacío y solo debe contener letras, números y signos permitidos.[m
+[32m+[m[32m                    </p>[m
+[32m+[m[32m                  </div>[m
+[32m+[m[32m                  <n-button color="red" @click="removeColumn(element.id)" :disabled="columns.length <= 1" class="flex-shrink-0">[m
+                     <template #icon>[m
+                       <n-icon :component="DeleteFilled" />[m
+                     </template>[m
+                   </n-button>[m
+                 </div>[m
+ [m
+[31m-                <draggable v-model="element.items" group="items" :item-key="itemKey" handle=".handle" :animation="150"[m
+[31m-                  class="n-card n-card--content-padding column-items bg-white" @add="onItemAdd(element)">[m
+[32m+[m[32m                <draggable[m
+[32m+[m[32m                  v-model="element.items"[m
+[32m+[m[32m                  group="items"[m
+[32m+[m[32m                  :item-key="itemKey"[m
+[32m+[m[32m                  handle=".handle"[m
+[32m+[m[32m                  :animation="150"[m
+[32m+[m[32m                  class="n-card n-card--content-padding column-items bg-white"[m
+[32m+[m[32m                  @add="onItemAdd(element)"[m
+[32m+[m[32m                >[m
+                   <template #item="{ element: item }">[m
+                     <n-card embedded class="option-card in-column">[m
+                       <div class="flex items-center gap-2 w-full">[m
+[36m@@ -89,102 +115,6 @@[m
+   </div>[m
+ </template>[m
+ [m
+[31m-<style scoped>[m
+[31m-.options-grid,[m
+[31m-.columns-grid {[m
+[31m-  display: grid;[m
+[31m-  grid-template-columns: repeat(3, 1fr);[m
+[31m-  gap: 10px;[m
+[31m-  width: 100%;[m
+[31m-}[m
+[31m-[m
+[31m-.options-grid .option-card.sm :deep(.n-card__content),[m
+[31m-.column .option-card.in-column :deep(.n-card__content) {[m
+[31m-  padding: 8px !important;[m
+[31m-}[m
+[31m-[m
+[31m-.column :deep(.n-card__content) {[m
+[31m-  padding: 12px !important;[m
+[31m-}[m
+[31m-[m
+[31m-.options-grid.single-item,[m
+[31m-.columns-grid.single-item {[m
+[31m-  grid-template-columns: 1fr;[m
+[31m-  max-width: calc(33.33% - 10px);[m
+[31m-}[m
+[31m-[m
+[31m-.options-grid.two-items,[m
+[31m-.columns-grid.two-items {[m
+[31m-  grid-template-columns: 1fr 1fr;[m
+[31m-  max-width: calc(66.66% - 10px);[m
+[31m-}[m
+[31m-[m
+[31m-.marginClass {[m
+[31m-  margin-top: 15px;[m
+[31m-  margin-bottom: 15px;[m
+[31m-}[m
+[31m-[m
+[31m-.column-items {[m
+[31m-  min-height: 120px;[m
+[31m-  display: grid;[m
+[31m-  gap: 8px;[m
+[31m-  background-color: white;[m
+[31m-}[m
+[31m-[m
+[31m-.option-card {[m
+[31m-  border: 1px solid #e0e3e7;[m
+[31m-  background-color: white;[m
+[31m-}[m
+[31m-[m
+[31m-.option-card.in-column {[m
+[31m-  background-color: #e6f7ff;[m
+[31m-  border-color: #91d5ff;[m
+[31m-}[m
+[31m-[m
+[31m-.option-text {[m
+[31m-  white-space: nowrap;[m
+[31m-  overflow: hidden;[m
+[31m-  text-overflow: ellipsis;[m
+[31m-}[m
+[31m-[m
+[31m-@media (max-width: 1075px) {[m
+[31m-[m
+[31m-  .options-grid,[m
+[31m-  .columns-grid {[m
+[31m-    grid-template-columns: repeat(2, 1fr);[m
+[31m-  }[m
+[31m-}[m
+[31m-[m
+[31m-@media (max-width: 1075px) {[m
+[31m-[m
+[31m-  .options-grid,[m
+[31m-  .columns-grid {[m
+[31m-    grid-template-columns: repeat(2, 1fr);[m
+[31m-  }[m
+[31m-[m
+[31m-  .options-grid.single-item,[m
+[31m-  .options-grid.two-items,[m
+[31m-  .columns-grid.single-item,[m
+[31m-  .columns-grid.two-items {[m
+[31m-    max-width: 100%;[m
+[31m-  }[m
+[31m-}[m
+[31m-[m
+[31m-@media (max-width: 639px) {[m
+[31m-[m
+[31m-  .options-grid,[m
+[31m-  .options-grid.single-item,[m
+[31m-  .options-grid.two-items,[m
+[31m-  .columns-grid,[m
+[31m-  .columns-grid.single-item,[m
+[31m-  .columns-grid.two-items {[m
+[31m-    grid-template-columns: 1fr;[m
+[31m-    max-width: 100%;[m
+[31m-  }[m
+[31m-}[m
+[31m-</style>[m
+[31m-[m
+[31m-[m
+ <script>[m
+ import { defineComponent, ref } from "vue";[m
+ import { NIcon, NInput, NButton } from "naive-ui";[m
+[36m@@ -202,7 +132,8 @@[m [mexport default defineComponent({[m
+     MenuFilled,[m
+   },[m
+   setup() {[m
+[31m-    // Opciones arrastrables[m
+[32m+[m[32m    const allowedRegex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]*$/;[m
+[32m+[m
+     const options = ref([[m
+       { id: 1, text: "Manzana" },[m
+       { id: 2, text: "Zanahoria" },[m
+[36m@@ -214,7 +145,6 @@[m [mexport default defineComponent({[m
+       { id: 8, text: "Espinaca" },[m
+     ]);[m
+ [m
+[31m-    // Columnas con sus items[m
+     const columns = ref([[m
+       {[m
+         id: 1,[m
+[36m@@ -259,7 +189,6 @@[m [mexport default defineComponent({[m
+       if (columns.value.length > 1) {[m
+         const column = columns.value.find((c) => c.id === id);[m
+         if (column) {[m
+[31m-          // Devolver items a las opciones[m
+           options.value.push(...column.items);[m
+           const index = columns.value.findIndex((col) => col.id === id);[m
+           if (index !== -1) {[m
+[36m@@ -269,8 +198,21 @@[m [mexport default defineComponent({[m
+       }[m
+     };[m
+ [m
+[32m+[m[32m    const isValidText = (text) => {[m
+[32m+[m[32m      return text.trim() !== "" && allowedRegex.test(text);[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    const getOptionStatus = (text) => {[m
+[32m+[m[32m      return isValidText(text) ? "success" : "error";[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    const onInput = (value, obj, key) => {[m
+[32m+[m[32m      const filtered = value.replace(/[^a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]/g, "");[m
+[32m+[m[32m      obj[key] = filtered;[m
+[32m+[m[32m    };[m
+[32m+[m
+     const onItemAdd = (column) => {[m
+[31m-      // (manejado automáticamente por vuedraggable)[m
+[32m+[m[32m      // Manejador de evento de arrastre, si se requiere lógica adicional[m
+     };[m
+ [m
+     return {[m
+[36m@@ -284,7 +226,123 @@[m [mexport default defineComponent({[m
+       onItemAdd,[m
+       DeleteFilled,[m
+       MenuFilled,[m
+[32m+[m[32m      isValidText,[m
+[32m+[m[32m      getOptionStatus,[m
+[32m+[m[32m      onInput,[m
+     };[m
+   },[m
+ });[m
+ </script>[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<style scoped>[m
+[32m+[m[32m.options-grid,[m
+[32m+[m[32m.columns-grid {[m
+[32m+[m[32m  display: grid;[m
+[32m+[m[32m  grid-template-columns: repeat(3, 1fr);[m
+[32m+[m[32m  gap: 10px;[m
+[32m+[m[32m  width: 100%;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.options-grid .option-card.sm :deep(.n-card__content),[m
+[32m+[m[32m.column .option-card.in-column :deep(.n-card__content) {[m
+[32m+[m[32m  padding: 8px !important;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.column :deep(.n-card__co
