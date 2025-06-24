@@ -58,16 +58,7 @@ import {
 } from 'naive-ui';
 
 const router = useRouter();
-const jobs = ref([
-    {
-        id: '123456',
-        name: "Job 1"
-    },
-    {
-        id: '123455',
-        name: "Job 2"
-    },
-]);
+const jobs = ref([]);
 const itemsPerPage = 12;
 
 const toggleSortOrder = () => {
