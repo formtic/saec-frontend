@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider>
+  <n-config-provider :theme-overrides="themeOverrides">
     <n-dialog-provider>
       <n-message-provider>
         <n-notification-provider>
@@ -11,9 +11,18 @@
 </template>
 
 <script>
+import { NConfigProvider } from 'naive-ui';
+import themeOverrides from './theme/theme.js';
+
 export default {
-  name: 'App'
-};
+  name: 'App',
+  components: {
+    NConfigProvider
+  },
+  setup() {
+    return {themeOverrides};
+  }
+}
 </script>
 
 <style>
