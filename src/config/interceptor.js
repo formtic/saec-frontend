@@ -4,6 +4,7 @@ import notification from '../plugins/notification';
 const api = axios.create({});
 
 api.interceptors.response.use(response => {
+    if(response.data.status && response.data.status !== 200)
     notification.success({
         title: `Éxito ${response.data.status}`,
         content: response.data.message,
