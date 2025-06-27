@@ -1,6 +1,6 @@
 <template>
-  <div style="padding-left: 1rem; padding-right: 1rem;">
-    <div class="admin-header">
+  <div class="pr-4 pl-4">
+    <div class="admin-header pt-4 pb-4">
       <n-breadcrumb class="admin-breadcumb">
         <n-breadcrumb-item>
           <n-icon :component="DashboardFilled" />
@@ -102,40 +102,5 @@ export default defineComponent({
 .card-container{
   display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 1rem;
 }
-.admin-title {
-  font-size:3.5rem; font-weight: bold; color: #0D5A79
-}
-.admin-breadcumb{
-  display: flex;
-}
-.admin-header{
-  display: flex; justify-content: space-between; align-items: center;
-}
-.mt-6 {
-  margin-top: 1.5rem;
-}
-.h-full {
-  height: 100%;
-}
 
-@media(max-width: 886px) {
-  .card-container{
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .admin-title {
-    font-size: 2rem;
-  }
-  .admin-breadcumb{
-    display: none;
-  }
-  .admin-header{
-    justify-content: center;
-  }
-  
-  /* Responsive para el grid */
-  [n-gi] {
-    grid-column: span 24 !important;
-  }
-}
 </style>
