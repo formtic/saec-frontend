@@ -1,8 +1,8 @@
 <template>
-  <div style="padding-left: 1rem; padding-right: 1rem">
+  <div class="px-4">
     <!-- CABECERA -->
-    <div class="reviewer-header">
-      <n-breadcrumb class="reviewer-breadcrumb">
+    <div class="admin-header pt-4 pb-4">
+      <n-breadcrumb class="admin-breadcumb">
         <n-breadcrumb-item @click="goBack">
           <n-icon :component="PeopleAltFilled" />
           Empleados
@@ -12,58 +12,72 @@
           Nuevo empleado
         </n-breadcrumb-item>
       </n-breadcrumb>
-      <h1 class="reviewer-title">Nuevo empleado</h1>
+      <h1 class="admin-title">Nuevo empleado</h1>
     </div>
+    
     <n-space vertical size="large" style="margin-bottom: 15px">
-      <n-form>
-        <n-form-item label="Rol:" required>
-          <n-select :options="rols" />
-        </n-form-item>
-        <n-grid :span="24" :x-gap="24">
-          <n-form-item-gi :span="12" label="Nombre(s):" required>
-            <n-input placeholder="Ej. Joana Andrea" />
-          </n-form-item-gi>
-          <n-form-item-gi :span="12" label="Apellido(s):" required>
-            <n-input placeholder="Ej. Marquina Hernandez" />
-          </n-form-item-gi>
-        </n-grid>
-        <n-grid :span="12" :x-gap="24">
-          <n-form-item-gi :span="12" label="Departamento:" required>
-            <n-select :options="departmenst" placeholder="Departamento" />
-          </n-form-item-gi>
-          <n-form-item-gi :span="12" label="Departamento:" required>
-            <n-select :options="jobs" placeholder="Puesto" />
-          </n-form-item-gi>
-        </n-grid>
-        <n-grid :span="12" :x-gap="24">
-          <n-form-item-gi :span="12" label="Codigo de usuario:" required>
-            <n-input placeholder="Codigo de usuario" />
-          </n-form-item-gi>
-          <n-form-item-gi :span="12" label="Correo electronico:" required>
-            <n-input placeholder="Correo electronico" />
-          </n-form-item-gi>
-        </n-grid>
-        <n-upload :max="1">
-          <n-upload-dragger>
-            <div>
-              <n-icon :size="48" :depth="3">
-                <ArchiveFilled />
-              </n-icon>
-            </div>
-            <div>
-              <p style="font-size: 16px">
-                Arrastra y suelta el archivo o
-                <span style="color: #1D8EC6;">haz clic para seleccionar</span>
-              </p>
-              <n-p depth="3">Máximo 5MB</n-p>
-            </div>
-          </n-upload-dragger>
-        </n-upload>
-        <n-space style="display: flex; justify-content: center; margin-top: 1rem;">
-          <n-button type="success">Registrar empleado</n-button>
-        </n-space>
-      </n-form>
+  <n-form>
+    <n-form-item label="Rol:" required>
+      <n-select :options="rols" />
+    </n-form-item>
+
+    <!-- Nombre y Apellido -->
+    <n-grid responsive="screen" item-responsive :x-gap="8">
+      <n-form-item-gi span="24 m:12 l:12" label="Nombre(s):" required>
+        <n-input placeholder="Ej. Joana Andrea" />
+      </n-form-item-gi>
+      <n-form-item-gi span="24 m:12 l:12" label="Apellido(s):" required>
+        <n-input placeholder="Ej. Marquina Hernandez" />
+      </n-form-item-gi>
+    </n-grid>
+
+    <!-- Departamento y Puesto -->
+    <n-grid responsive="screen" item-responsive :x-gap="8">
+      <n-form-item-gi span="24 m:12 l:12" label="Departamento:" required>
+        <n-select :options="departmenst" placeholder="Departamento" />
+      </n-form-item-gi>
+      <n-form-item-gi span="24 m:12 l:12" label="Puesto:" required>
+        <n-select :options="jobs" placeholder="Puesto" />
+      </n-form-item-gi>
+    </n-grid>
+
+    <!-- Código y Correo -->
+    <n-grid responsive="screen" item-responsive :x-gap="8">
+      <n-form-item-gi span="24 m:12 l:12" label="Código de usuario:" required>
+        <n-input placeholder="Código de usuario" />
+      </n-form-item-gi>
+      <n-form-item-gi span="24 m:12 l:12" label="Correo electrónico:" required>
+        <n-input placeholder="Correo electrónico" />
+      </n-form-item-gi>
+    </n-grid>
+
+    <!-- Firma -->
+    <n-form-item label="Firma del empleado">
+      <n-upload :max="1">
+        <n-upload-dragger>
+          <div>
+            <n-icon :size="48" :depth="3">
+              <ArchiveFilled />
+            </n-icon>
+          </div>
+          <div>
+            <p style="font-size: 16px">
+              Arrastra y suelta el archivo o
+              <span style="color: #1D8EC6;">haz clic para seleccionar</span>
+            </p>
+            <n-p depth="3">Máximo 5MB</n-p>
+          </div>
+        </n-upload-dragger>
+      </n-upload>
+    </n-form-item>
+
+    <!-- Botón -->
+    <n-space style="display: flex; justify-content: center; margin-top: 1rem;">
+      <n-button type="success">Registrar empleado</n-button>
     </n-space>
+  </n-form>
+</n-space>
+
   </div>
 </template>
 
