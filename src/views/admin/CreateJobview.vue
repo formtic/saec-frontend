@@ -13,18 +13,14 @@
             </n-breadcrumb>
             <h1 class="admin-title">Nuevo Puesto</h1>
         </div>
-        <n-flex class="w-full items-center align-center justify-center">
-            <n-config-provider :theme-overrides="themeOverrides">
-                <n-form ref="formRef" :model="model" :rules="rules">
-                    <n-form-item path="name" label="Nombre del puesto" class="w-md mb-2">
-                        <n-input placeholder="Puesto" @keydown.enter.prevent v-model:value="model.name" />
-                    </n-form-item>
-                    <n-button @click="handleValidateButtonClick" type="primary" >
-                        Guardar
-                    </n-button>
-                </n-form>
-            </n-config-provider>
-        </n-flex>
+        <n-form ref="formRef" :model="model" :rules="rules">
+            <n-form-item path="name" label="Nombre del puesto" class="w-md mb-2">
+                <n-input placeholder="Puesto" @keydown.enter.prevent v-model:value="model.name" />
+            </n-form-item>
+            <n-button @click="handleValidateButtonClick" type="primary">
+                Guardar
+            </n-button>
+        </n-form>
 
     </div>
 </template>
@@ -33,7 +29,6 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { AddOutlined, CasesOutlined } from '@vicons/material';
 import { NBreadcrumb, NBreadcrumbItem, NIcon, NConfigProvider, NForm, NFormItem, NInput, NButton } from 'naive-ui';
-import themeOverrides from '../../theme/filterInputsTheme.js';
 import { create } from '../../service/jobService.js';
 
 function validateName(rule, value) {

@@ -10,6 +10,7 @@ import UpdateDepartmentView from "../views/admin/UpdateDepartmentView.vue";
 import JobsListView from "../views/admin/JobsListView.vue";
 import CreateJobview from "../views/admin/CreateJobview.vue";
 import UpdateJobView from "../views/admin/UpdateJobView.vue";
+import CreateCourse from "../views/admin/CreateCourse.vue";
 
 export default [
   {
@@ -63,7 +64,7 @@ export default [
       },
       {
         path: "courses/new-course",
-        component: NewCourseView
+        component: CreateCourse
       }
     ],
     

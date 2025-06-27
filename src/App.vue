@@ -1,13 +1,24 @@
 <template>
   <div id="app">
-    <router-view />
+    <n-config-provider :theme-overrides="themeOverrides">
+      <router-view />
+    </n-config-provider>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'App'
-  };
+import { NConfigProvider } from 'naive-ui';
+import themeOverrides from './theme/theme.js';
+
+export default {
+  name: 'App',
+  components: {
+    NConfigProvider
+  },
+  setup() {
+    return {themeOverrides};
+  }
+};
 </script>
 
 <style>
