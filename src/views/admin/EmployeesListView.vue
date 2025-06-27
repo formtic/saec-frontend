@@ -57,7 +57,7 @@
     </n-space>
 
     <!-- lista de contenido -->
-    <div style="background-color:#0D5A79; border-radius:10px 10px 0 0;" class="p-4"/>
+    <div style="background-color:#0D5A79; border-radius:10px 10px 0 0;" class="p-4 mt-2"/>
     <n-grid
       class="mt-2"
       cols="1 m:2 l:2"
@@ -90,7 +90,7 @@
         :right="20"
         width="50"
         height="50"
-        type="primary"
+        style="background-color:#00485F;color:white"
       >
         <n-icon :component="PlusFilled" size="20" />
       </n-float-button>
