@@ -11,6 +11,7 @@ import JobsListView from "../views/admin/JobsListView.vue";
 import CreateJobview from "../views/admin/CreateJobview.vue";
 import UpdateJobView from "../views/admin/UpdateJobView.vue";
 import CreateCourse from "../views/admin/CreateCourse.vue";
+import UpdateCourse from "../views/admin/UpdateCourse.vue";
 
 export default [
   {
@@ -65,6 +66,17 @@ export default [
       {
         path: "courses/new-course",
         component: CreateCourse
+      },
+      {
+        path: 'courses/update/:id',
+        component: UpdateCourse,
+        props: true,
+        children: [
+          {
+            path: '',
+            component: UpdateCourse
+          }
+        ]
       }
     ],
     

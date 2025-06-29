@@ -32,7 +32,11 @@
 
         <n-grid cols="1 s:1 m:2 l:3" x-gap="12" y-gap="12" responsive="screen">
             <n-gi v-for="course in courses" :key="course.id">
-                <SimpleCardItem :title="course.name" :colorClass="'bg-cyan-600'"/>
+                <SimpleCardItem 
+                :title="course.name"
+                :colorClass="'bg-cyan-600'"
+                @click="router.push(`/admin/courses/update/${course.id}`)"
+                />
             </n-gi>
         </n-grid>
 
@@ -43,7 +47,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import {
     BookFilled,
@@ -69,6 +73,7 @@ import {
 import SimpleCardItem from "../../components/common/listable/SimpleCardItem.vue";
 import themeOverrides from '../../theme/theme.js';
 import { filter } from "../../service/courseService.js";
+import router from "../../router/main.js";
 export default defineComponent({
     components: {
         NBreadcrumb,
@@ -149,7 +154,8 @@ export default defineComponent({
             themeOverrides,
             pagesCount,
             searchByName,
-            paginate
+            paginate,
+            router
         };
     },
 });
