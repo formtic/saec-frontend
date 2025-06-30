@@ -67,10 +67,15 @@
         </n-space>
       </n-card>
 
-      <SimpleSelectQuestion class="question-component"/>
-      <MultipleSelectQuestion class="question-component"/>
-      <OrderQuestionEmployee class="question-component"/>
-      <OpenQuestion class="question-component"/>
+      <SimpleRelationQuestion class="question-component" />
+      <SimpleSelectQuestion class="question-component" />
+      <MultipleSelectQuestion class="question-component" />
+      <OrderQuestionEmployee class="question-component" />
+      <MultipleOrderQuestion class="question-component" />
+      <MultipleRelationQuestion class="question-component" />
+      <OpenQuestion class="question-component" />
+      <MultipleOpenQuestion class="question-component" />
+
     </div>
   </div>
 </template>
@@ -81,6 +86,10 @@ import SimpleSelectQuestion from "../../components/employee/SimpleSelectQuestion
 import MultipleSelectQuestion from "../../components/employee/MultipleSelectQuestion.vue";
 import OrderQuestionEmployee from "../../components/employee/OrderQuestionEmployee.vue";
 import OpenQuestion from "../../components/employee/OpenQuestion.vue";
+import MultipleOpenQuestion from "../../components/employee/MultipleOpenQuestion.vue";
+import MultipleRelationQuestion from "../../components/employee/MultipleRelationQuestion.vue";
+import SimpleRelationQuestion from "../../components/employee/SimpleRelationQuestion.vue";
+import MultipleOrderQuestion from "../../components/employee/MultipleOrderQuestion.vue";
 import {
   NCard,
   NText,
@@ -105,7 +114,11 @@ export default defineComponent({
     SimpleSelectQuestion,
     MultipleSelectQuestion,
     OrderQuestionEmployee,
-    OpenQuestion
+    OpenQuestion,
+    MultipleOpenQuestion,
+    MultipleRelationQuestion,
+    SimpleRelationQuestion,
+    MultipleOrderQuestion
   },
   setup() {
     const formData = ref({
@@ -161,7 +174,7 @@ export default defineComponent({
   .form-wrapper {
     width: 95%;
   }
-  
+
   .form-card {
     padding: 10px 16px;
   }

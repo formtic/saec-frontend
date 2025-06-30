@@ -3,13 +3,7 @@
     <h3 class="question-text">
       4.- ¿Qué operaciones debes realizar para el armado del adaptador con guarda? Acomoda la secuencia.
     </h3>
-    <draggable
-      v-model="items"
-      :item-key="itemKey"
-      handle=".handle"
-      :animation="150"
-      @end="onDragEnd"
-    >
+    <draggable v-model="items" :item-key="itemKey" handle=".handle" :animation="150" @end="onDragEnd">
       <template #item="{ element, index }">
         <div class="item-container">
           <div class="index-box">{{ index + 1 }}</div>
@@ -62,6 +56,8 @@ export default defineComponent({
       },
     ]);
 
+    
+
     // Mezclar los items para que aparezcan en orden aleatorio inicialmente
     items.value = items.value.sort(() => Math.random() - 0.5);
 
@@ -107,7 +103,7 @@ export default defineComponent({
   align-items: center;
   margin-bottom: 12px;
   position: relative;
-  margin-left: 25px;
+  margin-left: 30px;
 
 }
 
