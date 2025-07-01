@@ -13,11 +13,11 @@
 
     <!-- filtros de busqueda -->
     <n-space size="large" vertical>
-      <n-grid x-gap="16" cols="1 m:8 l:8" item-responsive responsive="screen">
+      <n-grid x-gap="16" cols="1 m:9 l:9" item-responsive responsive="screen">
         <n-grid-item span="1 m:2 l:2">
           <n-form-item label="Buscar empleado">
             <n-input-group>
-              <n-input placeholder="Nombre de empleado" clearable />
+              <n-input placeholder="Nombre empleado" clearable />
               <n-button type="primary"><n-icon :component="SearchFilled" /></n-button>
             </n-input-group>
           </n-form-item>
@@ -48,8 +48,8 @@
             />
           </n-button>
         </n-grid-item>
-        <n-grid-item span="0 m:1 l:1" class="styleContentButton">
-          <n-button class="styleButton" @click="toggleSortOrder" type="primary">
+        <n-grid-item span="0 m:2 l:2" class="styleContentButton">
+          <n-button class="styleButton" @click="" type="primary">
             <span style="color: white">Nuevo Empleado</span>
           </n-button>
         </n-grid-item>
@@ -84,7 +84,7 @@
       :theme-overrides="paginationTheme"
     />
     
-    <div class="block md:hidden lg:hidden">
+    <div class="lg:hidden">
       <n-float-button
         :bottom="20"
         :right="20"
@@ -307,6 +307,7 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left:2px
 }
 .admin-header {
   display: flex;
