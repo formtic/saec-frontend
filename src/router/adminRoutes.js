@@ -11,6 +11,7 @@ import JobsListView from "../views/admin/JobsListView.vue";
 import CreateJobview from "../views/admin/CreateJobview.vue";
 import UpdateJobView from "../views/admin/UpdateJobView.vue";
 import CreateCourse from "../views/admin/CreateCourse.vue";
+import ExamView from "../views/employee/ExamView.vue";
 
 export default [
   {
@@ -65,7 +66,13 @@ export default [
       {
         path: "courses/new-course",
         component: CreateCourse
+      },
+      
+      {
+        path: "employees/viewExam",
+        component: ExamView
       }
+
     ],
     
   },
