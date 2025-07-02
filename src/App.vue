@@ -1,9 +1,13 @@
 <template>
-  <div id="app">
-    <n-config-provider :theme-overrides="themeOverrides">
-      <router-view />
-    </n-config-provider>
-  </div>
+  <n-config-provider :theme-overrides="themeOverrides">
+    <n-dialog-provider>
+      <n-message-provider>
+        <n-notification-provider>
+          <router-view />
+        </n-notification-provider>
+      </n-message-provider>
+    </n-dialog-provider>
+  </n-config-provider>
 </template>
 
 <script>
@@ -18,7 +22,7 @@ export default {
   setup() {
     return {themeOverrides};
   }
-};
+}
 </script>
 
 <style>
