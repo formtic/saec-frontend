@@ -213,6 +213,7 @@ export default defineComponent({
       email: "",
       sign: null,
     });
+    const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
     const rules = {
       role: {
         required: true,
@@ -221,13 +222,26 @@ export default defineComponent({
       },
       name: {
         required: true,
-        message: "Por favor ingrese un nombre",
+        // message: "Por favor ingrese un nombre",
         trigger: "blur",
+        validator(rule,value){
+          if(!value || value.trim().length===0){
+            return new Error("Ingrese un nombre")
+          }else if(!regex.test(value)){
+            return new Error("El nombre solo debe contener letras");
+          }
+        }
       },
       lastname: {
         required: true,
-        message: "Porfavor ingrese los apellidos",
         trigger: "blur",
+        validator(rule,value){
+          if(!value || value.trim().length===0){
+            return new Error("Ingrese un apellido");
+          }else if(!regex.test(value)){
+            return new Error("El apellido solo debe contener letras");
+          }
+        }
       },
       departments: {
         required: true,
@@ -251,13 +265,27 @@ export default defineComponent({
       },
       employeeNumber: {
         required: true,
-        message: "Ingrese un número de empleado",
         trigger: "blur",
+        validator(rule,value){
+          const regexEmployeeNumber = /^[A-Za-z0-9]+$/;
+          if(!value || value.trim().length===0){
+            return new Error("Ingrese el número de empleado")
+          }else if(!regexEmployeeNumber.test(value)){
+            return new Error("El número de empleado solo debe contener número y letras")
+          }
+        }
       },
       email: {
         required: true,
-        message: "Ingrese un correo válido",
         trigger: ["blur", "input"],
+        validator(rule,value){
+          const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if(!value || value.trim().length===0){
+            return new Error("Ingrese un correo");
+          }else if(!regexEmail.test(value)){
+            return new Error("Ingrese un correo válido");
+          }
+        }
       },
       sign: {
         required: true,
