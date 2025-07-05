@@ -66,7 +66,7 @@ onMounted(async () => {
     }
 });
 const updateStep = (step) => {
-    const routerOptions = ['', 'course-info', 'course-test', 'course-content', ''];
+    const routerOptions = ['', 'course-info', 'course-test', 'course-content', 'course-assignation'];
     router.push(`/admin/courses/update/${props.id}/${routerOptions[step]}`);
 }
 </script>

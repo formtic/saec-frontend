@@ -14,6 +14,7 @@ import UpdateCourse from "../views/admin/UpdateCourse.vue";
 import SetCourseInfoForm from "../components/admin/SetCourseInfoForm.vue";
 import TestEditorView from "../views/admin/TestEditorView.vue";
 import AdminCourseContentView from "../components/admin/AdminCourseContentView.vue";
+import AdminCourseAssignationView from "../views/admin/AdminCourseAssignationView.vue";
 
 export default [
   {
@@ -85,6 +86,10 @@ export default [
           {
             path: 'course-content',
             component: AdminCourseContentView
+          },
+          {
+            path: 'course-assignation',
+            component: AdminCourseAssignationView
           }
         ]
       }
