@@ -26,16 +26,13 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { NForm, NFormItem, NGrid, NGridItem, NInput, NSelect } from 'naive-ui';
+import { NForm, NFormItem, NInput, NSelect } from 'naive-ui';
 import { findAllByStatus } from '../../service/teacherService.js';
-import { findTestsByStatus } from '../../service/testService.js';
 import { create } from '../../service/courseService.js';
 
 export default defineComponent({
     name: 'NewCourseForm',
     components: {
-        NGrid,
-        NGridItem,
         NForm,
         NFormItem,
         NSelect,
@@ -45,13 +42,11 @@ export default defineComponent({
         const router = useRouter();
         const formRef = ref(null);
         const teachers = ref(null);
-        const tests = ref(null);
         const model = ref(
             {
                 name: '',
                 description: '',
                 teacher: null,
-                test: null,
             }
         );
 
@@ -85,12 +80,6 @@ export default defineComponent({
             });
         };
 
-        const getTests = async () => {
-            await findTestsByStatus('CREATED').then(response => {
-                tests.value = response.data;
-            });
-        }
-
         const handleValidateCourseForm = (e) => {
             e.preventDefault();
             formRef.value?.validate(errors => {
@@ -102,22 +91,24 @@ export default defineComponent({
 
         const createCourse = async () => {
             const payload = {
-                name: model.value.name,
-                description: model.value.description,
-                teacherId: model.value.teacher,
-                testId: model.value.test ?? ''
+                name: model.value.name.trim(),
+                description: model.value.description.trim(),
+                teacherId: model.value.teacher
             };
-            await create(payload);
+            await create(payload)
+            .then(() => {
+                setTimeout(() => {
+                    router.push('/admin/courses');
+                }, 2000);
+            });
         }
         onMounted(() => {
             getTeachers();
-            getTests();
         });
         return {
             formRef,
             model,
             teachers,
-            tests,
             rules,
             handleValidateCourseForm
         }

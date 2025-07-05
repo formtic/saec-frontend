@@ -35,7 +35,7 @@
                 <SimpleCardItem 
                 :title="course.name"
                 :colorClass="'bg-cyan-600'"
-                @click="router.push(`/admin/courses/update/${course.id}`)"
+                @click="router.push(`/admin/courses/update/${course.id}/${{ CREATED: 'course-test', AVAILABLE: 'course-info' }[course.status]}`)"
                 />
             </n-gi>
         </n-grid>
@@ -102,7 +102,6 @@ export default defineComponent({
         const pageSize = 12;
         const pagesCount = ref(1);
         const router = useRouter();
-
         const toggleSortOrder = () => {
             sortAscending.value = !sortAscending.value;
             findFilterdCourses();
@@ -155,7 +154,7 @@ export default defineComponent({
             pagesCount,
             searchByName,
             paginate,
-            router
+            router,
         };
     },
 });

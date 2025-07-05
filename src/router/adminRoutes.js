@@ -4,7 +4,6 @@ import EmployeesListView from "../views/admin/EmployeesListView.vue";
 import CoursesListView from "../views/admin/CoursesListView.vue";
 import DepartmentsListView from "../views/admin/DepartmentsListView.vue";
 import ProfileView from "../views/admin/ProfileView.vue";
-import NewCourseView from "../views/admin/NewCourseView.vue";
 import CreateDepartment from "../views/admin/CreateDepartment.vue";
 import UpdateDepartmentView from "../views/admin/UpdateDepartmentView.vue";
 import JobsListView from "../views/admin/JobsListView.vue";
@@ -12,6 +11,9 @@ import CreateJobview from "../views/admin/CreateJobview.vue";
 import UpdateJobView from "../views/admin/UpdateJobView.vue";
 import CreateCourse from "../views/admin/CreateCourse.vue";
 import UpdateCourse from "../views/admin/UpdateCourse.vue";
+import SetCourseInfoForm from "../components/admin/SetCourseInfoForm.vue";
+import TestEditorView from "../views/admin/TestEditorView.vue";
+import AdminCourseContentView from "../components/admin/AdminCourseContentView.vue";
 
 export default [
   {
@@ -73,8 +75,16 @@ export default [
         props: true,
         children: [
           {
-            path: '',
-            component: UpdateCourse
+            path: 'course-info',
+            component: SetCourseInfoForm
+          },
+          {
+            path: 'course-test',
+            component: TestEditorView
+          },
+          {
+            path: 'course-content',
+            component: AdminCourseContentView
           }
         ]
       }

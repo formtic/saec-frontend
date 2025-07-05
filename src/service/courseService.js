@@ -33,3 +33,14 @@ export function findById(id) {
         }
     });
 }
+
+export function updateInfo(payload, id) {
+    const token = localStorage.getItem('authToken');
+    return api.put(`${BASE_URL}/course/updateinfo/${id}`, payload, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    );
+}
