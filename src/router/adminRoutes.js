@@ -1,6 +1,5 @@
 import AdminLayout from "../components/admin/AdminLayout.vue";
 import AdminDashboardView from "../views/admin/AdminDashboardView.vue";
-import EmployeesListView from "../views/admin/EmployeesListView.vue";
 import CoursesListView from "../views/admin/CoursesListView.vue";
 import DepartmentsListView from "../views/admin/DepartmentsListView.vue";
 import ProfileView from "../views/admin/ProfileView.vue";
@@ -28,7 +27,19 @@ export default [
       },
       {
         path: "employees",
-        component: EmployeesListView
+        component:()=>import("@/views/admin/AdminEmployeeView.vue"),
+        children:[
+          {
+            path:"",
+            component:()=>import("@/views/admin/EmployeesListView.vue"),
+            name:"employees",
+          },
+          {
+            path:"employee",
+            component:()=>import("@/views/admin/EmployeeDetails.vue"),
+            name:"employee"
+          },
+        ]
       },
       {
         path: "courses",
