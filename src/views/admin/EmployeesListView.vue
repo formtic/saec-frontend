@@ -32,7 +32,7 @@
                 <span style="color:white">A-Z</span>
                 <n-icon :component="sortAscending ? TrendingUpFilled : TrendingDownFilled" color="#ffffff" size="20" />
             </n-button>
-            <n-button color="#0D5A79">
+            <n-button @click="goNewEmployee" color="#0D5A79">
                 <span style="color: white">Nuevo Empleado</span>
             </n-button>
         </div>
@@ -71,7 +71,8 @@
 import { defineComponent, ref, computed } from "vue";
 import { NBreadcrumb, NBreadcrumbItem, NIcon, NForm, NFormItem, NInput, NButton, NSelect, NGrid, NGi, NCard, NPagination } from "naive-ui";
 import { PeopleAltFilled, SearchFilled, TrendingUpFilled, TrendingDownFilled, MoreVertFilled } from "@vicons/material";
-import {useRouter} from "vue-router"
+import { useRouter } from "vue-router";
+
 
 export default defineComponent({
     components: {
@@ -148,7 +149,11 @@ export default defineComponent({
             itemSize: '32px'
         }
 
-        const router = useRouter()
+        const router = useRouter();
+        function goNewEmployee(){
+            router.push({ name: 'new-employee' })
+         } 
+         
         function goDetails(){
             router.push({name:"employee"})
         }
@@ -171,6 +176,7 @@ export default defineComponent({
             changePage,
             MoreVertFilled,
             paginationTheme,
+            goNewEmployee,
             goDetails
         }
     }

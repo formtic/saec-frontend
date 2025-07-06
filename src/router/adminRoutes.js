@@ -32,7 +32,12 @@ export default [
           {
             path:"",
             component:()=>import("@/views/admin/EmployeesListView.vue"),
-            name:"employees",
+            name:"employees"
+          },
+          {
+            path:"new",
+            component:()=>import("@/components/admin/FormNewEmployee.vue"),
+            name:"new-employee"
           },
           {
             path:"employee",
