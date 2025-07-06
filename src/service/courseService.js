@@ -23,3 +23,24 @@ export function filter(name, page, pageSize, sortDirection) {
         }
     });
 }
+
+export function findById(id) {
+    const token = localStorage.getItem('authToken');
+    return api.get(`${BASE_URL}/course/findbyid/${id}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+}
+
+export function updateInfo(payload, id) {
+    const token = localStorage.getItem('authToken');
+    return api.put(`${BASE_URL}/course/updateinfo/${id}`, payload, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    );
+}
