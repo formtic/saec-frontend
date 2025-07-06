@@ -15,6 +15,7 @@ import SetCourseInfoForm from "../components/admin/SetCourseInfoForm.vue";
 import TestEditorView from "../views/admin/TestEditorView.vue";
 import AdminCourseContentView from "../components/admin/AdminCourseContentView.vue";
 import AdminCourseAssignationView from "../views/admin/AdminCourseAssignationView.vue";
+import ExamView from "../views/employee/ExamView.vue";
 
 export default [
   {
@@ -92,7 +93,13 @@ export default [
             component: AdminCourseAssignationView
           }
         ]
+      },
+
+      {
+        path: "employees/viewExam",
+        component: ExamView
       }
+
     ],
     
   },
