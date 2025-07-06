@@ -38,7 +38,7 @@
         </div>
         <div style="width: 100%; padding-top: 1rem; padding-bottom: 1rem; background-color: #0D5A79; margin-bottom: 3rem;" />
         <n-grid cols="2 s:1 m:2 l:2" x-gap="12" y-gap="12">
-            <n-gi v-for="employee in paginatedEmployees" :key="employee.id">
+            <n-gi @click="goDetails" v-for="employee in paginatedEmployees" :key="employee.id">
                 <n-card class="compact-employee-card">
                     <div class="card-content">
                         <div class="employee-info">
@@ -72,6 +72,7 @@ import { defineComponent, ref, computed } from "vue";
 import { NBreadcrumb, NBreadcrumbItem, NIcon, NForm, NFormItem, NInput, NButton, NSelect, NGrid, NGi, NCard, NPagination } from "naive-ui";
 import { PeopleAltFilled, SearchFilled, TrendingUpFilled, TrendingDownFilled, MoreVertFilled } from "@vicons/material";
 import { useRouter } from "vue-router";
+
 
 export default defineComponent({
     components: {
@@ -151,6 +152,10 @@ export default defineComponent({
         const router = useRouter();
         function goNewEmployee(){
             router.push({ name: 'new-employee' })
+         } 
+         
+        function goDetails(){
+            router.push({name:"employee"})
         }
 
         return {
@@ -171,7 +176,8 @@ export default defineComponent({
             changePage,
             MoreVertFilled,
             paginationTheme,
-            goNewEmployee
+            goNewEmployee,
+            goDetails
         }
     }
 })

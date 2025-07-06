@@ -19,6 +19,7 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@vicons/ionicons5": "^0.13.0",
     "@vicons/material": "^0.13.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "naive-ui": "^2.41.0",
