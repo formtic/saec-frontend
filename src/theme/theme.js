@@ -4,7 +4,9 @@ export default {
         siderToggleButtonColor: '#0D5A79', // Color de fondo del botón
         siderToggleButtonIconColor: '#f1f1f1', // Color del ícono (flecha)
         siderHoverColor: '#0D5A79', // Color al pasar el mouse
-        siderToggleButtonBorder: '2px solid '
+        siderToggleButtonBorder: '2px solid ',
+        siderColor: '#0d5a79',
+        headerColor: '#0d5a79'
     },
     Card: {
         borderRadius: '10px',

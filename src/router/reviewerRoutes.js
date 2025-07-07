@@ -1,29 +1,18 @@
+import TeacherCoursesDashboardView from "../views/teacher/course/TeacherCoursesDashboardView.vue";
+import TeacherLayout from "../views/teacher/layout/TeacherLayout.vue";
 export default [
   {
-    path: "/reviewer",
-    component: () => import("@/layouts/ReviewerLayout.vue"),
+    path: "/teacher",
+    component: TeacherLayout,
     children: [
       {
-        path: "",
-        component: () => import("@/views/reviewer/ViewListCourses.vue"),
-        name: "courses",
-        children: [
-          {
-            path: "",
-            name:'course-list',
-            component: ()=>import("@/components/reviewer/ListCourses.vue"),
-          },
-          {
-            path: "exams/:id/:title",
-            name: "course-exams",
-            component: ()=>import("@/components/reviewer/ListExam.vue"),
-          },
-        ],
-      },
+        path: 'courses',
+        component: TeacherCoursesDashboardView
+      }
     ],
     meta: {
       requiresAuth: true,
-      roles: ["ROLE_REVIEWER"],
+      roles: ["ROLE_TEACHER"],
     },
   },
 ];
