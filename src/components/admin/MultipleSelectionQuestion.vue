@@ -19,6 +19,7 @@
         </template>
       </n-button>
     </div>
+
     <div style="width: calc(100% - 1rem); display: flex; justify-content: center;">
       <n-button color="#0D5A79" @click="addAnswer">Agregar Respuesta</n-button>
     </div>
@@ -37,7 +38,7 @@ export default defineComponent({
     NButton,
     NIcon
   },
-  setup() {
+  setup(_, { expose }) {
     const answers = ref([{ isCorrect: false, text: '' }]);
 
     const allowedRegex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]*$/;
@@ -60,6 +61,15 @@ export default defineComponent({
         answers.value.splice(index, 1);
       }
     };
+
+    expose({
+      getData: () => ({
+        answers: answers.value.map(a => ({
+          text: a.text,
+          isCorrect: a.isCorrect
+        }))
+      })
+    });
 
     return {
       answers,

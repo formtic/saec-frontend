@@ -1,24 +1,24 @@
 <template>
   <div>
     <h3 style="text-align: center; width: 100%; font-weight: 400">
-      El empleado verá la lista de respuestas aleatoriamente y divididas en dos columnas las cuales se podrán ordenar.
+      The user will see the answers randomly in two columns that can be sorted.
     </h3>
 
     <div class="rows-container">
       <div v-for="element in items" :key="element.id" class="question-row">
         <n-input
-          v-model:value="element.textA"
-          placeholder="Elemento A"
+          v-model:value="element.concept"
+          placeholder="Concept"
           class="input"
-          :status="isValid(element.textA) ? 'success' : 'error'"
-          @input="(val) => onInput(val, element.id, 'textA')"
+          :status="isValid(element.concept) ? 'success' : 'error'"
+          @input="(val) => onInput(val, element.id, 'concept')"
         />
         <n-input
-          v-model:value="element.textB"
-          placeholder="Elemento B"
+          v-model:value="element.definition"
+          placeholder="Definition"
           class="input"
-          :status="isValid(element.textB) ? 'success' : 'error'"
-          @input="(val) => onInput(val, element.id, 'textB')"
+          :status="isValid(element.definition) ? 'success' : 'error'"
+          @input="(val) => onInput(val, element.id, 'definition')"
         />
         <n-button color="red" @click="removeItem(element.id)">
           <template #icon>
@@ -29,7 +29,7 @@
     </div>
 
     <div class="add-button-container">
-      <n-button color="#0D5A79" @click="addRow">Agregar Elemento</n-button>
+      <n-button color="#0D5A79" @click="addRow">Add Match</n-button>
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ import { NIcon, NInput, NButton } from "naive-ui";
 import { DeleteFilled, MenuFilled } from "@vicons/material";
 
 export default defineComponent({
-  name: "OrderQuestionSingleRow",
+  name: "SimpleMatchQuestion",
   components: {
     NInput,
     NButton,
@@ -48,10 +48,10 @@ export default defineComponent({
     DeleteFilled,
     MenuFilled,
   },
-  setup() {
+  setup(_, { expose }) {  // <--- Aquí usamos expose en setup
     const items = ref([
-      { id: 1, textA: "", textB: "", order: 1 },
-      { id: 2, textA: "", textB: "", order: 2 },
+      { id: 1, concept: "", definition: "" },
+      { id: 2, concept: "", definition: "" },
     ]);
 
     const nextId = ref(3);
@@ -73,9 +73,8 @@ export default defineComponent({
     const addRow = () => {
       items.value.push({
         id: nextId.value++,
-        textA: "",
-        textB: "",
-        order: items.value.length + 1,
+        concept: "",
+        definition: "",
       });
     };
 
@@ -84,16 +83,18 @@ export default defineComponent({
         const index = items.value.findIndex((item) => item.id === id);
         if (index !== -1) {
           items.value.splice(index, 1);
-          updateOrderNumbers();
         }
       }
     };
 
-    const updateOrderNumbers = () => {
-      items.value.forEach((item, index) => {
-        item.order = index + 1;
-      });
-    };
+    expose({
+      getData: () => ({
+        matches: items.value.map(item => ({
+          concept: item.concept,
+          definition: item.definition
+        }))
+      })
+    });
 
     return {
       items,

@@ -25,12 +25,8 @@
                   <MenuFilled />
                 </n-icon>
                 <div class="flex-grow min-w-0">
-                  <n-input
-                    v-model:value="element.text"
-                    placeholder="Escribe una opción"
-                    :status="getOptionStatus(element.text)"
-                    @input="(value) => onInput(value, element, 'text')"
-                  />
+                  <n-input v-model:value="element.text" placeholder="Escribe una opción"
+                    :status="getOptionStatus(element.text)" @input="(value) => onInput(value, element, 'text')" />
                   <p v-if="!isValidText(element.text)" style="color: red; font-size: 14px;">
                     El texto es obligatorio y solo perimte caracteres alfanuméricos.
                   </p>
@@ -67,32 +63,22 @@
                     <MenuFilled />
                   </n-icon>
                   <div class="flex-grow min-w-0">
-                    <n-input
-                      v-model:value="element.title"
-                      placeholder="Título de columna"
-                      :status="getOptionStatus(element.title)"
-                      @input="(value) => onInput(value, element, 'title')"
-                    />
+                    <n-input v-model:value="element.title" placeholder="Título de columna"
+                      :status="getOptionStatus(element.title)" @input="(value) => onInput(value, element, 'title')" />
                     <p v-if="!isValidText(element.title)" style="color: red; font-size: 14px;">
                       El texto no debe estar vacío y solo debe contener letras, números y signos permitidos.
                     </p>
                   </div>
-                  <n-button color="red" @click="removeColumn(element.id)" :disabled="columns.length <= 1" class="flex-shrink-0">
+                  <n-button color="red" @click="removeColumn(element.id)" :disabled="columns.length <= 1"
+                    class="flex-shrink-0">
                     <template #icon>
                       <n-icon :component="DeleteFilled" />
                     </template>
                   </n-button>
                 </div>
 
-                <draggable
-                  v-model="element.items"
-                  group="items"
-                  :item-key="itemKey"
-                  handle=".handle"
-                  :animation="150"
-                  class="n-card n-card--content-padding column-items bg-white"
-                  @add="onItemAdd(element)"
-                >
+                <draggable v-model="element.items" group="items" :item-key="itemKey" handle=".handle" :animation="150"
+                  class="n-card n-card--content-padding column-items bg-white" @add="onItemAdd(element)">
                   <template #item="{ element: item }">
                     <n-card embedded class="option-card in-column">
                       <div class="flex items-center gap-2 w-full">
@@ -131,7 +117,7 @@ export default defineComponent({
     DeleteFilled,
     MenuFilled,
   },
-  setup() {
+  setup(_, { expose }) {  // <-- Aquí agregamos expose
     const allowedRegex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]*$/;
 
     const options = ref([
@@ -212,8 +198,29 @@ export default defineComponent({
     };
 
     const onItemAdd = (column) => {
-      // Manejador de evento de arrastre, si se requiere lógica adicional
+      // Lógica adicional si la necesitas al arrastrar ítems
     };
+
+    expose({
+      getData: () => {
+        const usedItems = columns.value.flatMap(col =>
+          col.items.map(({ id, text }) => ({ id, text }))
+        );
+
+        const allItems = [...new Map([
+          ...usedItems,
+          ...options.value.map(({ id, text }) => ({ id, text }))
+        ].map(item => [item.id, item])).values()];
+
+        return {
+          options: allItems,
+          groups: columns.value.map(({ title, items }) => ({
+            title,
+            items: items.map(({ id, text }) => ({ id, text }))
+          }))
+        };
+      }
+    });
 
     return {
       options,
@@ -344,5 +351,3 @@ export default defineComponent({
   }
 }
 </style>
-
-

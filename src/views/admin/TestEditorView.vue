@@ -3,6 +3,7 @@
         <n-form-item label="Nombre del examen" required>
             <n-input placeholder="Nombre del examen" />
         </n-form-item>
+
         <n-grid :cols="2">
             <n-gi>
                 <n-form-item label="Versión" required>
@@ -12,6 +13,7 @@
                     <n-select placeholder="Selecciona el tiempo de evaluación" />
                 </n-form-item>
             </n-gi>
+
             <n-gi style="padding-left: 25px;">
                 <n-form-item label="Logo del examen">
                     <n-upload>
@@ -31,22 +33,47 @@
                 </n-form-item>
             </n-gi>
         </n-grid>
+
         <div style="width: calc(100% - 1rem); display: flex; justify-content: center; gap: 1rem; margin-bottom: 30px">
             <n-button color="#0D5A79" style="border-radius: 8px">Vista Previa</n-button>
         </div>
-        <QuestionContainer v-for="(quesiton, index) in questions" :key="quesiton.id" @remove="removeQuesiton(index)" />
+
+        <QuestionContainer v-for="(question, index) in questions" :key="question.id" @remove="removeQuestion(index)"
+            :ref="el => setQuestionRef(el, index)" />
+
         <div style="width: calc(100% - 1rem); display: flex; justify-content: center; gap: 1rem;">
-            <n-button color="#0D5A79" size="large" style="border-radius: 8px" @click="addQuestion">Nueva
-                Pregunta</n-button>
-            <n-button color="#0D5A79" size="large" style="border-radius: 8px">Continuar registro</n-button>
+            <n-button color="#0D5A79" size="large" style="border-radius: 8px" @click="addQuestion">
+                Nueva Pregunta
+            </n-button>
+            <n-button color="#0D5A79" size="large" style="border-radius: 8px" @click="continuarRegistro">
+                Continuar registro
+            </n-button>
         </div>
     </div>
 </template>
 
+
 <script scoped>
 import { defineComponent, ref, inject } from "vue";
-import { BookFilled, AddCircleFilled, DeleteFilled } from "@vicons/material";
-import { NBreadcrumb, NBreadcrumbItem, NIcon, NFormItem, NInput, NGrid, NGi, NSelect, NUpload, NUploadDragger, NDatePicker, NButton, } from "naive-ui";
+import {
+    BookFilled,
+    AddCircleFilled,
+    DeleteFilled
+} from "@vicons/material";
+import {
+    NBreadcrumb,
+    NBreadcrumbItem,
+    NIcon,
+    NFormItem,
+    NInput,
+    NGrid,
+    NGi,
+    NSelect,
+    NUpload,
+    NUploadDragger,
+    NDatePicker,
+    NButton
+} from "naive-ui";
 import { useRouter } from "vue-router";
 import QuestionContainer from "../../components/admin/QuestionContainer.vue";
 
@@ -69,34 +96,63 @@ export default defineComponent({
         QuestionContainer
     },
     setup() {
-        const currentStep = inject('step');
+        const currentStep = inject("step");
         currentStep.value = 2;
+
         const router = useRouter();
-        const navigateBack = () => {
-            router.replace("/admin/courses");
-        };
         const questions = ref([{ id: Date.now() }]);
+
+        const questionRefs = ref([]);
 
         const addQuestion = () => {
             questions.value.push({ id: Date.now() });
         };
 
-        const removeQuesiton = (index) => {
+        const removeQuestion = (index) => {
             if (questions.value.length > 1) {
                 questions.value.splice(index, 1);
+                questionRefs.value.splice(index, 1);
             }
+        };
+
+        const setQuestionRef = (el, index) => {
+            if (el) {
+                questionRefs.value[index] = el;
+            }
+        }
+
+        const continuarRegistro = async () => {
+
+            const allQuestionsData = await Promise.all(
+                questionRefs.value.map(async (refComp) => {
+                    try {
+                        if (refComp?.getData) {
+                            return await refComp.getData();
+                        }
+                        return null;
+                    } catch (error) {
+                        console.error("Error al obtener datos de pregunta:", error);
+                        return null;
+                    }
+                })
+            ).then(results => results.filter(Boolean));
+
+            console.log("Preguntas recopiladas:", allQuestionsData);
+
+
         };
 
         return {
             BookFilled,
-            navigateBack,
             AddCircleFilled,
             DeleteFilled,
-            addQuestion,
-            removeQuesiton,
             questions,
+            addQuestion,
+            removeQuestion,
+            continuarRegistro,
+            setQuestionRef
         };
-    },
+    }
 });
 </script>
 
