@@ -35,8 +35,8 @@
                             {{ title }}
                         </h1>
                     </n-flex>
+                    <router-view></router-view>
                 </div>
-                <router-view></router-view>
             </n-layout-content>
         </n-layout>
 
@@ -88,8 +88,8 @@ const handleNavigate = (key, item) => {
 }
 
 const handleBreadCrumbNavigate = (path, index) => {
-    if(index !== 0) {
-        router.push(`teacher/${path}`);        
+    if (index !== 0) {
+        router.push(`teacher/${path}`);
     }
 }
 
