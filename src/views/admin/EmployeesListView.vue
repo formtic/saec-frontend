@@ -58,28 +58,23 @@
 
     <!-- lista de contenido -->
     <div style="background-color:#0D5A79; border-radius:10px 10px 0 0;" class="p-4 mt-2"/>
-    <n-grid
-      class="mt-2"
-      cols="1 m:2 l:2"
-      x-gap="12"
-      y-gap="12"
-      responsive="screen"
-      item-responsive
-    >
-      <n-grid-item v-for="employee in paginatedEmployees" :key="employee.id">
-        <CardEmployee
-          :name="employee.name"
-          :employeeNumber="employee.employeeNumber"
-          :department="employee.department"
-          :job="employee.job"
-        />
-      </n-grid-item>
-    </n-grid>
+      <n-scrollbar style="max-height: 360px">
+        <n-grid class="mt-2" cols="1 m:2 l:2" x-gap="12" y-gap="12" responsive="screen" item-responsive>
+            <n-grid-item v-for="employee in employees" :key="employee.employeeNumber">
+              <CardEmployee
+                :name="employee.fullname"
+                :employeeNumber="employee.employeeNumber"
+                :department="employee.departments"
+                :job="employee.jobs"
+              />
+            </n-grid-item>
+        </n-grid>
+      </n-scrollbar>
 
     <n-pagination
-      v-model:page="currentPage"
+      :page="currentPage"
       :page-count="totalPages"
-      :on-update:page="changePage"
+      @update:page="changePage"
       class="pagination"
       :theme-overrides="paginationTheme"
     />
@@ -99,10 +94,11 @@
   </div>
 </template>
 
-<script scoped>
-import { defineComponent, ref, computed } from "vue";
+<script>
+import { defineComponent, ref, computed,onMounted } from "vue";
 import {
   NBreadcrumb,
+  NScrollbar,
   NBreadcrumbItem,
   NIcon,
   NForm,
@@ -128,10 +124,11 @@ import {
   PlusFilled,
 } from "@vicons/material";
 import CardEmployee from "../../components/admin/CardEmployee.vue";
-
+import {findAll as findAllService} from "../../service/employeeService.js";
 export default defineComponent({
   components: {
     NBreadcrumb,
+    NScrollbar,
     NBreadcrumbItem,
     NIcon,
     NForm,
@@ -151,12 +148,38 @@ export default defineComponent({
     CardEmployee,
   },
   setup() {
-    const searchQuery = ref("");
-    const sortAscending = ref(true);
-
-    const toggleSortOrder = () => {
-      sortAscending.value = !sortAscending.value;
+    const currentPage = ref(1);
+    const totalPages = ref(1);
+    const employees = ref([]);
+    const sortField=ref("fullname");
+    const sortDirection = ref("ASC");
+    const changePage = (page) => {
+      currentPage.value = page;
+      loadEmployees();
     };
+
+    const loadEmployees=async()=>{
+      try {
+        const response = await findAllService(currentPage.value-1,sortField.value,sortDirection.value);
+        console.log("API RESPONSE: ",response);
+        employees.value=response.data.content;
+        totalPages.value=response.data.totalPages;
+      } catch (error) {
+        console.log("Error",error);
+      }
+    }
+
+    onMounted(async() => {
+      loadEmployees();
+    });
+
+    const sortAscending = ref(true);
+    const toggleSortOrder=async()=>{
+      sortAscending.value = !sortAscending.value;
+      sortDirection.value = sortAscending.value ? "ASC" : "DESC";
+      await loadEmployees();
+    }
+
     const departmentOptions = [
       { label: "Inyección", value: "inyección" },
       { label: "Producción", value: "produccion" },
@@ -173,90 +196,6 @@ export default defineComponent({
       { label: "Opción 4", value: "Opción 4" },
     ];
 
-    const employees = ref([
-      {
-        id: 1,
-        name: "Marquina Hernández Joana Andrea",
-        employeeNumber: "623",
-        department: "Laboratorio Quimico para limpiadores",
-        job: "Químico de Estabilidad ",
-      },
-      {
-        id: 2,
-        name: "Carlos Pérez",
-        employeeNumber: "456",
-        department: "IT",
-        job: "Desarrollador",
-      },
-      {
-        id: 3,
-        name: "Ana Gómez",
-        employeeNumber: "789",
-        department: "RRHH",
-        job: "Reclutadora",
-      },
-      {
-        id: 4,
-        name: "Luis Torres",
-        employeeNumber: "101",
-        department: "Ventas",
-        job: "Ejecutivo de cuentas",
-      },
-      {
-        id: 5,
-        name: "Sofía Martínez",
-        employeeNumber: "202",
-        department: "Marketing",
-        job: "Diseñadora gráfica",
-      },
-      {
-        id: 6,
-        name: "Fernando López",
-        employeeNumber: "303",
-        department: "Producción",
-        job: "Ingeniero de calidad",
-      },
-      {
-        id: 7,
-        name: "Elena Ríos",
-        employeeNumber: "404",
-        department: "Administración",
-        job: "Contadora",
-      },
-      {
-        id: 8,
-        name: "Javier Domínguez",
-        employeeNumber: "505",
-        department: "Seguridad",
-        job: "Jefe de seguridad",
-      },
-      {
-        id: 9,
-        name: "Laura Méndez",
-        employeeNumber: "606",
-        department: "Compras",
-        job: "Coordinadora de compras",
-      },
-      {
-        id: 10,
-        name: "Roberto Chávez",
-        employeeNumber: "707",
-        department: "Almacén",
-        job: "Supervisor de inventarios",
-      },
-    ]);
-
-    const itemsPerPage = 6;
-    const currentPage = ref(1);
-    const totalPages = computed(() => Math.ceil(employees.value.length / itemsPerPage));
-    const paginatedEmployees = computed(() => {
-      const start = (currentPage.value - 1) * itemsPerPage;
-      return employees.value.slice(start, start + itemsPerPage);
-    });
-    const changePage = (page) => {
-      currentPage.value = page;
-    };
-
     const paginationTheme = {
       itemColor: "#0D5A79",
       itemColorActive: "white",
@@ -272,20 +211,18 @@ export default defineComponent({
       PeopleAltFilled,
       PlusFilled,
       SearchFilled,
-      searchQuery,
       TrendingUpFilled,
       TrendingDownFilled,
+      currentPage,
+      totalPages,
+      changePage,
+      employees,
       toggleSortOrder,
-      sortAscending,
       departmentOptions,
       jobsOptions,
       employees,
-      itemsPerPage,
-      currentPage,
-      totalPages,
-      paginatedEmployees,
-      changePage,
       MoreVertFilled,
+      sortAscending,
       CardEmployee,
       paginationTheme,
     };
@@ -315,14 +252,6 @@ export default defineComponent({
   align-items: center;
 }
 
-.search-input {
-  flex-grow: 1;
-}
-
-.search-button {
-  padding: 8px 12px;
-}
-
 .admin-title {
   font-size: 3.5rem;
   font-weight: bold;
@@ -341,67 +270,5 @@ export default defineComponent({
   .admin-header {
     padding-top: 15px;
   }
-}
-
-.compact-employee-card {
-  height: auto;
-  min-height: unset;
-  padding: 12px;
-}
-
-.card-content {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.employee-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.name-code-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-}
-
-.employee-name {
-  font-weight: bold;
-  font-size: 0.95rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-}
-
-.employee-code {
-  font-size: 0.85rem;
-  color: #778c96;
-  white-space: nowrap;
-}
-
-.details-row {
-  display: flex;
-  gap: 12px;
-  font-size: 0.85rem;
-  color: #555;
-}
-
-.department::before {
-  content: "Dpto: ";
-  font-weight: bold;
-}
-
-.position {
-  font-style: italic;
-}
-
-.actions {
-  display: flex;
-  align-items: flex-start;
 }
 </style>
