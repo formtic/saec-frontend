@@ -1,22 +1,23 @@
 <template>
     <div class="p-4">
         <n-form-item label="Nombre del examen" required>
-            <n-input placeholder="Nombre del examen" />
+            <n-input v-model:value="nombreExamen" placeholder="Nombre del examen" />
         </n-form-item>
 
         <n-grid :cols="2">
             <n-gi>
                 <n-form-item label="Versión" required>
-                    <n-input placeholder="Versión del examen" />
+                    <n-input v-model:value="versionExamen" placeholder="Versión del examen" />
                 </n-form-item>
                 <n-form-item label="Duración" required>
-                    <n-select placeholder="Selecciona el tiempo de evaluación" />
+                    <n-select v-model:value="duracionExamen" :options="duracionOptions"
+                        placeholder="Selecciona el tiempo de evaluación" />
                 </n-form-item>
             </n-gi>
 
             <n-gi style="padding-left: 25px;">
                 <n-form-item label="Logo del examen">
-                    <n-upload>
+                    <n-upload :max="1" :on-change="handleLogoChange" :default-upload="false">
                         <n-upload-dragger>
                             <div style="margin-bottom:12px">
                                 <n-icon size="48">
@@ -25,7 +26,7 @@
                             </div>
                             <p style="font-size: 16px">
                                 Arrastra tu imagen aquí, o
-                                <span style="color: #1D8EC6">has clic para seleccionar</span>
+                                <span style="color: #1D8EC6">haz clic para seleccionar</span>
                             </p>
                             <p style="color:#778C96">Máximo 5MB</p>
                         </n-upload-dragger>
@@ -52,7 +53,6 @@
     </div>
 </template>
 
-
 <script scoped>
 import { defineComponent, ref, inject } from "vue";
 import {
@@ -74,8 +74,14 @@ import {
     NDatePicker,
     NButton
 } from "naive-ui";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import QuestionContainer from "../../components/admin/QuestionContainer.vue";
+import api from "../../config/interceptor";
+
+
+const BASE_URL = import.meta.env.VITE_SPRING_API_URL;
+
+
 
 export default defineComponent({
     components: {
@@ -101,8 +107,26 @@ export default defineComponent({
 
         const router = useRouter();
         const questions = ref([{ id: Date.now() }]);
-
         const questionRefs = ref([]);
+
+        const route = useRoute();
+        const courseId = route.params.id;
+
+
+        const nombreExamen = ref("");
+        const versionExamen = ref("");
+        const duracionExamen = ref(null);
+        const logoExamen = ref(null);
+
+        const duracionOptions = [
+            { label: '30 minutos', value: '30m' },
+            { label: '1 hora', value: '1h' },
+            { label: '2 horas', value: '2h' }
+        ];
+
+        const handleLogoChange = (options) => {
+            logoExamen.value = options.file;
+        };
 
         const addQuestion = () => {
             questions.value.push({ id: Date.now() });
@@ -122,7 +146,6 @@ export default defineComponent({
         }
 
         const continuarRegistro = async () => {
-
             const allQuestionsData = await Promise.all(
                 questionRefs.value.map(async (refComp) => {
                     try {
@@ -137,10 +160,42 @@ export default defineComponent({
                 })
             ).then(results => results.filter(Boolean));
 
-            console.log("Preguntas recopiladas:", allQuestionsData);
+
+            var data = {
+                name: nombreExamen.value,
+                creationDate: new Date(),
+                status: "CREATED",
+                version: versionExamen.value,
+                courseId: courseId,
+                questions: allQuestionsData
+            }
 
 
-        };
+            console.log("mi dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa:", data);
+
+            try {
+                
+                const response = await api.post(
+                    `${BASE_URL}/test/CreateExam`,
+                    data,
+                    {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    }
+                );
+
+                console.log("Examen creado exitosamente:", response.data);
+
+            } catch (error) {
+                console.error("Error al crear el examen:", error);
+            }
+        }
+
+
+
+
+
 
         return {
             BookFilled,
@@ -150,7 +205,12 @@ export default defineComponent({
             addQuestion,
             removeQuestion,
             continuarRegistro,
-            setQuestionRef
+            setQuestionRef,
+            nombreExamen,
+            versionExamen,
+            duracionExamen,
+            duracionOptions,
+            handleLogoChange
         };
     }
 });

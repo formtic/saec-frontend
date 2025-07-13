@@ -66,15 +66,20 @@ export default defineComponent({
 
     expose({
       getData: () => {
-        console.log("getData en SimpleSelectionQuestion:", answers.value);
+        const correctIndex = answers.value.findIndex(a => a.isCorrect);
+        const answerTexts = answers.value.map(a => a.text);
+
+        console.log("getData en SimpleSelectionQuestion:", {
+          correctAnswer: correctIndex,
+          answers: answerTexts
+        });
+
         return {
-          answers: answers.value.map(a => ({
-            text: a.text,
-            isCorrect: a.isCorrect
-          }))
+          correctAnswer: correctIndex.toString(),
+          answers: answerTexts
         };
       }
-    })
+    });
 
     return {
       answers,

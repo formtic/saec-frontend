@@ -102,8 +102,9 @@ export default defineComponent({
     const questionText = ref("");
     const uploadedImage = ref(null);
     const childComponentRef = ref(null);
-    const componentKey = ref(0); // Para forzar re-render
+    const componentKey = ref(0);
 
+    // Opciones visibles del selector
     const questionTypes = [
       { label: "Identificación de elementos", value: "identifierQuestion" },
       { label: "Pregunta de selección simple", value: "simpleSelectionQuestion" },
@@ -114,6 +115,18 @@ export default defineComponent({
       { label: "Pregunta abierta", value: "simpleOpenQuestion" },
       { label: "Pregunta abierta múltiple", value: "multipleOpenQuestion" }
     ];
+
+    // Mapeo interno -> tipo real deseado
+    const questionTypeMap = {
+      identifierQuestion: "IDENTIFIER_QUESTION",
+      simpleSelectionQuestion: "SIMPLE_CHOICE_QUESTION",
+      multipleSelectionQuestion: "MULTIPLE_CHOICE_QUESTION",
+      orderQuestion: "ORDER_QUESTION",
+      simpleMatchQuestion: "SIMPLE_MATCH_QUESTION",
+      multipleMatchQuestion: "MULTIPLE_MATCH_QUESTION",
+      simpleOpenQuestion: "OPEN_QUESTION",
+      multipleOpenQuestion: "MULTIPLE_OPEN_QUESTION"
+    };
 
     const questionComponents = {
       identifierQuestion: "IdentifierQuestion",
@@ -132,8 +145,8 @@ export default defineComponent({
 
     const handleChangeType = async (newType) => {
       selectedQuestionType.value = newType;
-      componentKey.value++; // Forzar re-render del componente hijo
-      await nextTick(); // Esperar a que Vue actualice el DOM
+      componentKey.value++; // Forzar re-render
+      await nextTick();
     };
 
     const handleUploadChange = (options) => {
@@ -141,16 +154,13 @@ export default defineComponent({
     };
 
     const getData = async () => {
-      await nextTick(); // Esperar a que el componente hijo esté listo
+      await nextTick();
 
       const baseData = {
-        type: selectedQuestionType.value,
+        questionType: questionTypeMap[selectedQuestionType.value] || selectedQuestionType.value,
         question: questionText.value,
         image: uploadedImage.value
       };
-
-
-      await nextTick();
 
       if (!childComponentRef.value?.getData) {
         console.warn("Componente hijo no expone getData");
@@ -164,15 +174,16 @@ export default defineComponent({
         console.error("Error al obtener datos del hijo:", error);
         return baseData;
       }
-    };
+    }
 
-    expose({ getData }); // Correcto en setup tradicional
+    expose({ getData });
 
     return {
       selectedQuestionType,
       questionText,
       uploadedImage,
       questionTypes,
+      questionTypeMap,
       currentQuestionComponent,
       handleChangeType,
       handleUploadChange,
