@@ -41,9 +41,7 @@ export default defineComponent({
     expose({
       getData: () => {
         return {
-          answer: {
-            text: answer.value.text
-          }
+          correctAnswer:  answer.value.text
         };
       }
     });

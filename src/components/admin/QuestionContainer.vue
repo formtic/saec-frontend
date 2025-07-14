@@ -121,10 +121,10 @@ export default defineComponent({
       identifierQuestion: "IDENTIFIER_QUESTION",
       simpleSelectionQuestion: "SIMPLE_CHOICE_QUESTION",
       multipleSelectionQuestion: "MULTIPLE_CHOICE_QUESTION",
-      orderQuestion: "ORDER_QUESTION",
+      orderQuestion: "SORT_QUESTION",
       simpleMatchQuestion: "SIMPLE_MATCH_QUESTION",
       multipleMatchQuestion: "MULTIPLE_MATCH_QUESTION",
-      simpleOpenQuestion: "OPEN_QUESTION",
+      simpleOpenQuestion: "SINGLE_OPEN_QUESTION",
       multipleOpenQuestion: "MULTIPLE_OPEN_QUESTION"
     };
 
@@ -158,7 +158,7 @@ export default defineComponent({
 
       const baseData = {
         questionType: questionTypeMap[selectedQuestionType.value] || selectedQuestionType.value,
-        question: questionText.value,
+        title: questionText.value,
         image: uploadedImage.value
       };
 

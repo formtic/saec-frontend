@@ -43,7 +43,7 @@ export default defineComponent({
     DeleteFilled,
     MenuFilled,
   },
-  setup(_, { expose }) { 
+  setup(_, { expose }) {
     const items = ref([
       { id: 1, text: "", order: 1 },
       { id: 2, text: "", order: 2 },
@@ -96,9 +96,9 @@ export default defineComponent({
 
     expose({
       getData: () => ({
-        items: items.value.map(item => ({
-          text: item.text,
-          order: item.order
+        answers: items.value.map((item, index) => ({
+          answerOrder: index,
+          answer: item.text
         }))
       })
     });

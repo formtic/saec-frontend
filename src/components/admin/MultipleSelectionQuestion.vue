@@ -1,18 +1,10 @@
 <template>
   <div>
-    <div
-      v-for="(answer, index) in answers"
-      :key="index"
-      style="display: flex; width: 100%; align-items: center; gap: 15px; margin-bottom: 20px"
-    >
+    <div v-for="(answer, index) in answers" :key="index"
+      style="display: flex; width: 100%; align-items: center; gap: 15px; margin-bottom: 20px">
       <n-checkbox v-model:checked="answer.isCorrect" />
-      <n-input
-        v-model:value="answer.text"
-        placeholder="Respuesta"
-        :status="isValid(answer.text) ? 'success' : 'error'"
-        @input="(val) => onInput(val, index)"
-        style="flex-grow: 1"
-      />
+      <n-input v-model:value="answer.text" placeholder="Respuesta" :status="isValid(answer.text) ? 'success' : 'error'"
+        @input="(val) => onInput(val, index)" style="flex-grow: 1" />
       <n-button color="red" @click="removeAnswer(index)">
         <template #icon>
           <n-icon :component="DeleteFilled" />
@@ -62,13 +54,22 @@ export default defineComponent({
       }
     };
 
+
     expose({
-      getData: () => ({
-        answers: answers.value.map(a => ({
-          text: a.text,
-          isCorrect: a.isCorrect
-        }))
-      })
+      getData: () => {
+        const correctIndices = answers.value
+          .map((a, index) => (a.isCorrect ? index : -1))
+          .filter(index => index !== -1);
+
+        return {
+          answers: answers.value.map(a => a.text),
+          correctAnswers: {
+            answerType: "CHOICE_ANSWER",
+            answers: correctIndices
+          },
+          numberOfChoices: correctIndices.length
+        };
+      }
     });
 
     return {
