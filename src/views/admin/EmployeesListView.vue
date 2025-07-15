@@ -10,43 +10,45 @@
       </n-breadcrumb>
       <h1 class="admin-title">Empleados</h1>
     </div>
-
     <!-- filtros de busqueda -->
+    <h3 class="mb-4">Filtros:</h3>
     <n-space size="large" vertical>
       <n-grid x-gap="16" cols="1 m:9 l:9" item-responsive responsive="screen">
         <n-grid-item span="1 m:2 l:2">
-          <n-form-item label="Buscar empleado">
+          <n-form-item label="Por empleado">
             <n-input-group>
-              <n-input placeholder="Nombre empleado" clearable />
-              <n-button type="primary"><n-icon :component="SearchFilled" /></n-button>
+              <n-input clearable v-model:value="keyword" placeholder="Nombre empleado" @update:value="handleKeywordChange"/>
+              <n-button @click="findEmployee" type="primary"><n-icon :component="SearchFilled" /></n-button>
             </n-input-group>
           </n-form-item>
         </n-grid-item>
         <n-grid-item span="1 m:2 l:2">
-          <n-form-item label="Filtro por departamento">
+          <n-form-item label="Por departamento">
             <n-input-group>
-              <n-select :options="departmentOptions" placeholder="Departamento" />
-              <n-button type="primary"><n-icon :component="SearchFilled" /></n-button>
+              <n-select clearable v-model:value="selectedDepartment" :options="departmentOptions" placeholder="Departamento" @update:value="handleKeywordChangeDepartment"/>
+              <n-button @click="findByDepartment" type="primary"><n-icon :component="SearchFilled" /></n-button>
             </n-input-group>
           </n-form-item>
         </n-grid-item>
         <n-grid-item span="1 m:2 l:2">
-          <n-form-item label="Filtro por puestos">
+          <n-form-item label="Por puesto">
             <n-input-group>
-              <n-select :options="jobsOptions" placeholder="Puesto de trabajo" />
-              <n-button type="primary"><n-icon :component="SearchFilled" /></n-button>
+              <n-select clearable v-model:value="selectedJob" :options="jobsOptions" placeholder="Puesto de trabajo" @update:value="handleKeywordChangeJob"/>
+              <n-button @click="findByJob" type="primary"><n-icon :component="SearchFilled" /></n-button>
             </n-input-group>
           </n-form-item>
         </n-grid-item>
         <n-grid-item class="styleContentButton" span="1">
-          <n-button class="styleButton" @click="toggleSortOrder" type="primary">
+          <n-form-item>
+            <n-button class="styleButton" @click="toggleSortOrder" type="primary">
             <span style="color: white">A-Z</span>
             <n-icon
               :component="sortAscending ? TrendingUpFilled : TrendingDownFilled"
               color="#ffffff"
               size="20"
             />
-          </n-button>
+            </n-button>
+          </n-form-item>
         </n-grid-item>
         <n-grid-item span="0 m:2 l:2" class="styleContentButton">
           <n-button class="styleButton" @click="" type="primary">
@@ -124,7 +126,9 @@ import {
   PlusFilled,
 } from "@vicons/material";
 import CardEmployee from "../../components/admin/CardEmployee.vue";
-import {findAll as findAllService} from "../../service/employeeService.js";
+import {findAll as findAllEmployeesService, findEmployeeBy, findEmployeeByDepartment as findByDepartmentService, findEmployeeByJob} from "../../service/employeeService.js";
+import {findAll as findAllDepartmentService} from "../../service/DepartmentService.js";
+import {findAll as findAllJobs} from "../../service/jobService.js";
 export default defineComponent({
   components: {
     NBreadcrumb,
@@ -148,11 +152,17 @@ export default defineComponent({
     CardEmployee,
   },
   setup() {
+    const selectedDepartment = ref(null);
+    const selectedJob = ref(null);
     const currentPage = ref(1);
     const totalPages = ref(1);
     const employees = ref([]);
+    const departmentOptions = ref([]);
+    const jobsOptions = ref([]);
     const sortField=ref("fullname");
     const sortDirection = ref("ASC");
+    const keyword = ref("");
+
     const changePage = (page) => {
       currentPage.value = page;
       loadEmployees();
@@ -160,8 +170,7 @@ export default defineComponent({
 
     const loadEmployees=async()=>{
       try {
-        const response = await findAllService(currentPage.value-1,sortField.value,sortDirection.value);
-        console.log("API RESPONSE: ",response);
+        const response = await findAllEmployeesService(currentPage.value-1,sortField.value,sortDirection.value);
         employees.value=response.data.content;
         totalPages.value=response.data.totalPages;
       } catch (error) {
@@ -171,30 +180,96 @@ export default defineComponent({
 
     onMounted(async() => {
       loadEmployees();
+      loadDepartments();
+      loadJobs();
     });
 
+    const handleKeywordChange = async (value) => {
+      keyword.value = value;
+      if (value === '') {
+        await loadEmployees();
+      }
+    };
+
+    const handleKeywordChangeDepartment = async (value) => {
+      selectedDepartment.value = value;
+      if (value === null) {
+        await loadEmployees();
+      }
+    };
+
+    const handleKeywordChangeJob = async (value) => {
+      selectedJob.value = value;
+      if (value === null) {
+        await loadEmployees();
+      }
+    };
+
+
+    const filtersAreActive = computed(() => {
+      return (
+        keyword.value !== "" ||
+        selectedDepartment.value !== null ||
+        selectedJob.value !== null
+      );
+    });
+
+    const clearFilters = async () => {
+      keyword.value = "";
+      selectedDepartment.value = null;
+      selectedJob.value = null;
+      await loadEmployees();
+    };
+
     const sortAscending = ref(true);
-    const toggleSortOrder=async()=>{
+    const toggleSortOrder = async () => {
       sortAscending.value = !sortAscending.value;
       sortDirection.value = sortAscending.value ? "ASC" : "DESC";
-      await loadEmployees();
+
+      if (keyword.value) {
+        // Solo nombre
+        await findEmployee();
+      } else if (selectedDepartment.value) {
+        // Solo departamento
+        await findByDepartment();
+      } else if (selectedJob.value) {
+        // Solo puesto
+        await findByJob();
+      } else {
+        // Ningún filtro => trae todo
+        await loadEmployees();
+      }
+    };
+
+
+
+    const findEmployee =async()=>{
+      const response = await findEmployeeBy(sortField.value,sortDirection.value,keyword.value);
+      employees.value=response.data.content;
+      totalPages.value = response.data.totalPages;
     }
 
-    const departmentOptions = [
-      { label: "Inyección", value: "inyección" },
-      { label: "Producción", value: "produccion" },
-      { label: "Inyección1", value: "inyección1" },
-      { label: "Producción2", value: "produccion2" },
-      { label: "Inyección3", value: "inyección3" },
-      { label: "Producción4", value: "produccion4" },
-    ];
+    const findByDepartment = async()=>{
+      const response = await findByDepartmentService(sortField.value,sortDirection.value,selectedDepartment.value);
+      employees.value = response.data.content;
+      totalPages.value = response.data.totalPages;
+    }
 
-    const jobsOptions = [
-      { label: "Opción 1", value: "Opción 1" },
-      { label: "Opción 2", value: "Opción 2" },
-      { label: "Opción 3", value: "Opción 3" },
-      { label: "Opción 4", value: "Opción 4" },
-    ];
+    const findByJob=async()=>{
+      const response = await findEmployeeByJob(sortField.value,sortDirection.value,selectedJob.value);
+      employees.value = response.data.content;
+      totalPages.value = response.data.totalPages;
+    }
+
+    const loadDepartments =async()=>{
+      const response = await findAllDepartmentService();
+      departmentOptions.value=response.data.map(dep=>({label:dep.name,value:dep.id}))
+    }
+
+    const loadJobs=async()=>{
+      const response = await findAllJobs();
+      jobsOptions.value = response.data.map(job=>({label:job.name,value:job.id}))
+    }
 
     const paginationTheme = {
       itemColor: "#0D5A79",
@@ -218,6 +293,7 @@ export default defineComponent({
       changePage,
       employees,
       toggleSortOrder,
+      findEmployee,
       departmentOptions,
       jobsOptions,
       employees,
@@ -225,6 +301,17 @@ export default defineComponent({
       sortAscending,
       CardEmployee,
       paginationTheme,
+      keyword,
+      clearFilters,
+      filtersAreActive,
+      selectedDepartment,
+      selectedJob,
+      loadJobs,
+      handleKeywordChange,
+      handleKeywordChangeDepartment,
+      handleKeywordChangeJob,
+      findByDepartment,
+      findByJob,
     };
   },
 });
