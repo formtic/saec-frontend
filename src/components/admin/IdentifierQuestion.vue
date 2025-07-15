@@ -79,7 +79,7 @@ export default defineComponent({
     expose({
       getData: () => ({
         elements: elements.value.map(e => ({
-          name: e.name,
+          element: e.name,
           value: e.value
         }))
       })

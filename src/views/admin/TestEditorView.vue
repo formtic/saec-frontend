@@ -174,7 +174,7 @@ export default defineComponent({
             console.log("mi dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa:", data);
 
             try {
-                
+
                 const response = await api.post(
                     `${BASE_URL}/test/CreateExam`,
                     data,
@@ -190,6 +190,7 @@ export default defineComponent({
             } catch (error) {
                 console.error("Error al crear el examen:", error);
             }
+
         }
 
 

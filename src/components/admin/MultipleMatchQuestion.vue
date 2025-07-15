@@ -214,9 +214,13 @@ export default defineComponent({
 
         return {
           options: allItems,
-          groups: columns.value.map(({ title, items }) => ({
+          correctAnswer: columns.value.map(({ title, items }) => ({
             title,
             items: items.map(({ id, text }) => ({ id, text }))
+          })),
+          groups: columns.value.map(col => ({
+            groupId: col.id,
+            groupName: col.title,
           }))
         };
       }

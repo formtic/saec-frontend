@@ -6,20 +6,12 @@
 
     <div class="rows-container">
       <div v-for="element in items" :key="element.id" class="question-row">
-        <n-input
-          v-model:value="element.concept"
-          placeholder="Concept"
-          class="input"
+        <n-input v-model:value="element.concept" placeholder="Concept" class="input"
           :status="isValid(element.concept) ? 'success' : 'error'"
-          @input="(val) => onInput(val, element.id, 'concept')"
-        />
-        <n-input
-          v-model:value="element.definition"
-          placeholder="Definition"
-          class="input"
+          @input="(val) => onInput(val, element.id, 'concept')" />
+        <n-input v-model:value="element.definition" placeholder="Definition" class="input"
           :status="isValid(element.definition) ? 'success' : 'error'"
-          @input="(val) => onInput(val, element.id, 'definition')"
-        />
+          @input="(val) => onInput(val, element.id, 'definition')" />
         <n-button color="red" @click="removeItem(element.id)">
           <template #icon>
             <n-icon :component="DeleteFilled" />
@@ -88,12 +80,18 @@ export default defineComponent({
     };
 
     expose({
-      getData: () => ({
-        matches: items.value.map(item => ({
-          concept: item.concept,
-          definition: item.definition
-        }))
-      })
+      getData: () => {
+        return {
+          concepts: items.value.map((item, index) => ({
+            correctOrder: index,
+            concept: item.concept
+          })),
+          definitions: items.value.map((item, index) => ({
+            correctOrder: index,
+            definition: item.definition
+          }))
+        };
+      }
     });
 
     return {
