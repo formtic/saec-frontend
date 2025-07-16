@@ -20,13 +20,20 @@
   background-color: #0d5a79;
 }
 
+.border-primary-900 {
+  border-color: #0D5A79;
+}
+
 .bg-primary-700 {
   background-color: #187dac;
 }
 
+.text-primary-color {
+  color: #0D5A79;
+}
+
 
 .pagination {
-    margin-top: 2rem;
     display: flex;
     justify-content: center;
     background-color: #0D5A79;

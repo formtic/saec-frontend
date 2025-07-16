@@ -44,3 +44,14 @@ export function updateInfo(payload, id) {
     }
     );
 }
+
+export function filterMyCourses(name, page, pageSize, sortDirection) {
+    const token = localStorage.getItem('authToken');
+    return api.get(`${BASE_URL}/course/filter/mycourses`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        params: { name, page, pageSize, sortDirection }
+    });
+}
