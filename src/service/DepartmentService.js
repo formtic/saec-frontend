@@ -8,7 +8,7 @@ export function findAll() {
         {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+
             }
         });
 }
@@ -19,7 +19,7 @@ export function findById(id) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+
             }
         }
     );
@@ -31,7 +31,6 @@ export function filter(name, page, pageSize, sortDirection) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
             params: {
                 name,
@@ -50,7 +49,7 @@ export function create(payload) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+
             }
         }
     );
@@ -62,7 +61,7 @@ export function update(payload, id) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+
             }
         }
     );

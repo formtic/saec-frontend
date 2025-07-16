@@ -1,21 +1,10 @@
 <template>
   <div>
-    <div
-      v-for="(answer, index) in answers"
-      :key="index"
-      style="display: flex; width: 100%; align-items: center; gap: 15px; margin-bottom: 20px;"
-    >
-      <n-radio
-        :checked="answer.isCorrect"
-        @change="() => updateCorrectAnswer(index)"
-      />
-      <n-input
-        v-model:value="answer.text"
-        placeholder="Respuesta"
-        :status="isValid(answer.text) ? 'success' : 'error'"
-        @input="(val) => onInput(val, index)"
-        style="flex-grow: 1"
-      />
+    <div v-for="(answer, index) in answers" :key="index"
+      style="display: flex; width: 100%; align-items: center; gap: 15px; margin-bottom: 20px;">
+      <n-radio :checked="answer.isCorrect" @change="() => updateCorrectAnswer(index)" />
+      <n-input v-model:value="answer.text" placeholder="Respuesta" :status="isValid(answer.text) ? 'success' : 'error'"
+        @input="(val) => onInput(val, index)" style="flex-grow: 1" />
       <n-button color="red" @click="removeAnswer(index)">
         <template #icon>
           <n-icon :component="DeleteFilled" />
@@ -40,7 +29,7 @@ export default defineComponent({
     NButton,
     NIcon
   },
-  setup() {
+  setup(_, { expose }) {
     const answers = ref([{ isCorrect: true, text: '' }]);
 
     const allowedRegex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]*$/;
@@ -74,6 +63,23 @@ export default defineComponent({
       });
       answers.value[index].isCorrect = true;
     };
+
+    expose({
+      getData: () => {
+        const correctIndex = answers.value.findIndex(a => a.isCorrect);
+        const answerTexts = answers.value.map(a => a.text);
+
+        console.log("getData en SimpleSelectionQuestion:", {
+          correctAnswer: correctIndex,
+          answers: answerTexts
+        });
+
+        return {
+          correctAnswer: correctIndex.toString(),
+          answers: answerTexts
+        };
+      }
+    });
 
     return {
       answers,

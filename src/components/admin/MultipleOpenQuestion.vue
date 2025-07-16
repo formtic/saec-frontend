@@ -7,26 +7,16 @@
     <div class="rows-container">
       <div v-for="element in items" :key="element.id" class="question-row">
         <div class="input-group">
-          <n-input
-            v-model:value="element.textA"
-            placeholder="Sub-pregunta"
-            class="input"
-            :status="getStatus(element.textA)"
-            @input="(value) => onInput(value, element, 'textA')"
-          />
+          <n-input v-model:value="element.textA" placeholder="Sub-pregunta" class="input"
+            :status="getStatus(element.textA)" @input="(value) => onInput(value, element, 'textA')" />
           <p v-if="!isValidText(element.textA)" class="error-message">
             El texto no debe estar vacío y solo debe contener letras, números y signos permitidos.
           </p>
         </div>
 
         <div class="input-group">
-          <n-input
-            v-model:value="element.textB"
-            placeholder="Respuesta"
-            class="input"
-            :status="getStatus(element.textB)"
-            @input="(value) => onInput(value, element, 'textB')"
-          />
+          <n-input v-model:value="element.textB" placeholder="Respuesta" class="input"
+            :status="getStatus(element.textB)" @input="(value) => onInput(value, element, 'textB')" />
           <p v-if="!isValidText(element.textB)" class="error-message">
             El texto no debe estar vacío y solo debe contener letras, números y signos permitidos.
           </p>
@@ -47,25 +37,24 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-import { NIcon, NInput, NButton } from "naive-ui";
-import { DeleteFilled, MenuFilled } from "@vicons/material";
+import { defineComponent, ref } from 'vue';
+import { NInput, NButton, NIcon } from 'naive-ui';
+import { DeleteFilled } from '@vicons/material';
 
 export default defineComponent({
-  name: "OrderQuestionSingleRow",
+  name: 'MultipleOpenQuestion',
   components: {
     NInput,
     NButton,
     NIcon,
     DeleteFilled,
-    MenuFilled,
   },
-  setup() {
+  setup(_, { expose }) {
     const allowedRegex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]*$/;
 
     const items = ref([
-      { id: 1, textA: "", textB: "", order: 1 },
-      { id: 2, textA: "", textB: "", order: 2 },
+      { id: 1, textA: '', textB: '', order: 1 },
+      { id: 2, textA: '', textB: '', order: 2 },
     ]);
 
     const nextId = ref(3);
@@ -73,19 +62,17 @@ export default defineComponent({
     const addRow = () => {
       items.value.push({
         id: nextId.value++,
-        textA: "",
-        textB: "",
+        textA: '',
+        textB: '',
         order: items.value.length + 1,
       });
     };
 
     const removeItem = (id) => {
-      if (items.value.length > 2) {
-        const index = items.value.findIndex((item) => item.id === id);
-        if (index !== -1) {
-          items.value.splice(index, 1);
-          updateOrderNumbers();
-        }
+      const index = items.value.findIndex((item) => item.id === id);
+      if (index !== -1 && items.value.length > 2) {
+        items.value.splice(index, 1);
+        updateOrderNumbers();
       }
     };
 
@@ -96,27 +83,35 @@ export default defineComponent({
     };
 
     const onInput = (value, obj, key) => {
-      const filtered = value.replace(/[^a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]/g, "");
+      const filtered = value.replace(/[^a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]/g, '');
       obj[key] = filtered;
     };
 
     const isValidText = (text) => {
-      return text.trim() !== "" && allowedRegex.test(text);
+      return text.trim() !== '' && allowedRegex.test(text);
     };
 
     const getStatus = (text) => {
-      return isValidText(text) ? "success" : "error";
+      return isValidText(text) ? 'success' : 'error';
     };
+
+    expose({
+      getData: () => ({
+        subquestions: items.value.map(({ textA, textB }) => ({
+          subquestion: textA,
+          correctAnswer: textB,
+        }))
+      })
+    });
 
     return {
       items,
       addRow,
       removeItem,
-      DeleteFilled,
-      MenuFilled,
       onInput,
       isValidText,
       getStatus,
+      DeleteFilled,
     };
   },
 });

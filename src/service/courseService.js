@@ -6,7 +6,7 @@ export function create(payload) {
     return api.post(`${BASE_URL}/course/create`, payload, {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+
         }
     });
 }
@@ -16,7 +16,7 @@ export function filter(name, page, pageSize, sortDirection) {
     return api.get(`${BASE_URL}/course/filter`, {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+
         },
         params: {
             name, page, pageSize, sortDirection
@@ -29,7 +29,7 @@ export function findById(id) {
     return api.get(`${BASE_URL}/course/findbyid/${id}`, {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+
         }
     });
 }
@@ -39,7 +39,7 @@ export function updateInfo(payload, id) {
     return api.put(`${BASE_URL}/course/updateinfo/${id}`, payload, {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+
         }
     }
     );
