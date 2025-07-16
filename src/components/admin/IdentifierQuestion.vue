@@ -48,7 +48,7 @@ export default defineComponent({
     NButton,
     NIcon
   },
-  setup() {
+  setup(_, { expose }) {
     const elements = ref([{ name: '', value: '' }]);
 
     const allowedRegex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]*$/;
@@ -75,6 +75,15 @@ export default defineComponent({
         elements.value.splice(index, 1);
       }
     };
+
+    expose({
+      getData: () => ({
+        elements: elements.value.map(e => ({
+          element: e.name,
+          value: e.value
+        }))
+      })
+    });
 
     return {
       elements,
