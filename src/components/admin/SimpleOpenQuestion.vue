@@ -1,21 +1,10 @@
 <template>
   <div>
-    <div
-      style="display: flex; width: 100%; align-items: center; gap: 15px; margin-bottom: 20px;"
-    >
-      <n-input
-        v-model:value="answer.text"
-        type="textarea"
-        placeholder="Escribe tu pregunta..."
-        :status="isValid ? 'success' : 'error'"
-        @input="onInput"
-        clearable
-      />
+    <div style="display: flex; width: 100%; align-items: center; gap: 15px; margin-bottom: 20px;">
+      <n-input v-model:value="answer.text" type="textarea" placeholder="Escribe tu pregunta..."
+        :status="isValid ? 'success' : 'error'" @input="onInput" clearable />
     </div>
-    <h3
-      class="text-center w-full font-normal n-mb-6"
-      style="color: #778C96;"
-    >
+    <h3 class="text-center w-full font-normal n-mb-6" style="color: #778C96;">
       La respuesta correcta es solamente una propuesta, la respuesta deberá ser revisada manualmente.
     </h3>
     <p v-if="!isValid" style="color: red; font-size: 14px;">
@@ -32,7 +21,7 @@ export default defineComponent({
   components: {
     NInput,
   },
-  setup() {
+  setup(_, { expose }) {
     const answer = ref({ text: '' });
 
     const allowedRegex = /^[a-zA-Z0-9áéíóúüÁÉÍÓÚÜñÑ.,()¿?¡!\s]*$/;
@@ -47,6 +36,14 @@ export default defineComponent({
         answer.value.text.trim() !== '' &&
         allowedRegex.test(answer.value.text)
       );
+    });
+
+    expose({
+      getData: () => {
+        return {
+          correctAnswer:  answer.value.text
+        };
+      }
     });
 
     return {

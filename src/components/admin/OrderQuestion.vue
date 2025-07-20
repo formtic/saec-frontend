@@ -4,25 +4,15 @@
       Organiza las respuestas en el orden correcto, el empleado verá la lista de respuesta aleatoriamente
     </h3>
 
-    <draggable
-      v-model="items"
-      :item-key="itemKey"
-      handle=".handle"
-      :animation="150"
-      @end="onDragEnd"
-    >
+    <draggable v-model="items" :item-key="itemKey" handle=".handle" :animation="150" @end="onDragEnd">
       <template #item="{ element }">
         <div class="draggable-item">
           <n-icon class="handle" size="20">
             <MenuFilled />
           </n-icon>
-          <n-input
-            v-model:value="element.text"
-            placeholder="Elemento a ordenar"
-            :status="isValid(element.text) ? 'success' : 'error'"
-            @input="(val) => onInput(val, element.id)"
-            style="flex-grow: 1"
-          />
+          <n-input v-model:value="element.text" placeholder="Elemento a ordenar"
+            :status="isValid(element.text) ? 'success' : 'error'" @input="(val) => onInput(val, element.id)"
+            style="flex-grow: 1" />
           <n-button color="red" @click="removeItem(element.id)">
             <template #icon>
               <n-icon :component="DeleteFilled" />
@@ -37,7 +27,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { defineComponent, ref } from "vue";
 import { NIcon, NInput, NButton } from "naive-ui";
@@ -54,7 +43,7 @@ export default defineComponent({
     DeleteFilled,
     MenuFilled,
   },
-  setup() {
+  setup(_, { expose }) {
     const items = ref([
       { id: 1, text: "", order: 1 },
       { id: 2, text: "", order: 2 },
@@ -105,6 +94,15 @@ export default defineComponent({
       updateOrderNumbers();
     };
 
+    expose({
+      getData: () => ({
+        answers: items.value.map((item, index) => ({
+          answerOrder: index,
+          answer: item.text
+        }))
+      })
+    });
+
     return {
       items,
       itemKey,
@@ -119,6 +117,7 @@ export default defineComponent({
   },
 });
 </script>
+
 
 <style scoped>
 .draggable-item {

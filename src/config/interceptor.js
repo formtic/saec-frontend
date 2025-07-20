@@ -3,16 +3,24 @@ import notification from '../plugins/notification';
 
 const api = axios.create({});
 
-api.interceptors.response.use(response => {
-    if(response.data.status && response.data.status !== 200)
-    notification.success({
-        title: `Éxito ${response.data.status}`,
-        content: response.data.message,
-        duration: 2000
-    });
+//  Verifica si hay un token en localStorage al iniciar
+const token = localStorage.getItem('authToken');
+if (token) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
-    return response.data;
-},
+api.interceptors.response.use(
+    response => {
+        if (response.data.status && response.data.status !== 200) {
+            notification.success({
+                title: `Éxito ${response.data.status}`,
+                content: response.data.message,
+                duration: 2000
+            });
+        }
+
+        return response.data;
+    },
     error => {
         if (error.response && error.response.data) {
             notification.error({
