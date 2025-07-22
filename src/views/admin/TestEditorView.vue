@@ -166,7 +166,7 @@ export default defineComponent({
                 creationDate: new Date(),
                 status: "CREATED",
                 version: versionExamen.value,
-                courseId: courseId,
+                course:{id:courseId} ,
                 questions: allQuestionsData
             }
 

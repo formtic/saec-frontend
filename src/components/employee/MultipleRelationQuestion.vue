@@ -1,30 +1,40 @@
 <template>
-  <n-card :bordered="false" >
+  <n-card :bordered="false">
     <n-space vertical :size="16" class="customContainer">
       <n-text tag="div" class="question-text">
-        6.- Responsabilidades. Relaciona según corresponda
+        {{ question.title }}
       </n-text>
 
       <div class="table-container">
         <n-table :bordered="false" :single-line="false" size="small">
           <thead>
             <tr>
-              <th>Responsabilidades</th>
-              <th v-for="(role, index) in roles" :key="'header-' + index">
-                {{ role }}
+              <th>Ítem</th>
+              <th v-for="(group, index) in groups" :key="'header-' + index">
+                {{ group.groupName }}
               </th>
+              <th>Ninguno</th> 
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(task, taskIndex) in tasks" :key="'task-' + taskIndex">
-              <td>{{ task }}</td>
-              <td v-for="(role, roleIndex) in roles" :key="'role-' + taskIndex + '-' + roleIndex">
-                <n-radio-group
-                  v-model:value="selectedOptions[taskIndex]"
-                  :name="'task-' + taskIndex"
-                >
-                  <n-radio :value="roleIndex" />
-                </n-radio-group>
+            <tr v-for="(item, itemIndex) in items" :key="'item-' + itemIndex">
+              <td>{{ item.text }}</td>
+
+              <td
+                v-for="(group, groupIndex) in groups"
+                :key="'group-' + itemIndex + '-' + groupIndex"
+              >
+                <n-radio
+                  :checked="selectedOptions[itemIndex] === groupIndex"
+                  @click="toggleSelection(itemIndex, groupIndex)"
+                />
+              </td>
+
+              <td>
+                <n-radio
+                  :checked="selectedOptions[itemIndex] === -1"
+                  @click="toggleSelection(itemIndex, -1)"
+                />
               </td>
             </tr>
           </tbody>
@@ -35,29 +45,45 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
-import { NText, NCard, NSpace, NTable, NRadio, NRadioGroup } from "naive-ui"
+import { ref, watch } from "vue";
+import { NText, NCard, NSpace, NTable, NRadio } from "naive-ui";
 
-const roles = ref([
-  "Supervisor",
-  "Persona de Control de Calidad",
-  "Movedor de Materiales",
-  "Auxiliar",
-  "Personal Operativo"
-])
+const props = defineProps({
+  question: {
+    type: Object,
+    required: true,
+  },
+});
 
-const tasks = ref([
-  "Verificar el cumplimiento del procedimiento, realizar los recorridos al proceso y hacer las inspecciones necesarias.",
-  "Hacer el despeje de línea limpia, manejar correctamente los solventes, cumplir con las condiciones de vestido y seguridad del área.",
-  "Realizar la limpieza semanal de los dosificadores y registrar en PRO-18.",
-  "Abastecer los materiales o materia prima a las líneas de producción y vigilar que no existan faltantes de material o subensambles en las estaciones de trabajo.",
-  "Recibir las OP y el material proporcionado por el almacén, verificar que el material esté completo, identificado y completo.",
-  "Mantener actualizado el pizarrón de productividad y rechazo diariamente, postear al metas de productividad.",
-  "Clasificar, registrar y entregar al almacén el rechazo generado por lote de fabricación."
-])
+// Los grupos vienen de question.groups
+const groups = ref(props.question.groups || []);
 
-// Almacena el índice del coumna seleccionado para cada fila
-const selectedOptions = ref(Array(tasks.value.length).fill(null))
+// Los items son la unión de todos los items dentro de cada grupo correctAnswer
+const items = ref(
+  (props.question.correctAnswer || []).flatMap((g) => g.items || [])
+);
+
+
+const selectedOptions = ref(Array(items.value.length).fill(null));
+
+function toggleSelection(itemIndex, value) {
+  if (selectedOptions.value[itemIndex] === value) {
+    selectedOptions.value[itemIndex] = null;//quitar seleccion
+  } else {
+    selectedOptions.value[itemIndex] = value;
+  }
+}
+
+
+watch(
+  () => props.question,
+  (newQuestion) => {
+    groups.value = newQuestion.groups || [];
+    items.value = (newQuestion.correctAnswer || []).flatMap((g) => g.items || []);
+    selectedOptions.value = Array(items.value.length).fill(null);
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped>
@@ -110,6 +136,4 @@ const selectedOptions = ref(Array(tasks.value.length).fill(null))
     min-width: 200px;
   }
 }
-
-
 </style>

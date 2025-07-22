@@ -1,11 +1,18 @@
 <template>
   <div class="clean-room-options">
-    <p class="question-text">3.- Selecciona cuales de los siguientes puntos los puedes relacionar con un cuarto limpio.</p>
+    <p class="question-text">{{ question.title }}</p>
     <div class="options-container">
-      <n-checkbox-group v-model:value="selectedOptions" :max="3">
-        <div class="checkbox-option" v-for="option in options" :key="option.value">
-          <n-checkbox :value="option.value" />
-          <div class="answer-box">{{ option.label }}</div>
+      <n-checkbox-group v-model:value="selectedOptions">
+        <div
+          class="checkbox-option"
+          v-for="(answer, index) in question.answers"
+          :key="index"
+        >
+          <n-checkbox
+            :value="index"
+            :disabled="isDisabled(index)"
+          />
+          <div class="answer-box">{{ answer }}</div>
         </div>
       </n-checkbox-group>
     </div>
@@ -17,23 +24,30 @@ import { defineComponent, ref } from "vue";
 import { NCheckbox, NCheckboxGroup } from "naive-ui";
 
 export default defineComponent({
+  name: "MultipleSelectQuestion",
   components: {
     NCheckbox,
     NCheckboxGroup
   },
-  setup() {
+  props: {
+    question: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
     const selectedOptions = ref([]);
-    const options = [
-      { value: "option1", label: "Acabado Sanitario" },
-      { value: "option2", label: "Filtros Hepa" },
-      { value: "option3", label: "Esterilización" },
-      { value: "option4", label: "Vestimenta" },
-      { value: "option5", label: "Instrucciones de Acceso" }
-    ];
-    
+
+    const isDisabled = (index) => {
+      return (
+        selectedOptions.value.length >= props.question.numberOfChoices &&
+        !selectedOptions.value.includes(index)
+      );
+    };
+
     return {
       selectedOptions,
-      options
+      isDisabled
     };
   }
 });

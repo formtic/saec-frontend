@@ -1,38 +1,32 @@
 <template>
   <div class="parallel-dnd-container">
     <h3 class="question-text">
-      5.- Relaciona los conceptos con sus definiciones reordenando ambas listas de forma independiente.
+      {{ question.title }}
     </h3>
 
     <div class="columns-wrapper">
-      <draggable
-        v-model="leftConcepts"
-        :item-key="(item) => item.id"
-        handle=".handle"
-        class="column"
-        @end="updateNumberOrder"
-      >
+      <draggable v-model="elementsList" :item-key="(item) => item.element" handle=".handle" class="column"
+        @end="updateElementsOrder">
         <template #item="{ element, index }">
           <div class="concept-box with-index">
-            <n-icon class="handle" size="20"><MenuFilled /></n-icon>
+            <n-icon class="handle" size="20">
+              <MenuFilled />
+            </n-icon>
             <span class="index-box outside">{{ index + 1 }}</span>
-            <span class="concept-text">{{ element.text }}</span>
+            <span class="concept-text">{{ element.element }}</span>
           </div>
         </template>
       </draggable>
 
-      <draggable
-        v-model="rightConcepts"
-        :item-key="(item) => item.id"
-        handle=".handle"
-        class="column"
-        @end="updateConceptLetters"
-      >
+      <draggable v-model="valuesList" :item-key="(item) => item.value" handle=".handle" class="column"
+        @end="updateValuesOrder">
         <template #item="{ element, index }">
           <div class="concept-box with-index">
-            <n-icon class="handle" size="20"><MenuFilled /></n-icon>
+            <n-icon class="handle" size="20">
+              <MenuFilled />
+            </n-icon>
             <span class="index-box outside">{{ getLetter(index) }}</span>
-            <span class="concept-text">{{ element.text }}</span>
+            <span class="concept-text">{{ element.value }}</span>
           </div>
         </template>
       </draggable>
@@ -41,62 +35,66 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import { NIcon } from "naive-ui";
 import { MenuFilled } from "@vicons/material";
 import draggable from "vuedraggable";
 
 export default defineComponent({
-  name: "ParallelDnD",
+  name: "MultipleOrderQuestion",
   components: {
     draggable,
     NIcon,
     MenuFilled,
   },
-  setup() {
-    const leftConcepts = ref([
-      { id: 1, text: "Hardware" },
-      { id: 2, text: "Software" },
-      { id: 3, text: "CPU" },
-      { id: 4, text: "Sistema Operativo" },
-    ]);
+  props: {
+    question: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
+    const elementsList = ref([]);
+    const valuesList = ref([]);
 
-    const rightConcepts = ref([
-      {
-        id: 5,
-        text: "Parte física de un sistema informático, como el teclado, monitor o disco duro.",
-      },
-      {
-        id: 6,
-        text: "Conjunto de programas que permiten a una computadora realizar tareas específicas.",
-      },
-      {
-        id: 7,
-        text: "Unidad central de procesamiento que ejecuta instrucciones del software.",
-      },
-      {
-        id: 8,
-        text: "Software principal que gestiona el hardware y permite la interacción con el usuario.",
-      },
-    ]);
-
-    const getLetter = (index) => String.fromCharCode(65 + index); // A, B, C...
-
-    const updateNumberOrder = () => {
-      //orden izquiero
+    const shuffleArray = (array) => {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
     };
 
-    const updateConceptLetters = () => {
-      // orden derecho
+    const initializeLists = () => {
+      elementsList.value = shuffleArray([...props.question.elements]);
+      valuesList.value = shuffleArray(
+        props.question.elements.map(el => ({ value: el.value }))
+      );
     };
+
+    const getLetter = (index) => String.fromCharCode(65 + index); 
+
+    const updateElementsOrder = () => {
+      console.log("Nuevo orden de elementos:", elementsList.value);
+    };
+
+    const updateValuesOrder = () => {
+      console.log("Nuevo orden de valores:", valuesList.value);
+    };
+
+    // Inicializar las listas desordenadas cuando el componente se monta
+    onMounted(() => {
+      initializeLists();
+    });
 
     return {
-      leftConcepts,
-      rightConcepts,
+      elementsList,
+      valuesList,
       MenuFilled,
       getLetter,
-      updateNumberOrder,
-      updateConceptLetters,
+      updateElementsOrder,
+      updateValuesOrder,
     };
   },
 });
