@@ -1,19 +1,15 @@
 <template>
-  <div class="security-measures">
-    <p class="question-text">2.- ¿Cuáles son tus medidas de seguridad?</p>
+  <div class="simple-select-question">
+    <p class="question-text">{{ question.title }}</p>
     <div class="options-container">
       <n-radio-group v-model:value="selectedOption">
-        <div class="radio-option">
-          <n-radio value="option1" />
-          <div class="answer-box">Colocarse los lentes antes de trabajar y cumplir con las BPV</div>
-        </div>
-        <div class="radio-option">
-          <n-radio value="option2" />
-          <div class="answer-box">Colocarse los lentes antes de trabajar y cumplir con las BPF</div>
-        </div>
-        <div class="radio-option">
-          <n-radio value="option3" />
-          <div class="answer-box">Cumplir con las BPF y no tener uñas largas</div>
+        <div
+          v-for="(answer, index) in question.answers"
+          :key="index"
+          class="radio-option"
+        >
+          <n-radio :value="index.toString()" />
+          <div class="answer-box">{{ answer }}</div>
         </div>
       </n-radio-group>
     </div>
@@ -25,9 +21,16 @@ import { defineComponent, ref } from "vue";
 import { NRadio, NRadioGroup } from "naive-ui";
 
 export default defineComponent({
+  name: "SimpleSelectQuestion",
   components: {
     NRadio,
     NRadioGroup
+  },
+  props: {
+    question: {
+      type: Object,
+      required: true
+    }
   },
   setup() {
     const selectedOption = ref(null);
@@ -39,7 +42,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.security-measures {
+.simple-select-question {
   font-family: Arial, sans-serif;
   padding: 16px;
   background: white;
@@ -72,7 +75,7 @@ export default defineComponent({
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   transition: all 0.3s;
-  margin:4px;
+  margin: 4px 0;
 }
 
 .n-radio-group:focus-within .n-radio:checked + .answer-box,
