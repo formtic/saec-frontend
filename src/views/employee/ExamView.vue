@@ -15,51 +15,49 @@
           <n-form style="margin-bottom: -12px">
             <n-grid :cols="3" :x-gap="12" :y-gap="16" responsive="screen">
               <n-gi>
-                <n-form-item label="Fecha" :show-feedback="false" :show-label="true" class="compact-form-item">
-                  <n-input :value="formData.date" placeholder="01-01-2023" disabled />
+                <n-form-item label="Fecha" :show-feedback="false" class="compact-form-item">
+                  <n-input :value="formData.date" disabled />
                 </n-form-item>
               </n-gi>
               <n-gi>
-                <n-form-item label="Diagrammeño" :show-feedback="false" :show-label="true" class="compact-form-item">
-                  <n-input :value="formData.department" placeholder="Nombre del departamento" disabled />
+                <n-form-item label="Diagrammeño" :show-feedback="false" class="compact-form-item">
+                  <n-input :value="formData.department" disabled />
                 </n-form-item>
               </n-gi>
               <n-gi>
-                <n-form-item label="Instructor" :show-feedback="false" :show-label="true" class="compact-form-item">
-                  <n-input :value="formData.instructor" placeholder="Omar de Jesús Santander Vestayas" disabled />
+                <n-form-item label="Instructor" :show-feedback="false" class="compact-form-item">
+                  <n-input :value="formData.instructor" disabled />
                 </n-form-item>
               </n-gi>
             </n-grid>
 
             <n-grid :cols="2" :x-gap="12" :y-gap="16" responsive="screen">
               <n-gi>
-                <n-form-item label="Código de empleado" :show-feedback="false" :show-label="true"
-                  class="compact-form-item">
-                  <n-input :value="formData.employeeCode" placeholder="41.2" disabled />
+                <n-form-item label="Código de empleado" :show-feedback="false" class="compact-form-item">
+                  <n-input :value="formData.employeeCode" disabled />
                 </n-form-item>
               </n-gi>
               <n-gi>
-                <n-form-item label="Nombre de empleado" :show-feedback="false" :show-label="true"
-                  class="compact-form-item">
-                  <n-input :value="formData.employeeName" placeholder="Ulises Daniel García México" disabled />
+                <n-form-item label="Nombre de empleado" :show-feedback="false" class="compact-form-item">
+                  <n-input :value="formData.employeeName" disabled />
                 </n-form-item>
               </n-gi>
             </n-grid>
 
             <n-grid :cols="3" :x-gap="12" :y-gap="16" responsive="screen" style="margin-bottom: -8px">
               <n-gi>
-                <n-form-item label="Formato" :show-feedback="false" :show-label="true" class="compact-form-item">
-                  <n-input :value="formData.format" placeholder="FEBR/09-02/03/4.5" disabled />
+                <n-form-item label="Formato" :show-feedback="false" class="compact-form-item">
+                  <n-input :value="formData.format" disabled />
                 </n-form-item>
               </n-gi>
               <n-gi>
-                <n-form-item label="Revisión" :show-feedback="false" :show-label="true" class="compact-form-item">
-                  <n-input :value="formData.revision" placeholder="2" disabled />
+                <n-form-item label="Revisión" :show-feedback="false" class="compact-form-item">
+                  <n-input :value="formData.revision" disabled />
                 </n-form-item>
               </n-gi>
               <n-gi>
-                <n-form-item label="Fecha Efectiva" :show-feedback="false" :show-label="true" class="compact-form-item">
-                  <n-input :value="formData.effectiveDate" placeholder="02-06-2022" disabled />
+                <n-form-item label="Fecha Efectiva" :show-feedback="false" class="compact-form-item">
+                  <n-input :value="formData.effectiveDate" disabled />
                 </n-form-item>
               </n-gi>
             </n-grid>
@@ -67,21 +65,25 @@
         </n-space>
       </n-card>
 
-      <SimpleRelationQuestion class="question-component" />
-      <SimpleSelectQuestion class="question-component" />
-      <MultipleSelectQuestion class="question-component" />
-      <OrderQuestionEmployee class="question-component" />
-      <MultipleOrderQuestion class="question-component" />
-      <MultipleRelationQuestion class="question-component" />
-      <OpenQuestion class="question-component" />
-      <MultipleOpenQuestion class="question-component" />
-
+      <!-- Preguntas dinámicas -->
+      <component
+        v-for="(question, index) in questions"
+        :key="index"
+        :is="getComponentName(question.questionType)"
+        :question="question"
+        class="question-component"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import {
+  NCard, NText, NSpace, NForm, NFormItem, NInput, NGrid, NGi
+} from "naive-ui";
+
 import SimpleSelectQuestion from "../../components/employee/SimpleSelectQuestion.vue";
 import MultipleSelectQuestion from "../../components/employee/MultipleSelectQuestion.vue";
 import OrderQuestionEmployee from "../../components/employee/OrderQuestionEmployee.vue";
@@ -90,27 +92,13 @@ import MultipleOpenQuestion from "../../components/employee/MultipleOpenQuestion
 import MultipleRelationQuestion from "../../components/employee/MultipleRelationQuestion.vue";
 import SimpleRelationQuestion from "../../components/employee/SimpleRelationQuestion.vue";
 import MultipleOrderQuestion from "../../components/employee/MultipleOrderQuestion.vue";
-import {
-  NCard,
-  NText,
-  NSpace,
-  NForm,
-  NFormItem,
-  NInput,
-  NGrid,
-  NGi
-} from "naive-ui";
+
+import { findTestByCouseseId } from "../../service/testService";
 
 export default defineComponent({
+  name: "ExamView",
   components: {
-    NCard,
-    NText,
-    NSpace,
-    NForm,
-    NFormItem,
-    NInput,
-    NGrid,
-    NGi,
+    NCard, NText, NSpace, NForm, NFormItem, NInput, NGrid, NGi,
     SimpleSelectQuestion,
     MultipleSelectQuestion,
     OrderQuestionEmployee,
@@ -121,6 +109,7 @@ export default defineComponent({
     MultipleOrderQuestion
   },
   setup() {
+    const route = useRoute();
     const formData = ref({
       date: "01-01-2023",
       department: "Nombre del departamento",
@@ -131,9 +120,56 @@ export default defineComponent({
       revision: "2",
       effectiveDate: "02-06-2022"
     });
+    const questions = ref([]);
+    const isLoading = ref(false);
+    const error = ref(null);
+
+    onMounted(async () => {
+      try {
+        isLoading.value = true;
+        const courseId = route.params.courseId;
+        const response = await findTestByCouseseId(courseId);
+        if (response.data?.questions) {
+          questions.value = response.data.questions;
+        }
+        console.log("Examen cargado:", response.data);
+      } catch (err) {
+        error.value = "Error al cargar el examen";
+        console.error("Error fetching test:", err);
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    const getComponentName = (questionType) => {
+      switch (questionType) {
+        case "SIMPLE_CHOICE_QUESTION":
+          return "SimpleSelectQuestion";
+        case "MULTIPLE_CHOICE_QUESTION":
+          return "MultipleSelectQuestion";
+        case "SORT_QUESTION":
+          return "OrderQuestionEmployee";
+        case "SINGLE_OPEN_QUESTION":
+          return "OpenQuestion";
+        case "MULTIPLE_OPEN_QUESTION":
+          return "MultipleOpenQuestion";
+        case "MULTIPLE_MATCH_QUESTION":
+          return "MultipleRelationQuestion";
+        case "SIMPLE_MATCH_QUESTION":
+          return "SimpleRelationQuestion";
+        case "IDENTIFIER_QUESTION":
+          return "MultipleOrderQuestion";
+        default:
+          return null;
+      }
+    };
 
     return {
-      formData
+      formData,
+      questions,
+      isLoading,
+      error,
+      getComponentName
     };
   }
 });
