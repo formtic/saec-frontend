@@ -52,9 +52,9 @@
 </template>
 <script setup>
 import { EditFilled, PeopleAltFilled, PersonAddFilled, SearchOutlined, TrendingDownFilled, TrendingUpFilled } from '@vicons/material';
-import { findAllDepartments } from '../../service/DepartmentService';
+import { findAllDepartments } from '../../service/DepartmentService.js';
 import { h, onMounted, ref, render } from 'vue';
-import { findAllJobs } from '../../service/jobService';
+import { findAllJobs } from '../../service/jobService.js';
 import FilterableTable from '../../components/admin/FilterableTable.vue';
 import { useRouter } from 'vue-router';
 import { filterEmployees } from '../../service/employeeService.js'
@@ -99,7 +99,7 @@ const handlePaginate = (page) => {
 
 const handleTab = (value) => {
   currentTab = value;
-  eFiltersDisabled.value = currentPage !== 'employees';
+  eFiltersDisabled.value = currentTab !== 'employees';
   handlePaginate(1);
 }
 
@@ -108,7 +108,6 @@ const handleSearch = () => {
     employees: () => fetchEmployees(),
     teachers: () => fetchTeachers()
   })[currentTab]?.();
-  fetchEmployees();
 }
 
 const fetchEmployees = async () => {

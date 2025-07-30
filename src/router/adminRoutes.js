@@ -28,7 +28,7 @@ export default [
       },
       {
         path: "users",
-        component: () => import("@/views/admin/EmployeesView.vue"),
+        component: () => import("@/views/admin/UsersListView.vue"),
         name: "users"
       },
       {
