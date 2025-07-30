@@ -1,7 +1,7 @@
 <template>
     <div class="time-matching">
         <n-text tag="p" strong class="question-text">
-            1.- Condiciones de trabajo: Según la imagen coloca el número que corresponda de acuerdo a lo que se te pide:
+            {{ question.title }}
         </n-text>
 
         <div class="content-wrapper">
@@ -11,12 +11,17 @@
             </div>
 
             <div class="items-container">
-                <div v-for="(item, index) in timeItems" :key="index" class="item-row">
+                <div v-for="(concept, index) in question.concepts" :key="index" class="item-row">
                     <n-text class="time-display">
-                        {{ item.label }}
+                        {{ concept.concept }}
                     </n-text>
-                    <n-input v-model:value="item.answer" type="text" placeholder="Escribe la correspondencia..."
-                        clearable class="full-width-input" />
+                    <n-input 
+                        v-model:value="userAnswers[concept.correctOrder]" 
+                        type="text" 
+                        placeholder="Escribe la definición correspondiente..."
+                        clearable 
+                        class="full-width-input" 
+                    />
                 </div>
             </div>
         </div>
@@ -24,16 +29,25 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import { NInput, NText, NImage } from "naive-ui"
 
-const timeItems = ref([
-    { label: "Mesa de trabajo", answer: "" },
-    { label: "Gaveta para rechazo", answer: "" },
-    { label: "Gaveta para subensambles", answer: "" },
-    { label: "Adaptador", answer: "" },
-    { label: "Aguja", answer: "" }
-])
+const props = defineProps({
+    question: {
+        type: Object,
+        required: true
+    }
+})
+
+// Inicializar respuestas del usuario
+const userAnswers = ref(Array(props.question.concepts.length).fill(''))
+
+// Opcional: Si necesitas emitir las respuestas al componente padre
+// const emit = defineEmits(['update:answers'])
+
+// watch(userAnswers, (newVal) => {
+//     emit('update:answers', newVal)
+// }, { deep: true })
 </script>
 
 <style scoped>
@@ -93,7 +107,6 @@ const timeItems = ref([
     min-width: 200px;
 }
 
-/* Diseño para pantallas medianas (650px - 1099px) */
 @media (min-width: 650px) and (max-width: 1099px) {
     .content-wrapper {
         flex-direction: column;
