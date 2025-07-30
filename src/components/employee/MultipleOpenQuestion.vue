@@ -1,20 +1,20 @@
 <template>
   <div class="time-matching">
     <n-text tag="p" strong class="question-text">
-      8.- Colores de almacenamiento de las sustancias. Relaciona según corresponda.
+      {{ question.title }}
     </n-text>
 
     <div class="items-container">
       <div
-        v-for="(item, index) in timeItems"
+        v-for="(item, index) in question.subquestions"
         :key="index"
         class="item-row"
       >
         <n-text class="time-display">
-          {{ item.time }}
+          {{ item.subquestion }}
         </n-text>
         <n-input
-          v-model:value="item.answer"
+          v-model:value="userAnswers[index]"
           type="text"
           placeholder="Escribe la correspondencia..."
           clearable
@@ -26,14 +26,29 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
-import { NInput, NText } from "naive-ui"
+import { ref, watch, toRefs } from "vue";
+import { NInput, NText } from "naive-ui";
 
-const timeItems = ref([
-  { time: "Son las 4 de la tarde con 45 minutos", answer: "" },
-  { time: "Son las 8 de la mañana con 5 minutos", answer: "" },
-  { time: "Son las 11 de la noche con 59 minutos", answer: "" }
-])
+// Recibe la pregunta completa como prop
+const props = defineProps({
+  question: {
+    type: Object,
+    required: true,
+  },
+});
+
+const userAnswers = ref([]);
+
+userAnswers.value = props.question.subquestions
+  ? props.question.subquestions.map(() => "")
+  : [];
+
+watch(
+  () => props.question.subquestions,
+  (newSubs) => {
+    userAnswers.value = newSubs ? newSubs.map(() => "") : [];
+  }
+);
 </script>
 
 <style scoped>
@@ -44,8 +59,7 @@ const timeItems = ref([
 .question-text {
   margin-bottom: 1rem;
   display: block;
-    font-weight: bold;
-
+  font-weight: bold;
 }
 
 .items-container {
@@ -78,7 +92,7 @@ const timeItems = ref([
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .time-display,
   .full-width-input {
     width: 100%;

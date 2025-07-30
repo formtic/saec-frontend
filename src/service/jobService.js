@@ -42,3 +42,13 @@ export function findById(id) {
         }
     });
 }
+
+export function findAllJobs(){
+    const token = localStorage.getItem('authToken');
+    return api.get(`${BASE_URL}/job/list`,{
+        headers:{
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
+        }
+    });
+}

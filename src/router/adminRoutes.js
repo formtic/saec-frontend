@@ -15,6 +15,7 @@ import TestEditorView from "../views/admin/TestEditorView.vue";
 import AdminCourseContentView from "../components/admin/AdminCourseContentView.vue";
 import AdminCourseAssignationView from "../views/admin/AdminCourseAssignationView.vue";
 import ExamView from "../views/employee/ExamView.vue";
+import NewUserFormView from "../views/admin/NewUserFormView.vue";
 
 export default [
   {
@@ -26,25 +27,18 @@ export default [
         component: AdminDashboardView,
       },
       {
-        path: "employees",
-        component:()=>import("@/views/admin/AdminEmployeeView.vue"),
-        children:[
-          {
-            path:"",
-            component:()=>import("@/views/admin/EmployeesListView.vue"),
-            name:"employees"
-          },
-          {
-            path:"new",
-            component:()=>import("@/components/admin/FormNewEmployee.vue"),
-            name:"new-employee"
-          },
-          {
-            path:"employee",
-            component:()=>import("@/views/admin/EmployeeDetails.vue"),
-            name:"employee"
-          },
-        ]
+        path: "users",
+        component: () => import("@/views/admin/UsersListView.vue"),
+        name: "users"
+      },
+      {
+        path: 'users/create',
+        component: () => NewUserFormView,
+      },
+      {
+        path: "employee/details",
+        component: () => import("@/views/admin/EmployeeDetails.vue"),
+        name: "employee"
       },
       {
         path: "courses",
@@ -117,6 +111,6 @@ export default [
       }
 
     ],
-    
+
   },
 ];

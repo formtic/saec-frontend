@@ -1,7 +1,7 @@
 <template>
   <div class="order-question-container">
     <h3 class="question-text">
-      4.- ¿Qué operaciones debes realizar para el armado del adaptador con guarda? Acomoda la secuencia.
+      {{ question.title }}
     </h3>
     <draggable v-model="items" :item-key="itemKey" handle=".handle" :animation="150" @end="onDragEnd">
       <template #item="{ element, index }">
@@ -11,7 +11,7 @@
             <n-icon class="handle" size="20">
               <MenuFilled />
             </n-icon>
-            <span class="option-text">{{ element.text }}</span>
+            <span class="option-text">{{ element.answer }}</span>
           </div>
         </div>
       </template>
@@ -26,42 +26,23 @@ import { MenuFilled } from "@vicons/material";
 import draggable from "vuedraggable";
 
 export default defineComponent({
-  name: "OrderQuestion",
+  name: "OrderQuestionEmployee",
   components: {
     draggable,
     NIcon,
     MenuFilled,
   },
-  setup() {
-    const items = ref([
-      {
-        id: 1,
-        text: "Surtir las gavetas del proceso de ensamble cuando se tenga una cantidad suficiente acumulada en la gabeta contenedora",
-        order: 1,
-      },
-      {
-        id: 2,
-        text: "Introducir la guarda en el adaptador luer lock dar un leve giro para asegurar el ensamble",
-        order: 2,
-      },
-      {
-        id: 3,
-        text: "Tomar simultáneamente el adaptador luer lock y la guarda adaptador",
-        order: 3,
-      },
-      {
-        id: 4,
-        text: "Colocar el adaptador luer lock con guarda en la gaveta contenedora",
-        order: 4,
-      },
-    ]);
+  props: {
+    question: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
+    // duplicxar y mezclar los elementos
+    const items = ref([...props.question.answers].sort(() => Math.random() - 0.5));
 
-    
-
-    // Mezclar los items para que aparezcan en orden aleatorio inicialmente
-    items.value = items.value.sort(() => Math.random() - 0.5);
-
-    const itemKey = (item) => item.id;
+    const itemKey = (item) => item.answer;
 
     const onDragEnd = () => {
       updateOrderNumbers();
@@ -69,7 +50,7 @@ export default defineComponent({
 
     const updateOrderNumbers = () => {
       items.value.forEach((item, index) => {
-        item.order = index + 1;
+        item.answerOrder = index;
       });
     };
 
@@ -77,9 +58,9 @@ export default defineComponent({
       items,
       itemKey,
       onDragEnd,
-      MenuFilled,
+      MenuFilled
     };
-  },
+  }
 });
 </script>
 
@@ -104,7 +85,6 @@ export default defineComponent({
   margin-bottom: 12px;
   position: relative;
   margin-left: 30px;
-
 }
 
 .index-box {
@@ -116,7 +96,6 @@ export default defineComponent({
   height: 24px;
   color: #59b6e4;
   border: 1px solid #59b6e4;
-
   border-radius: 4px;
   font-weight: bold;
   display: flex;

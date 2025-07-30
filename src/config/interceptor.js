@@ -3,12 +3,6 @@ import notification from '../plugins/notification';
 
 const api = axios.create({});
 
-//  Verifica si hay un token en localStorage al iniciar
-const token = localStorage.getItem('authToken');
-if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-}
-
 api.interceptors.response.use(
     response => {
         if (response.data.status && response.data.status !== 200) {

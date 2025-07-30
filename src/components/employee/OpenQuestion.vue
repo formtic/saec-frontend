@@ -1,30 +1,41 @@
 <template>
   <div class="pvc-warnings">
-    <p class="question-text">7.- Menciona al menos 3 advertencias del enrrollado de PVC manómetro flexible.</p>
+    <p class="question-text">{{ question.title }}</p>
     <div class="textarea-container">
       <n-input
         v-model:value="answer"
         type="textarea"
         placeholder="Escribe tu respuesta aquí..."
-        :autosize="{
-          minRows: 3,
-          maxRows: 5
-        }"
+        :autosize="{ minRows: 3, maxRows: 5 }"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, defineExpose } from "vue";
 import { NInput } from "naive-ui";
 
 export default defineComponent({
   components: {
     NInput
   },
+  props: {
+    question: {
+      type: Object,
+      required: true
+    }
+  },
   setup() {
     const answer = ref("");
+
+    defineExpose({
+      getData: () => ({
+        answerType: "SIMPLE_ANSWER",
+        answer: answer.value
+      })
+    });
+
     return {
       answer
     };

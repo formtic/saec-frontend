@@ -106,7 +106,7 @@ export default defineComponent({
       }
 
       // Verifica si estamos en alguna subruta de las opciones principales
-      const mainRoutes = ['dashboard', 'courses', 'employees', 'departments', 'jobs', 'profile'];
+      const mainRoutes = ['dashboard', 'courses', 'users', 'departments', 'jobs', 'profile'];
       const currentMainRoute = parts[1];
 
       // Si es una ruta principal, devuélvela directamente
@@ -114,7 +114,6 @@ export default defineComponent({
         return currentMainRoute;
       }
 
-      // Para subrutas como /admin/employees/new, etc.
       // Busca en el historial la última ruta principal visitada
       const matchedRoute = router.currentRoute.value.matched.find(route => {
         return mainRoutes.some(mainRoute => route.path.includes(mainRoute));
@@ -146,7 +145,7 @@ export default defineComponent({
     const topMenuOptions = [
       { label: 'Panel General', key: 'dashboard', icon: renderIcon(DashboardFilled) },
       { label: 'Cursos', key: 'courses', icon: renderIcon(BookFilled) },
-      { label: 'Empleados', key: 'employees', icon: renderIcon(PeopleAltFilled) },
+      { label: 'Usuarios', key: 'users', icon: renderIcon(PeopleAltFilled) },
       { label: 'Departamentos', key: 'departments', icon: renderIcon(HomeFilled) },
       { label: 'Puestos', key: 'jobs', icon: renderIcon(CasesOutlined) }
     ];
@@ -164,8 +163,8 @@ export default defineComponent({
         case 'courses':
           router.push('/admin/courses');
           break;
-        case 'employees':
-          router.push('/admin/employees');
+        case 'users':
+          router.push('/admin/users');
           break;
         case 'departments':
           router.push('/admin/departments');

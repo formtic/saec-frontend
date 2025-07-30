@@ -121,5 +121,12 @@ export default {
     Checkbox: {
         colorChecked: '#0D5A79',
         borderRadius: '5px',
+    },
+    Tabs: {
+        colorSegment: '#187dac',
+        tabColorSegment: '#0D5A79',
+        tabTextColorSegment: '#fff',
+        tabTextColorActiveSegment: '#fff',
+        tabTextColorHoverSegment: '#fff'
     }
 }

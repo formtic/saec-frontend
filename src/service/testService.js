@@ -10,3 +10,8 @@ export function findTestsByStatus(status) {
         }
     );
 }
+
+
+export function findTestByCouseseId(courseId) {
+    return api.get(`${BASE_URL}/test/getbycourseid/${courseId}`);
+}
