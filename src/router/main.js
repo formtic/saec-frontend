@@ -4,6 +4,7 @@ import adminRoutes from "./adminRoutes.js";
 import employeeRoutes from "./employeeRoutes.js";
 import reviewerRoutes from "./reviewerRoutes.js";
 import { jwtDecode } from "jwt-decode";
+import api from "../config/interceptor.js";
 
 const routes = [
     { path: "/", component: LoginView, meta: { isPublic: true } },
@@ -21,6 +22,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('authToken');
     if (token) {
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`
         try {
             const decoded = jwtDecode(token);
             const userRole = `ROLE_${decoded.roles[0]}`;
@@ -41,13 +43,14 @@ router.beforeEach((to, from, next) => {
             if (to.path.startsWith('/teacher') && userRole !== 'ROLE_TEACHER') return next('/');
             if (to.path.startsWith('/employee') && userRole !== 'ROLE_EMPLOYEE') return next('/');
             return next();
-            
+
         } catch (error) {
             localStorage.removeItem('authToken');
+            api.defaults.headers.common['Authorization'] = undefined;
             return next('/');
         }
     }
-    if(to.meta.isPublic) {
+    if (to.meta.isPublic) {
         return next();
     }
     return next('/');

@@ -24,6 +24,14 @@
   background-color: #187dac;
 }
 
+.text-primary-900 {
+  color: #0d5079;
+}
+
+.text-primary-700 {
+  color: #187dac;
+}
+
 
 .pagination {
     margin-top: 2rem;

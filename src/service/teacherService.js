@@ -11,3 +11,13 @@ export function findAllByStatus(status) {
         }
     );
 }
+
+export function createTeacher(payload) {
+    return api.post(`${BASE_URL}/teacher/create`, payload);
+}
+
+export function filterTeachers(name, page, pageSize, sortDirection) {
+    return api.get(`${BASE_URL}/teacher/filter`, {
+        params: {name, page, pageSize, sortDirection}
+    });
+}

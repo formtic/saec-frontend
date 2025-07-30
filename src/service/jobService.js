@@ -43,7 +43,7 @@ export function findById(id) {
     });
 }
 
-export function findAll(){
+export function findAllJobs(){
     const token = localStorage.getItem('authToken');
     return api.get(`${BASE_URL}/job/list`,{
         headers:{
