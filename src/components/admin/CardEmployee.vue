@@ -15,10 +15,10 @@
       <!-- Fila 2: Departamento / Puesto -->
       <n-grid cols="1 s:1 m:2 l:2" item-responsive responsive="screen">
         <n-grid-item class="text-left">
-          <span class="font-medium">Dpto. {{ department }}</span>
+          <span class="font-medium">Dpto. {{ department.join(', ') }}</span>
         </n-grid-item>
         <n-grid-item class="text-left md:text-right lg:text-right text-gray-500">
-          <span class="italic">{{ job }}</span>
+          <span class="italic">{{ job.join(', ') }}</span>
         </n-grid-item>
       </n-grid>
       </n-space>

@@ -2,7 +2,7 @@ import api from '../config/interceptor.js';
 const BASE_URL = import.meta.env.VITE_SPRING_API_URL;
 
 
-export function findAll() {
+export function findAllDepartments() {
     const token = localStorage.getItem('authToken');
     return api.get(`${BASE_URL}/department/list`,
         {
