@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, watch } from "vue";
 import { NIcon } from "naive-ui";
 import { MenuFilled } from "@vicons/material";
 import draggable from "vuedraggable";
@@ -51,11 +51,17 @@ export default defineComponent({
     question: {
       type: Object,
       required: true
+    },
+    hasAttemptedSubmission: {
+      type: Boolean,
+      default: false
     }
   },
-  setup(props) {
+  emits: ["update:answer"],
+  setup(props, { emit }) {
     const elementsList = ref([]);
     const valuesList = ref([]);
+    const originalElements = ref([]);
 
     const shuffleArray = (array) => {
       const newArray = [...array];
@@ -67,26 +73,46 @@ export default defineComponent({
     };
 
     const initializeLists = () => {
+      originalElements.value = [...props.question.elements];
+      
       elementsList.value = shuffleArray([...props.question.elements]);
       valuesList.value = shuffleArray(
         props.question.elements.map(el => ({ value: el.value }))
       );
+      emitAnswer();
     };
 
-    const getLetter = (index) => String.fromCharCode(65 + index); 
+    const getLetter = (index) => String.fromCharCode(65 + index);
 
     const updateElementsOrder = () => {
-      console.log("Nuevo orden de elementos:", elementsList.value);
+      emitAnswer();
     };
 
     const updateValuesOrder = () => {
-      console.log("Nuevo orden de valores:", valuesList.value);
+      emitAnswer();
     };
 
-    // Inicializar las listas desordenadas cuando el componente se monta
+    const emitAnswer = () => {
+      const answer = {
+        questionType: props.question.questionType,
+        correctAnswers: originalElements.value,
+        userAnswers: elementsList.value.map((element, index) => ({
+          element: element.element,
+          value: valuesList.value[index]?.value || ''
+        })),
+        isComplete: true 
+      };
+      
+      emit("update:answer", answer);
+    };
+
     onMounted(() => {
       initializeLists();
     });
+
+    watch(() => props.question, () => {
+      initializeLists();
+    }, { deep: true });
 
     return {
       elementsList,
@@ -99,6 +125,7 @@ export default defineComponent({
   },
 });
 </script>
+
 
 <style scoped>
 .parallel-dnd-container {

@@ -1,6 +1,7 @@
 <template>
   <div class="page-container">
     <div class="form-wrapper">
+
       <n-card class="form-card">
         <n-space vertical :size="8">
           <n-space vertical :size="2" align="center" style="margin-top: -8px">
@@ -65,14 +66,16 @@
         </n-space>
       </n-card>
 
-      <!-- Preguntas dinámicas -->
-      <component
-        v-for="(question, index) in questions"
-        :key="index"
-        :is="getComponentName(question.questionType)"
-        :question="question"
-        class="question-component"
-      />
+
+
+
+      <component v-for="(question, index) in questions" :key="index" :is="getComponentName(question.questionType)"
+        :question="question" :has-attempted-submission="hasAttemptedSubmission" @update:answer="handleAnswerUpdate"
+        class="question-component" />
+
+      <n-button type="primary" block size="large" style="margin-top: 24px" @click="enviarExamen">
+        Enviar examen
+      </n-button>
     </div>
   </div>
 </template>
@@ -81,7 +84,7 @@
 import { defineComponent, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import {
-  NCard, NText, NSpace, NForm, NFormItem, NInput, NGrid, NGi
+  NCard, NText, NSpace, NForm, NFormItem, NInput, NGrid, NGi, NButton, NAlert
 } from "naive-ui";
 
 import SimpleSelectQuestion from "../../components/employee/SimpleSelectQuestion.vue";
@@ -98,7 +101,7 @@ import { findTestByCouseseId } from "../../service/testService";
 export default defineComponent({
   name: "ExamView",
   components: {
-    NCard, NText, NSpace, NForm, NFormItem, NInput, NGrid, NGi,
+    NCard, NText, NSpace, NForm, NFormItem, NInput, NGrid, NGi, NButton, NAlert,
     SimpleSelectQuestion,
     MultipleSelectQuestion,
     OrderQuestionEmployee,
@@ -110,6 +113,7 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+
     const formData = ref({
       date: "01-01-2023",
       department: "Nombre del departamento",
@@ -120,26 +124,54 @@ export default defineComponent({
       revision: "2",
       effectiveDate: "02-06-2022"
     });
+
     const questions = ref([]);
     const isLoading = ref(false);
     const error = ref(null);
+    const showSubmissionError = ref(false);
+    const hasAttemptedSubmission = ref(false);
+    const answersMap = ref({});
 
-    onMounted(async () => {
-      try {
-        isLoading.value = true;
-        const courseId = route.params.courseId;
-        const response = await findTestByCouseseId(courseId);
-        if (response.data?.questions) {
-          questions.value = response.data.questions;
-        }
-        console.log("Examen cargado:", response.data);
-      } catch (err) {
-        error.value = "Error al cargar el examen";
-        console.error("Error fetching test:", err);
-      } finally {
-        isLoading.value = false;
+    function handleAnswerUpdate(answerData) {
+      answersMap.value[answerData.questionId] = answerData;
+      // Ocultar error si el usuario corrige después de un intento fallido
+      if (showSubmissionError.value) {
+        validateExam();
       }
-    });
+    }
+
+    function validateExam() {
+      // Verifica que todas las preguntas tengan respuesta
+      const allQuestionsAnswered = questions.value.every(question => {
+        return answersMap.value[question.id || question._id] !== undefined;
+      });
+
+      // Verifica que todas las respuestas estén completas
+      const allAnswersComplete = Object.values(answersMap.value).every(answer => {
+        if (answer.questionType === "MULTIPLE_MATCH_QUESTION") {
+          return answer.answers.every(item => item.selectedGroup !== null && item.selectedGroup !== undefined);
+        }
+        return true; // Para otros tipos de preguntas
+      });
+
+      const isValid = allQuestionsAnswered && allAnswersComplete;
+      showSubmissionError.value = !isValid;
+      return isValid;
+    }
+
+    function enviarExamen() {
+      hasAttemptedSubmission.value = true;
+
+      if (!validateExam()) {
+        window.$message?.error?.("Por favor completa todas las preguntas.");
+        return;
+      }
+
+      showSubmissionError.value = false;
+      console.log("Examen enviado:", answersMap.value);
+      // Aquí iría el envío real a la API
+      // await submitExam({ employeeId, answers: Object.values(answersMap.value) })
+    }
 
     const getComponentName = (questionType) => {
       switch (questionType) {
@@ -164,12 +196,33 @@ export default defineComponent({
       }
     };
 
+    onMounted(async () => {
+      try {
+        isLoading.value = true;
+        const courseId = route.params.courseId;
+        const response = await findTestByCouseseId(courseId);
+        if (response.data?.questions) {
+          questions.value = response.data.questions;
+        }
+        console.log("Examen cargado:", response.data);
+      } catch (err) {
+        error.value = "Error al cargar el examen";
+        console.error("Error fetching test:", err);
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
     return {
       formData,
       questions,
       isLoading,
       error,
-      getComponentName
+      showSubmissionError,
+      hasAttemptedSubmission,
+      getComponentName,
+      handleAnswerUpdate,
+      enviarExamen
     };
   }
 });

@@ -16,39 +16,89 @@
         <n-input
           v-model:value="userAnswers[index]"
           type="text"
-          placeholder="Escribe la correspondencia..."
+          placeholder="Escribe la respuesta..."
           clearable
           class="full-width-input"
+          @update:value="handleInputChange"
         />
       </div>
     </div>
+
+    <n-alert v-if="showIncompleteWarning && parentHasAttemptedSubmission" type="warning" :bordered="false"
+      style="margin-top: 16px; background-color: #fff8e6">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <span>Debes completar todas las respuestas para enviar el examen.</span>
+      </div>
+    </n-alert>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, toRefs } from "vue";
-import { NInput, NText } from "naive-ui";
-
-// Recibe la pregunta completa como prop
+import { ref, watch, onMounted, computed } from "vue";
+import { NInput, NText, NAlert } from "naive-ui"; 
 const props = defineProps({
   question: {
     type: Object,
     required: true,
   },
+  hasAttemptedSubmission: {
+    type: Boolean,
+    default: false,
+  },
 });
 
+const emit = defineEmits(['update:answer']);
+
 const userAnswers = ref([]);
+const parentHasAttemptedSubmission = ref(props.hasAttemptedSubmission); 
+const initializeAnswers = () => {
+  
+  const initialLength = props.question.subquestions ? props.question.subquestions.length : 0;
+  const newAnswers = Array(initialLength).fill('');
+  userAnswers.value = newAnswers;
 
-userAnswers.value = props.question.subquestions
-  ? props.question.subquestions.map(() => "")
-  : [];
+  emitCurrentAnswerState();
+};
 
-watch(
-  () => props.question.subquestions,
-  (newSubs) => {
-    userAnswers.value = newSubs ? newSubs.map(() => "") : [];
-  }
+// Validación: verificar si todos los campos están llenos
+const isValid = computed(() =>
+  userAnswers.value.every((answer) => answer.trim() !== "")
 );
+
+const emitCurrentAnswerState = () => {
+  if (isValid.value) { // <--- Solo emite si todos los campos están completos
+    const response = {
+      questionId: props.question.id || props.question._id,
+      questionType: props.question.questionType,
+      userAnswers: [...userAnswers.value],
+      isComplete: true, 
+      isValid: true     
+    };
+    emit('update:answer', response);
+  }
+  // Si no es válido, no se emite nada.
+};
+
+const handleInputChange = () => {
+  emitCurrentAnswerState(); 
+};
+
+// Watchers
+watch(() => props.question.subquestions, initializeAnswers, { deep: true, immediate: true });
+
+watch(() => props.hasAttemptedSubmission, (newVal) => {
+  parentHasAttemptedSubmission.value = newVal;
+  // Cuando el padre intenta la sumisión, este componente verifica si es válido.
+  // Si es válido, emite. Si no, no emite nada, pero la alerta se muestra.
+  emitCurrentAnswerState();
+});
+
+onMounted(initializeAnswers); 
+
+
+const showIncompleteWarning = computed(() => {
+  return !isValid.value && parentHasAttemptedSubmission.value;
+});
 </script>
 
 <style scoped>

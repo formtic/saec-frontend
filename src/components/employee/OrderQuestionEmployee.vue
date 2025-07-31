@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { NIcon } from "naive-ui";
 import { MenuFilled } from "@vicons/material";
 import draggable from "vuedraggable";
@@ -30,29 +30,58 @@ export default defineComponent({
   components: {
     draggable,
     NIcon,
-    MenuFilled,
+    MenuFilled
   },
   props: {
     question: {
       type: Object,
       required: true
+    },
+    hasAttemptedSubmission: {
+      type: Boolean,
+      default: false
     }
   },
-  setup(props) {
-    // duplicxar y mezclar los elementos
+  emits: ["update:answer"],
+  setup(props, { emit }) {
     const items = ref([...props.question.answers].sort(() => Math.random() - 0.5));
 
     const itemKey = (item) => item.answer;
-
-    const onDragEnd = () => {
-      updateOrderNumbers();
-    };
 
     const updateOrderNumbers = () => {
       items.value.forEach((item, index) => {
         item.answerOrder = index;
       });
     };
+
+    const emitAnswer = () => {
+      const answer = {
+        questionId: props.question.id || props.question._id,
+        questionType: props.question.questionType,
+        points: props.question.points,
+        correctAnswers: props.question.answers,
+        userAnswer: items.value.map((item, index) => ({
+          answer: item.answer,
+          answerOrder: index
+        })),
+        isComplete: true
+      };
+      emit("update:answer", answer);
+    };
+
+    const onDragEnd = () => {
+      updateOrderNumbers();
+      emitAnswer();
+    };
+
+    updateOrderNumbers();
+    emitAnswer();
+
+    watch(() => props.question, () => {
+      items.value = [...props.question.answers].sort(() => Math.random() - 0.5);
+      updateOrderNumbers();
+      emitAnswer();
+    }, { deep: true });
 
     return {
       items,
@@ -63,7 +92,6 @@ export default defineComponent({
   }
 });
 </script>
-
 <style scoped>
 .order-question-container {
   font-family: Arial, sans-serif;

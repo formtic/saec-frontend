@@ -9,40 +9,81 @@
         :autosize="{ minRows: 3, maxRows: 5 }"
       />
     </div>
+
+    <n-alert 
+      v-if="showIncompleteWarning && parentHasAttemptedSubmission" 
+      type="warning" 
+      :bordered="false"
+      style="margin-top: 16px; background-color: #fff8e6"
+    >
+      <div style="display: flex; align-items: center; gap: 8px">
+        <span>Por favor, escribe tu respuesta.</span>
+      </div>
+    </n-alert>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, defineExpose } from "vue";
-import { NInput } from "naive-ui";
+import { defineComponent, ref, watch, computed } from "vue";
+import { NInput, NAlert } from "naive-ui";
 
 export default defineComponent({
+  name: "OpenQuestion",
   components: {
-    NInput
+    NInput,
+    NAlert
   },
   props: {
     question: {
       type: Object,
       required: true
+    },
+    hasAttemptedSubmission: {
+      type: Boolean,
+      default: false
     }
   },
-  setup() {
+  emits: ["update:answer"],
+  setup(props, { emit }) {
     const answer = ref("");
+    const parentHasAttemptedSubmission = ref(props.hasAttemptedSubmission);
 
-    defineExpose({
-      getData: () => ({
-        answerType: "SIMPLE_ANSWER",
-        answer: answer.value
-      })
+    const showIncompleteWarning = computed(() => {
+      return answer.value.trim() === "";
+    });
+
+    const emitAnswer = () => {
+      const response = {
+        questionType: props.question.questionType,
+        correctAnswers: props.question.correctAnswer.answer,
+        userAnswers: answer.value,
+        isComplete: !showIncompleteWarning.value
+      };
+      
+      emit("update:answer", response);
+    };
+
+    watch(answer, () => {
+      emitAnswer();
+    });
+
+    watch(() => props.question, () => {
+      answer.value = "";
+      emitAnswer();
+    }, { deep: true });
+
+    watch(() => props.hasAttemptedSubmission, (newVal) => {
+      parentHasAttemptedSubmission.value = newVal;
     });
 
     return {
-      answer
+      answer,
+      showIncompleteWarning,
+      parentHasAttemptedSubmission
     };
   }
 });
 </script>
-
 <style scoped>
 .pvc-warnings {
   font-family: Arial, sans-serif;

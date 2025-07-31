@@ -2,7 +2,7 @@
   <div class="simple-select-question">
     <p class="question-text">{{ question.title }}</p>
     <div class="options-container">
-      <n-radio-group v-model:value="selectedOption">
+      <n-radio-group v-model:value="selectedOption" @update:value="emitAnswer">
         <div
           v-for="(answer, index) in question.answers"
           :key="index"
@@ -13,29 +13,80 @@
         </div>
       </n-radio-group>
     </div>
+
+    <n-alert 
+      v-if="showIncompleteWarning && parentHasAttemptedSubmission" 
+      type="warning" 
+      :bordered="false"
+      style="margin-top: 16px; background-color: #fff8e6"
+    >
+      <div style="display: flex; align-items: center; gap: 8px">
+        <span>Selecciona una opción.</span>
+      </div>
+    </n-alert>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-import { NRadio, NRadioGroup } from "naive-ui";
+import { defineComponent, ref, watch, computed } from "vue";
+import { NRadio, NRadioGroup, NAlert } from "naive-ui";
 
 export default defineComponent({
   name: "SimpleSelectQuestion",
   components: {
     NRadio,
-    NRadioGroup
+    NRadioGroup,
+    NAlert
   },
   props: {
     question: {
       type: Object,
       required: true
+    },
+    hasAttemptedSubmission: {
+      type: Boolean,
+      default: false
     }
   },
-  setup() {
+  emits: ["update:answer"],
+  setup(props, { emit }) {
     const selectedOption = ref(null);
+    const parentHasAttemptedSubmission = ref(props.hasAttemptedSubmission);
+
+    const showIncompleteWarning = computed(() => {
+      return selectedOption.value === null;
+    });
+
+    const emitAnswer = () => {
+      const answer = {
+        questionId: props.question.id || props.question._id,
+        questionType: props.question.questionType,
+        correctAnswers: props.question.correctAnswer.answer, 
+        userAnswers: selectedOption.value !== null ? [selectedOption.value] : [],
+        isComplete: !showIncompleteWarning.value
+      };
+      
+      emit("update:answer", answer);
+    };
+
+    watch(selectedOption, () => {
+      emitAnswer();
+    });
+
+    watch(() => props.question, () => {
+      selectedOption.value = null;
+      emitAnswer();
+    }, { deep: true });
+
+    watch(() => props.hasAttemptedSubmission, (newVal) => {
+      parentHasAttemptedSubmission.value = newVal;
+    });
+
     return {
-      selectedOption
+      selectedOption,
+      showIncompleteWarning,
+      parentHasAttemptedSubmission,
+      emitAnswer
     };
   }
 });
