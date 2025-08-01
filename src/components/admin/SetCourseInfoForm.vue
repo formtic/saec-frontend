@@ -48,7 +48,7 @@ export default defineComponent({
             if (c) {
                 model.value.name = c.name;
                 model.value.description = c.description;
-                model.value.teacher = c.teacher.id;
+                model.value.teacher = c.teacher?.id;
             }
         }, { immediate: true })
 

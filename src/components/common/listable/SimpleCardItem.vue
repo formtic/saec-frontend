@@ -1,12 +1,12 @@
 <template>
     <div class="card-container border border-solid border-gray-400 rounded-sm overflow-hidden pl-2" :class="colorClass">
         <n-flex class="card-content p-2" vertical justify="center">
-            <n-text class="text-lg">
+            <n-text class="text-lg font-semibold">
                 {{ title }}
             </n-text>
-            <n-text class="text-base">
+            <p class="text-xs line-clamp-2">
                 {{ body }}
-            </n-text>
+            </p>
         </n-flex>
     </div>
 </template>

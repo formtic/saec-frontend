@@ -18,12 +18,7 @@
       <div class="bg-white p-4 rounded-b-md grow">
         <n-grid  :cols="2" :x-gap="12" :y-gap="12" item-responsive>
           <n-grid-item v-for="c in courses" :key="c.id" span="2 600:1">
-            <n-card content-class="bg-white rounded-b-xl" header-class="bg-white rounded-t-xl" class="h-30">
-              <template #header>
-                <h3 class="text-xl">{{ c.name }}</h3>
-              </template>
-              {{ c.description }}
-            </n-card>
+            <SimpleCardItem :title="c?.name" :colorClass="'bg-cyan-600'" :body="c.description" @click="router.push(`courses/details/${c?.id}`)"/>
           </n-grid-item>
         </n-grid>
       </div>
@@ -35,7 +30,10 @@
 import { BookFilled, SearchOutlined, TrendingDownFilled, TrendingUpFilled } from '@vicons/material';
 import { inject, onMounted, ref } from 'vue';
 import { filterMyCourses } from '../../../service/courseService';
+import SimpleCardItem from '../../../components/common/listable/SimpleCardItem.vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const currentPath = inject('module');
 const breadCrumbItems = inject('breadcrumbItems');
 const pageTitle = inject('pageTitle');

@@ -1,44 +1,44 @@
 <template>
-        <n-layout has-sider class="h-screen">
-            <n-layout-sider :width="240" :collapsed="hideSider" collapse-mode="width" collapsed-width="64">
-                <n-flex vertical class="h-full">
-                    <n-flex class="p-3" justify="space-between">
-                        <img :src="logo" alt="Logo">
-                        <n-button quaternary color="none" @click="handleCollapse(!hideSider)">
-                            <template #icon>
-                                <n-icon :component="MenuFilled" color="#fff" :size="32" />
-                            </template>
-                        </n-button>
-                    </n-flex>
-                    <n-menu :options="topMenuOptions" :collapsed="hideSider" :collapsed-width="64"
-                        :collapsed-icon-size="25" :value="topMenuValue" :on-update:value="handleNavigate" />
-                    <div class="mt-auto">
-                        <div class="w-full px-2">
-                            <n-divider />
-                        </div>
-                        <n-menu :options="bottomMenuOptions" :collapsed="hideSider" :collapse-width="64"
-                            :on-update:value="handleBottomMenuOptions" />
+    <n-layout has-sider class="h-screen">
+        <n-layout-sider :width="240" :collapsed="hideSider" collapse-mode="width" collapsed-width="64">
+            <n-flex vertical class="h-full">
+                <div class="p-3 flex flex-row flex-wrap sm:flex-row-reverse justify-between">
+                    <n-button quaternary color="none" @click="handleCollapse(!hideSider)">
+                        <template #icon>
+                            <n-icon :component="MenuFilled" color="#fff" :size="32" />
+                        </template>
+                    </n-button>
+                    <img :src="logo" alt="Logo" width="75">
+                </div>
+                <n-menu :options="topMenuOptions" :collapsed="hideSider" :collapsed-width="64" :collapsed-icon-size="25"
+                    :value="topMenuValue" :on-update:value="handleNavigate" />
+                <div class="mt-auto">
+                    <div class="w-full px-2">
+                        <n-divider />
                     </div>
+                    <n-menu :options="bottomMenuOptions" :collapsed="hideSider" :collapse-width="64"
+                        :on-update:value="handleBottomMenuOptions" />
+                </div>
+            </n-flex>
+        </n-layout-sider>
+        <n-layout-content>
+            <n-flex vertical class="px-4 h-full">
+                <n-flex justify="space-between" align="center" class="pt-4">
+                    <n-breadcrumb>
+                        <n-breadcrumb-item v-for="(item, index) in breadcrumbOptions" key="path"
+                            @click="handleBreadCrumbNavigate(item.path, index)">
+                            <n-icon :component="item.icon" />
+                            {{ item.label }}
+                        </n-breadcrumb-item>
+                    </n-breadcrumb>
+                    <h1 class="admin-title">
+                        {{ title }}
+                    </h1>
                 </n-flex>
-            </n-layout-sider>
-            <n-layout-content>
-                <n-flex vertical class="px-4 h-full">
-                    <n-flex justify="space-between" align="center" class="pt-4">
-                        <n-breadcrumb>
-                            <n-breadcrumb-item v-for="(item, index) in breadcrumbOptions" key="path"
-                                @click="handleBreadCrumbNavigate(item.path, index)">
-                                <n-icon :component="item.icon" />
-                                {{ item.label }}
-                            </n-breadcrumb-item>
-                        </n-breadcrumb>
-                        <h1 class="admin-title">
-                            {{ title }}
-                        </h1>
-                    </n-flex>
-                    <router-view></router-view>
-                </n-flex>
-            </n-layout-content>
-        </n-layout>
+                <router-view></router-view>
+            </n-flex>
+        </n-layout-content>
+    </n-layout>
 </template>
 
 <script setup>
@@ -95,8 +95,9 @@ const handleBottomMenuOptions = (key, item) => {
 }
 
 const handleBreadCrumbNavigate = (path, index) => {
-    if (index !== 0) {
-        router.push(`teacher/${path}`);
+    console.log(breadcrumbOptions.value.length);
+    if (index < breadcrumbOptions.value.length -1) {
+        router.push(path);
     }
 }
 
