@@ -76,7 +76,7 @@
             </n-grid>
         </n-form>
         <div class="w-1/2 mx-auto" v-if="model.role === 'TEACHER'">
-            <n-upload :max="1" directory-dnd>
+            <n-upload :max="1" directory-dnd :on-change="handleUpload">
                 <n-upload-dragger>
                     <div style="margin-bottom: 12px">
                         <n-icon size="48" :depth="3">
@@ -91,6 +91,7 @@
                     </n-p>
                 </n-upload-dragger>
             </n-upload>
+            <n-text v-if="showImageError" type="error" class="block mt-2 text-center">La imagen es obligatoria para evaluadores</n-text>
         </div>
         <div class="w-full flex justify-center mt-8">
             <n-button type="primary" @click="valdiateForm">
@@ -99,6 +100,7 @@
         </div>
     </div>
 </template>
+
 <script setup>
 import { InfoOutlined, PeopleFilled, PersonAddFilled } from '@vicons/material';
 import { useRouter } from 'vue-router';
@@ -112,6 +114,8 @@ import { createTeacher } from '../../service/teacherService';
 const router = useRouter();
 const departments = ref([]);
 const jobs = ref([]);
+const showImageError = ref(false);
+
 //Formulario
 const formRef = ref(null);
 const roles = [{ label: 'Empleado', value: 'EMPLOYEE' }, { label: 'Evaluador', value: 'TEACHER' }];
@@ -126,8 +130,14 @@ const model = ref(
         confirmPassword: '',
         employeeDepartments: [],
         employeeJobs: [],
+        image: null
     },
 );
+
+const handleUpload = ({ file }) => {
+    model.value.image = file.file;
+    showImageError.value = false;
+}
 
 const validateName = (rule, value) => {
     if (!value || value.trim() === '') {
@@ -194,8 +204,6 @@ const validateConfirmPassword = (r, value) => {
     return true;
 }
 
-
-
 const rules = {
     role: {
         required: true,
@@ -256,6 +264,12 @@ const rules = {
 };
 
 const valdiateForm = () => {
+    // Validación adicional para la imagen cuando es TEACHER
+    if (model.value.role === 'TEACHER' && !model.value.image) {
+        showImageError.value = true;
+        return;
+    }
+
     formRef.value?.validate((errors) => {
         if (!errors) {
             const data = {
@@ -265,9 +279,13 @@ const valdiateForm = () => {
                 email: model.value.email,
                 employeeNumber: model.value?.employeeNumber,
                 departmentsId: model.value?.employeeDepartments,
-                jobsId: model.value?.employeeJobs
+                jobsId: model.value?.employeeJobs,
             }
-            saveUser(data);            
+
+            if (model.value.role === 'TEACHER') {
+                data.image = model.value.image; 
+            }
+            saveUser(data);
         }
     });
 }
@@ -287,6 +305,8 @@ const fetchJobs = async () => {
 }
 
 const saveUser = async (data) => {
+    console.log("Datos del usuario a crear:", data);
+
     await ({
         EMPLOYEE: () => createEmployee(data),
         TEACHER: () => createTeacher(data)
