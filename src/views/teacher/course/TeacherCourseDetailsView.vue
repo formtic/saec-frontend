@@ -22,7 +22,7 @@
                             <n-switch v-model:value="enableSectionSorting"></n-switch>
                         </div>
                     </n-space>
-                    <TeacherCourseSectionListTable :sort-sections="enableSectionSorting" :sections="sections"/>
+                    <CourseSectionListTable :sort-sections="enableSectionSorting" :sections="sections"/>
                     <n-flex justify="center" class="mb-4 ps-4 pe-4 h-[50px]">
                         <n-button block class="h-full" @click="router.push(`/teacher/courses/details/${props?.id}/set`)">
                             <n-icon :component="AddCircleOutline" size="32"></n-icon>
@@ -40,7 +40,7 @@
 import { BookFilled, InfoOutlined } from '@vicons/material';
 import { inject, onMounted, ref } from 'vue';
 import { findById } from '../../../service/courseService';
-import TeacherCourseSectionListTable from '../../../components/teacher/course/TeacherCourseSectionListTable.vue';
+import CourseSectionListTable from '../../../components/common/CourseSectionListTable.vue';
 import { AddCircleOutline } from '@vicons/ionicons5';
 import { findSectionsByCourseId } from '../../../service/CourseSectionService';
 import { useRouter } from 'vue-router';

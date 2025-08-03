@@ -1,18 +1,57 @@
 <template>
-    <n-form ref="formRef">
+    <n-form ref="formRef"class="mb-4">
         <n-space vertical>
             <n-form-item label="Nombre">
                 <n-input placeholder="Nombre de la sección" />
             </n-form-item>
             <n-form-item label="Descripción">
-                <n-input placeholder="Resumen de la sección" type="textarea" size="large" :rows="3"  :autosize="{minRows:3,maxRows:3}"/>
+                <n-input placeholder="Resumen de la sección" type="textarea" size="large" :rows="3"
+                    :autosize="{ minRows: 3, maxRows: 3 }" />
             </n-form-item>
+            <n-space item-class="w-full md:flex-1" size="large">
+                <n-form-item label="Video">
+                    <n-upload multiple directory-dnd action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f" :max="1" class="w-full">
+                        <n-upload-dragger>
+                            <div style="margin-bottom: 12px">
+                                <n-icon size="48" :depth="3">
+                                    <ArchiveFilled />
+                                </n-icon>
+                            </div>
+                            <n-text class="text-md font-semibold">
+                                Haga click o arrastre el archivo
+                            </n-text>
+                            <br>
+                            <n-text class="text-xs">
+                                Solo se permiten archivos .mp4
+                            </n-text>
+                        </n-upload-dragger>
+                    </n-upload>
+                </n-form-item>
+                <n-form-item label="Presentación">
+                    <n-upload multiple directory-dnd action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f" :max="1">
+                        <n-upload-dragger>
+                            <div style="margin-bottom: 12px">
+                                <n-icon size="48" :depth="3">
+                                    <ArchiveFilled />
+                                </n-icon>
+                            </div>
+                            <n-text class="text-md font-semibold">
+                                Haga click o arrastre el archivo
+                            </n-text>
+                            <br>
+                            <n-text class="text-xs">
+                                Solo se permiten archivos .mp4
+                            </n-text>
+                        </n-upload-dragger>
+                    </n-upload>
+                </n-form-item>
+            </n-space>
         </n-space>
     </n-form>
 </template>
 <script setup>
 import { BookOutline, PencilOutline } from '@vicons/ionicons5';
-import { AddOutlined, BookFilled } from '@vicons/material';
+import { AddOutlined, ArchiveFilled, BookFilled } from '@vicons/material';
 import { ref, inject } from 'vue';
 import { findSectionDetailsById } from '../../../service/CourseSectionService';
 const breadCrumbItems = inject('breadcrumbItems');

@@ -96,7 +96,8 @@ export default [
           },
           {
             path: 'course-content',
-            component: AdminCourseContentView
+            component: AdminCourseContentView,
+            props: true
           },
           {
             path: 'course-assignation',
