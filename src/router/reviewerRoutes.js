@@ -1,3 +1,4 @@
+import SetCourseSectionFormView from "../views/teacher/course/SetCourseSectionFormView.vue";
 import TeacherCourseDetailsView from "../views/teacher/course/TeacherCourseDetailsView.vue";
 import TeacherCoursesDashboardView from "../views/teacher/course/TeacherCoursesDashboardView.vue";
 import TeacherLayout from "../views/teacher/layout/TeacherLayout.vue";
@@ -18,6 +19,16 @@ export default [
       {
         path: 'courses/details/:id',
         component: TeacherCourseDetailsView,
+        props: true
+      },
+      {
+        path: 'courses/details/:course_id/set',
+        component: SetCourseSectionFormView,
+        props: true
+      },
+      {
+        path: 'courses/details/:course_id/set/:id',
+        component: SetCourseSectionFormView,
         props: true
       }
     ],

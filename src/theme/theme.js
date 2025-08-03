@@ -136,5 +136,8 @@ export default {
         tabTextColorSegment: '#fff',
         tabTextColorActiveSegment: '#fff',
         tabTextColorHoverSegment: '#fff'
+    },
+    Divider: {
+        color: '#0D5A79'        
     }
 }
