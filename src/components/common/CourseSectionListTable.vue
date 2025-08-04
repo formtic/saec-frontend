@@ -49,9 +49,7 @@ export default defineComponent({
             //console.log('index' + e.draggedContext.futureIndex)
         },
         checkChange(e) {
-            this.sections.forEach((section, index) => {
-                section.order = index
-            });
+            this.sections.forEach((s,i) => s.order = i);
         }
     },
     components: {

@@ -11,7 +11,6 @@ export default defineComponent({
     name: 'AdminCourseContentView',
     props: {
         id: String,
-        pene: String
     },
     data() {
         return {
