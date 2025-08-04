@@ -1,6 +1,8 @@
 import api from "../config/interceptor.js";
 const BASE_URL = import.meta.env.VITE_SPRING_API_URL;
 export function createEmployee(payload) {
+
+
     return api.post(`${BASE_URL}/employee/create`, payload);
 }
 
