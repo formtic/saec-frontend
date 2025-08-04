@@ -88,7 +88,7 @@ import {
 } from "@vicons/material";
 import logo from "@/assets/svg/logoDarkmode.svg";
 import { useRouter, useRoute } from "vue-router";
-
+import {logout} from "../service/authService"
 export default defineComponent({
   components: {
     NLayout,
@@ -173,8 +173,8 @@ export default defineComponent({
                 router.push('/reviewer/profile');
                 break;
             case 'logout':
-                window.location.href='/';
-                break;
+                logout()
+;                break;
         }
         showMobileMenu = false;
     }

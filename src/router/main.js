@@ -21,6 +21,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('authToken');
+    console.log("Token:", token);
     if (token) {
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
         try {
@@ -34,13 +35,13 @@ router.beforeEach((to, from, next) => {
 
             if (to.meta.isPublic) {
                 if (userRole === 'ROLE_ADMIN') return next('/admin');
-                if (userRole === 'ROLE_TEACHER') return next('/teacher');
+                if (userRole === 'ROLE_TEACHER') return next('/reviewer');
                 if (userRole === 'ROLE_EMPLOYEE') return next('/employee');
                 return next('/');
             }
 
             if (to.path.startsWith('/admin') && userRole !== 'ROLE_ADMIN') return next('/');
-            if (to.path.startsWith('/teacher') && userRole !== 'ROLE_TEACHER') return next('/');
+            if (to.path.startsWith('/reviewer') && userRole !== 'ROLE_TEACHER') return next('/');
             if (to.path.startsWith('/employee') && userRole !== 'ROLE_EMPLOYEE') return next('/');
             return next();
 
