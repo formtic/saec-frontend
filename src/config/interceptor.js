@@ -1,7 +1,13 @@
 import axios from 'axios';
 import notification from '../plugins/notification';
+import { startLoop, stopLoop } from '../compose/utils/loadingBarAnimation';
 
 const api = axios.create({});
+
+api.interceptors.request.use(options => {
+    startLoop();
+    return options;
+}, error => { return Promise.reject(error)});
 
 api.interceptors.response.use(
     response => {
@@ -12,10 +18,11 @@ api.interceptors.response.use(
                 duration: 2000
             });
         }
-
+        stopLoop();
         return response.data;
     },
     error => {
+        stopLoop();
         if (error.response && error.response.data) {
             notification.error({
                 title: `Error ${error.response.data.status}`,

@@ -139,5 +139,9 @@ export default {
     },
     Divider: {
         color: '#0D5A79'        
+    },
+    Upload: {
+        draggerBorder: '1px dashed #0D5A79',
+        draggerBorderHover: '1px dashed #1d8ec6'
     }
 }

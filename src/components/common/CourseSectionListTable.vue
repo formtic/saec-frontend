@@ -1,14 +1,13 @@
 <template>
     <div class="p-3">
-        <draggable :list="sections" item-key="id" :move="checkMove" :disabled="!sortSections">
+        <draggable :list="sections" item-key="id" :move="checkMove" @change="checkChange" :disabled="!sortSections">
             <template #item="{ element }">
                 <div class="w-full mt-2">
                     <n-flex class="w-full" align="center">
-                        <n-flex class="bg-blue-100 rounded p-2 border-1 border-primary-900 items-center flex-1"
-                            justify="space-between">
+                        <n-flex class=" rounded p-2 items-center flex-1 shadow-sm" justify="space-between">
                             <div class="flex w-[12px] justify-center">
                                 <n-text class="text-xs">
-                                    {{ element.order + 1}}
+                                    {{ element.order + 1 }}
                                 </n-text>
                             </div>
                             <n-divider vertical></n-divider>
@@ -29,7 +28,6 @@
                     </n-flex>
                 </div>
             </template>
-
         </draggable>
     </div>
 </template>
@@ -38,17 +36,22 @@ import { MoreVertFilled } from '@vicons/material';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable'
 export default defineComponent({
-    data() {
-        return {
-        }
-    },
     props: {
         sortSections: Boolean,
         sections: Array,
     },
+    data() {
+        return {
+        }
+    },
     methods: {
         checkMove: (e) => {
-            console.log('index' + e.draggedContext.futureIndex)
+            //console.log('index' + e.draggedContext.futureIndex)
+        },
+        checkChange(e) {
+            this.sections.forEach((section, index) => {
+                section.order = index
+            });
         }
     },
     components: {

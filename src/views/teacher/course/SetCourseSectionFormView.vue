@@ -10,7 +10,7 @@
             </n-form-item>
             <n-space item-class="w-full md:flex-1" size="large">
                 <n-form-item label="Video">
-                    <n-upload multiple directory-dnd action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f" :max="1" class="w-full">
+                    <n-upload multiple directory-dnd :max="1" class="w-full">
                         <n-upload-dragger>
                             <div style="margin-bottom: 12px">
                                 <n-icon size="48" :depth="3">
@@ -47,7 +47,10 @@
                 </n-form-item>
             </n-space>
         </n-space>
-    </n-form>
+        <n-image src="C:/Users/Antonio/files/CIENCIAS_OLGUIN_Tecnologia_en_el_Aprendizaje_1.pdf">
+
+        </n-image>
+    </n-form>    
 </template>
 <script setup>
 import { BookOutline, PencilOutline } from '@vicons/ionicons5';
