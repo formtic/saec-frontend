@@ -1,6 +1,6 @@
 export default [
   {
-    path: "/reviewer",
+    path: "/teacher",
     component: () => import("@/layouts/ReviewerLayout.vue"),
     children: [
       {

@@ -3,27 +3,15 @@
     <p class="question-text">{{ question.title }}</p>
     <div class="options-container">
       <n-checkbox-group v-model:value="selectedOptions">
-        <div
-          class="checkbox-option"
-          v-for="(answer, index) in question.answers"
-          :key="index"
-        >
-          <n-checkbox
-            :value="index"
-            :disabled="isDisabled(index)"
-            @click="emitAnswer"
-          />
+        <div class="checkbox-option" v-for="(answer, index) in question.answers" :key="index">
+          <n-checkbox :value="index" :disabled="isDisabled(index)" @click="emitAnswer" />
           <div class="answer-box">{{ answer }}</div>
         </div>
       </n-checkbox-group>
     </div>
 
-    <n-alert 
-      v-if="showIncompleteWarning && parentHasAttemptedSubmission" 
-      type="warning" 
-      :bordered="false"
-      style="margin-top: 16px; background-color: #fff8e6"
-    >
+    <n-alert v-if="showIncompleteWarning && parentHasAttemptedSubmission" type="warning" :bordered="false"
+      style="margin-top: 16px; background-color: #fff8e6">
       <div style="display: flex; align-items: center; gap: 8px">
         <span>Selecciona almenos una opcion.</span>
       </div>
@@ -53,6 +41,14 @@ export default defineComponent({
     hasAttemptedSubmission: {
       type: Boolean,
       default: false
+    },
+    questionIndex: {
+      type: Number,
+      required: true
+    },
+    questionIndex: {
+      type: Number,
+      required: true
     }
   },
   emits: ["update:answer"],
@@ -73,13 +69,14 @@ export default defineComponent({
 
     const emitAnswer = () => {
       const answer = {
-        questionId: props.question.id || props.question._id,
+        questionIndex:  props.questionIndex,
         questionType: props.question.questionType,
         correctAnswers: props.question.correctAnswers.answers,
         userAnswers: [...selectedOptions.value],
         isComplete: !showIncompleteWarning.value
       };
-      
+      console.log("Emitting answer:", answer);
+
       emit("update:answer", answer);
     };
 
@@ -143,7 +140,7 @@ export default defineComponent({
   margin: 4px;
 }
 
-.n-checkbox-group:focus-within .n-checkbox:checked + .answer-box,
+.n-checkbox-group:focus-within .n-checkbox:checked+.answer-box,
 .checkbox-option:hover .answer-box {
   border-color: #2d8cf0;
   background-color: #f0f7ff;

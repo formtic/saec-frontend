@@ -5,22 +5,12 @@
     </n-text>
 
     <div class="items-container">
-      <div
-        v-for="(item, index) in question.subquestions"
-        :key="index"
-        class="item-row"
-      >
+      <div v-for="(item, index) in question.subquestions" :key="index" class="item-row">
         <n-text class="time-display">
           {{ item.subquestion }}
         </n-text>
-        <n-input
-          v-model:value="userAnswers[index]"
-          type="text"
-          placeholder="Escribe la respuesta..."
-          clearable
-          class="full-width-input"
-          @update:value="handleInputChange"
-        />
+        <n-input v-model:value="userAnswers[index]" type="text" placeholder="Escribe la respuesta..." clearable
+          class="full-width-input" @update:value="handleInputChange" />
       </div>
     </div>
 
@@ -35,7 +25,7 @@
 
 <script setup>
 import { ref, watch, onMounted, computed } from "vue";
-import { NInput, NText, NAlert } from "naive-ui"; 
+import { NInput, NText, NAlert } from "naive-ui";
 const props = defineProps({
   question: {
     type: Object,
@@ -45,14 +35,18 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+    questionIndex: {
+      type: Number,
+      required: true
+    }
 });
 
 const emit = defineEmits(['update:answer']);
 
 const userAnswers = ref([]);
-const parentHasAttemptedSubmission = ref(props.hasAttemptedSubmission); 
+const parentHasAttemptedSubmission = ref(props.hasAttemptedSubmission);
 const initializeAnswers = () => {
-  
+
   const initialLength = props.question.subquestions ? props.question.subquestions.length : 0;
   const newAnswers = Array(initialLength).fill('');
   userAnswers.value = newAnswers;
@@ -60,19 +54,18 @@ const initializeAnswers = () => {
   emitCurrentAnswerState();
 };
 
-// Validación: verificar si todos los campos están llenos
 const isValid = computed(() =>
   userAnswers.value.every((answer) => answer.trim() !== "")
 );
 
 const emitCurrentAnswerState = () => {
-  if (isValid.value) { // <--- Solo emite si todos los campos están completos
+  if (isValid.value) { 
     const response = {
-      questionId: props.question.id || props.question._id,
+      questionIndex: props.questionIndex,
       questionType: props.question.questionType,
       userAnswers: [...userAnswers.value],
-      isComplete: true, 
-      isValid: true     
+      isComplete: true,
+      isValid: true
     };
     emit('update:answer', response);
   }
@@ -80,10 +73,9 @@ const emitCurrentAnswerState = () => {
 };
 
 const handleInputChange = () => {
-  emitCurrentAnswerState(); 
+  emitCurrentAnswerState();
 };
 
-// Watchers
 watch(() => props.question.subquestions, initializeAnswers, { deep: true, immediate: true });
 
 watch(() => props.hasAttemptedSubmission, (newVal) => {
@@ -93,7 +85,7 @@ watch(() => props.hasAttemptedSubmission, (newVal) => {
   emitCurrentAnswerState();
 });
 
-onMounted(initializeAnswers); 
+onMounted(initializeAnswers);
 
 
 const showIncompleteWarning = computed(() => {

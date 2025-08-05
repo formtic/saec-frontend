@@ -21,7 +21,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('authToken');
-    console.log("Token:", token);
     if (token) {
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
         try {

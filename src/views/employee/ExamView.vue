@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <div class="form-wrapper">
-
+      <!-- AQUI PONER EL NCARD ANTES DE SUBIR CAMBIOS -->
       <n-card class="form-card">
         <n-space vertical :size="8">
           <n-space vertical :size="2" align="center" style="margin-top: -8px">
@@ -66,12 +66,9 @@
         </n-space>
       </n-card>
 
-
-
-
       <component v-for="(question, index) in questions" :key="index" :is="getComponentName(question.questionType)"
-        :question="question" :has-attempted-submission="hasAttemptedSubmission" @update:answer="handleAnswerUpdate"
-        class="question-component" />
+        :question="question" :question-index="index" :has-attempted-submission="hasAttemptedSubmission"
+        @update:answer="handleAnswerUpdate" class="question-component" />
 
       <n-button type="primary" block size="large" style="margin-top: 24px" @click="enviarExamen">
         Enviar examen
@@ -133,7 +130,7 @@ export default defineComponent({
     const answersMap = ref({});
 
     function handleAnswerUpdate(answerData) {
-      answersMap.value[answerData.questionId] = answerData;
+      answersMap.value[answerData.questionIndex] = answerData;
       // Ocultar error si el usuario corrige después de un intento fallido
       if (showSubmissionError.value) {
         validateExam();
@@ -141,22 +138,19 @@ export default defineComponent({
     }
 
     function validateExam() {
-      // Verifica que todas las preguntas tengan respuesta
-      const allQuestionsAnswered = questions.value.every(question => {
-        return answersMap.value[question.id || question._id] !== undefined;
+
+      const allQuestionsAnswered = questions.value.every((_, index) => {
+        return answersMap.value[index] !== undefined;
       });
 
-      // Verifica que todas las respuestas estén completas
       const allAnswersComplete = Object.values(answersMap.value).every(answer => {
-        if (answer.questionType === "MULTIPLE_MATCH_QUESTION") {
-          return answer.answers.every(item => item.selectedGroup !== null && item.selectedGroup !== undefined);
-        }
-        return true; // Para otros tipos de preguntas
+        return answer.isComplete;
       });
 
       const isValid = allQuestionsAnswered && allAnswersComplete;
       showSubmissionError.value = !isValid;
       return isValid;
+
     }
 
     function enviarExamen() {
@@ -169,8 +163,7 @@ export default defineComponent({
 
       showSubmissionError.value = false;
       console.log("Examen enviado:", answersMap.value);
-      // Aquí iría el envío real a la API
-      // await submitExam({ employeeId, answers: Object.values(answersMap.value) })
+
     }
 
     const getComponentName = (questionType) => {

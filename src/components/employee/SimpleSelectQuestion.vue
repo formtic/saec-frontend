@@ -3,23 +3,15 @@
     <p class="question-text">{{ question.title }}</p>
     <div class="options-container">
       <n-radio-group v-model:value="selectedOption" @update:value="emitAnswer">
-        <div
-          v-for="(answer, index) in question.answers"
-          :key="index"
-          class="radio-option"
-        >
+        <div v-for="(answer, index) in question.answers" :key="index" class="radio-option">
           <n-radio :value="index.toString()" />
           <div class="answer-box">{{ answer }}</div>
         </div>
       </n-radio-group>
     </div>
 
-    <n-alert 
-      v-if="showIncompleteWarning && parentHasAttemptedSubmission" 
-      type="warning" 
-      :bordered="false"
-      style="margin-top: 16px; background-color: #fff8e6"
-    >
+    <n-alert v-if="showIncompleteWarning && parentHasAttemptedSubmission" type="warning" :bordered="false"
+      style="margin-top: 16px; background-color: #fff8e6">
       <div style="display: flex; align-items: center; gap: 8px">
         <span>Selecciona una opción.</span>
       </div>
@@ -46,6 +38,10 @@ export default defineComponent({
     hasAttemptedSubmission: {
       type: Boolean,
       default: false
+    },
+    questionIndex: {
+      type: Number,
+      required: true
     }
   },
   emits: ["update:answer"],
@@ -59,13 +55,14 @@ export default defineComponent({
 
     const emitAnswer = () => {
       const answer = {
-        questionId: props.question.id || props.question._id,
+        questionIndex: props.questionIndex,
         questionType: props.question.questionType,
-        correctAnswers: props.question.correctAnswer.answer, 
+        correctAnswers: props.question.correctAnswer.answer,
         userAnswers: selectedOption.value !== null ? [selectedOption.value] : [],
         isComplete: !showIncompleteWarning.value
       };
-      
+      console.log("Emitting answer:", answer);
+
       emit("update:answer", answer);
     };
 
@@ -129,7 +126,7 @@ export default defineComponent({
   margin: 4px 0;
 }
 
-.n-radio-group:focus-within .n-radio:checked + .answer-box,
+.n-radio-group:focus-within .n-radio:checked+.answer-box,
 .radio-option:hover .answer-box {
   border-color: #2d8cf0;
   background-color: #f0f7ff;

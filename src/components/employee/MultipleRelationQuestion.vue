@@ -57,7 +57,11 @@ const props = defineProps({
   hasAttemptedSubmission: {
     type: Boolean,
     default: false
-  }
+  },
+    questionIndex: {
+      type: Number,
+      required: true
+    }
 });
 
 const emit = defineEmits(["update:answer"]);
@@ -67,7 +71,7 @@ const items = ref(props.question.options || []);
 const selectedOptions = ref(Array(items.value.length).fill(null));
 const parentHasAttemptedSubmission = ref(props.hasAttemptedSubmission);
 
-// Computed para verificar si hay opciones sin seleccionar
+//verifica si hay opciones sin seleccionar
 const showIncompleteWarning = computed(() => {
   return selectedOptions.value.some(option =>
     option === null || option === undefined
@@ -82,7 +86,7 @@ function toggleSelection(itemIndex, value) {
 
 function emitAnswer() {
   emit("update:answer", {
-    questionId: props.question.id || props.question._id,
+    questionIndex: props.questionIndex,
     questionType: props.question.questionType,
     answers: selectedOptions.value.map((groupIndex, i) => ({
       itemId: items.value[i].id,

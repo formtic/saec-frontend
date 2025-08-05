@@ -46,7 +46,11 @@ const props = defineProps({
   hasAttemptedSubmission: {
     type: Boolean,
     default: false
-  }
+  },
+    questionIndex: {
+      type: Number,
+      required: true
+    }
 })
 
 const emit = defineEmits(['update:answer'])
@@ -64,7 +68,7 @@ const isValid = computed(() => {
 const emitCurrentAnswerState = () => {
   if (isValid.value) {
     const response = {
-      questionId: props.question.id || props.question._id,
+      questionIndex:  props.questionIndex,
       questionType: props.question.questionType,
       correctAnswers: props.question.definitions.map(def => def.definition),
       userAnswers: [...userAnswers.value],

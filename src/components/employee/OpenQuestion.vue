@@ -41,6 +41,10 @@ export default defineComponent({
     hasAttemptedSubmission: {
       type: Boolean,
       default: false
+    },
+    questionIndex: {
+      type: Number,
+      required: true
     }
   },
   emits: ["update:answer"],
@@ -54,6 +58,7 @@ export default defineComponent({
 
     const emitAnswer = () => {
       const response = {
+        questionIndex:  props.questionIndex,
         questionType: props.question.questionType,
         correctAnswers: props.question.correctAnswer.answer,
         userAnswers: answer.value,

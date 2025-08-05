@@ -55,6 +55,10 @@ export default defineComponent({
     hasAttemptedSubmission: {
       type: Boolean,
       default: false
+    },
+    questionIndex: {
+      type: Number,
+      required: true
     }
   },
   emits: ["update:answer"],
@@ -74,7 +78,6 @@ export default defineComponent({
 
     const initializeLists = () => {
       originalElements.value = [...props.question.elements];
-      
       elementsList.value = shuffleArray([...props.question.elements]);
       valuesList.value = shuffleArray(
         props.question.elements.map(el => ({ value: el.value }))
@@ -94,15 +97,16 @@ export default defineComponent({
 
     const emitAnswer = () => {
       const answer = {
+        questionIndex:  props.questionIndex,
         questionType: props.question.questionType,
         correctAnswers: originalElements.value,
         userAnswers: elementsList.value.map((element, index) => ({
           element: element.element,
           value: valuesList.value[index]?.value || ''
         })),
-        isComplete: true 
+        isComplete: true
       };
-      
+
       emit("update:answer", answer);
     };
 
