@@ -5,6 +5,10 @@ export function createCourseSection(payload) {
     return api.post(`${BASE_URL}/coursesection/create`, payload);
 }
 
+export function updateCourseSection(payload, id) {
+    return api.put(`${BASE_URL}/coursesection/update/${id}`, payload);
+}
+
 export function findSectionsByCourseId(id) {
     return api.get(`${BASE_URL}/coursesection/findbycourseid/${id}`);
 }

@@ -10,8 +10,7 @@
             </n-form-item>
             <n-space item-class="w-full md:flex-1 mt-2" size="large">
                 <n-form-item label="Video" path="video">
-                    <n-upload directory-dnd :max="1" ref="fileVideo"
-                    accept=".mp4"
+                    <n-upload directory-dnd :max="1" ref="fileVideo" accept=".mp4"
                         :on-change="data => handleFileChange(data, 'video')">
                         <n-upload-dragger>
                             <div style="margin-bottom: 12px">
@@ -30,7 +29,7 @@
                     </n-upload>
                 </n-form-item>
                 <n-form-item label="Presentación" path="presentation">
-                    <n-upload directory-dnd :max="1" ref="filePresentation" accept=".pdf"
+                    <n-upload directory-dnd max="1" ref="filePresentation" accept=".pdf"
                         :on-change="data => handleFileChange(data, 'presentation')">
                         <n-upload-dragger>
                             <div style="margin-bottom: 12px">
@@ -52,7 +51,7 @@
             <div class="flex justify-center">
                 <n-button type="primary" attr-type="submit">
                     <div class="w-35">
-                        Guardar
+                        Guardar cambios
                     </div>
                 </n-button>
             </div>
@@ -64,8 +63,8 @@
 <script setup>
 import { BookOutline, PencilOutline } from '@vicons/ionicons5';
 import { AddOutlined, ArchiveFilled, BookFilled } from '@vicons/material';
-import { ref, inject } from 'vue';
-import { createCourseSection, findSectionDetailsById } from '../../../service/CourseSectionService';
+import { ref, inject, onMounted } from 'vue';
+import { createCourseSection, findSectionDetailsById, updateCourseSection } from '../../../service/CourseSectionService';
 import { uploadSectionFiles } from '../../../service/fileService';
 const breadCrumbItems = inject('breadcrumbItems');
 const pageTitle = inject('pageTitle');
@@ -74,10 +73,11 @@ const props = defineProps({
     course_id: String,
     id: String
 });
-const section = ref(null);
 const formRef = ref(null);
-const fileVideo = ref(null);
-const filePresentation = ref(null);
+const fileVideo = ref({});
+const filePresentation = ref({
+    file: null
+});
 const model = ref({
     name: '',
     description: '',
@@ -104,6 +104,7 @@ const rules = {
         {
             required: true,
             validator() {
+                console.log('+', filePresentation.value);
                 if (!filePresentation.value?.file) {
                     return new Error('Debe agregar una presentación en PDF');
                 }
@@ -113,7 +114,6 @@ const rules = {
                 if (filePresentation.value.file.type !== 'application/pdf') {
                     return new Error('Solo se permiten archivos PDF');
                 }
-                console.log(filePresentation.value.file);
                 return true;
             }
         }
@@ -121,15 +121,15 @@ const rules = {
     video: [
         {
             validator() {
-                if(fileVideo.value?.file) {
-                    console.log(fileVideo.value.file);
-                    if(fileVideo.value.file.size >= 10200000) {
+                if (fileVideo.value?.file) {
+                    if (fileVideo.value.file.size >= 10200000) {
                         return new Error('El limite es de 10mb')
                     }
-                    if(fileVideo.value.type !== 'video/mp4') {
+                    if (fileVideo.value.type !== 'video/mp4') {
                         return new Error('Solo se peremiten archivos mp4');
                     }
                 }
+                return true;
             }
         }
     ]
@@ -150,7 +150,7 @@ breadCrumbItems.value = [
     },
     {
         icon: props.id ? PencilOutline : AddOutlined,
-        label: props.id ? section.value?.name : 'Nueva sección'
+        label: props.id ? 'Editar sección' : 'Nueva sección'
     }
 ]
 currentPath.value = 'courses';
@@ -165,10 +165,10 @@ const handleSubmit = () => {
 
 const handleFileChange = ({ file }, ref) => {
     ({
-        'video': () => fileVideo.value = file.status === 'removed' ? null : file,
-        'presentation': () => filePresentation.value = file.status === 'removed' ? null : file,
+        'video': () => fileVideo.value = file.status === 'removed' ? {} : file,
+        'presentation': () => filePresentation.value.file = file.status === 'removed' ? null : file.file,
     })[ref]?.();
-    formRef.value.validate();
+    formRef.value?.validate();
 }
 
 const submitFiles = async () => {
@@ -182,21 +182,35 @@ const submitFiles = async () => {
 }
 
 const submitCourseSection = async () => {
-    await createCourseSection(
-        {
-            name: model.value.name,
-            description: model.value.description,
-            url_video: model.value.url_video,
-            url_presentation: model.value.url_presentation,
-            courseId: props.course_id
-        }
-    );
+    const payload = {
+        name: model.value.name,
+        description: model.value.description,
+        url_video: model.value.url_video,
+        url_presentation: model.value.url_presentation,
+        courseId: props.course_id
+    };
+    if (props.id) {
+        await updateCourseSection(payload, props.id).then(() => { return });
+    } else {
+        await createCourseSection(payload);
+    }
 }
 
 const fetchCourseSection = async () => {
     await findSectionDetailsById(props?.id)
-        .then(response => section.value = response.data);
+        .then(response => {
+            const data = response.data;
+            breadCrumbItems.value[2].label = data.name;
+            model.value.name = data.name;
+            model.value.description = data.description;
+        });
 }
+
+onMounted(() => {
+    if (props.id) {
+        fetchCourseSection();
+    }
+});
 
 
 

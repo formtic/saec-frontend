@@ -19,9 +19,9 @@
                                     {{ element.description }}
                                 </n-text>
                             </div>
-                            <n-button>
+                            <n-button @click="navigateSection(element.id)">
                                 <n-icon size="18">
-                                    <MoreVertFilled />
+                                    <EditOutlined />
                                 </n-icon>
                             </n-button>
                         </n-flex>
@@ -32,8 +32,9 @@
     </div>
 </template>
 <script>
-import { MoreVertFilled } from '@vicons/material';
+import { EditOutlined, MoreVertFilled } from '@vicons/material';
 import { defineComponent } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import draggable from 'vuedraggable'
 export default defineComponent({
     props: {
@@ -42,6 +43,8 @@ export default defineComponent({
     },
     data() {
         return {
+            router: useRouter(),
+            route: useRoute(),
         }
     },
     methods: {
@@ -50,11 +53,15 @@ export default defineComponent({
         },
         checkChange(e) {
             this.sections.forEach((s,i) => s.order = i);
+        },
+        navigateSection(id) {
+            this.router.push(`${this.route.path}/set/${id}`)
         }
     },
     components: {
         draggable,
-        MoreVertFilled
+        MoreVertFilled,
+        EditOutlined
     }
 });
 </script>
