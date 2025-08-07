@@ -1,29 +1,40 @@
+import SetCourseSectionFormView from "../views/teacher/course/SetCourseSectionFormView.vue";
+import TeacherCourseDetailsView from "../views/teacher/course/TeacherCourseDetailsView.vue";
+import TeacherCoursesDashboardView from "../views/teacher/course/TeacherCoursesDashboardView.vue";
+import TeacherLayout from "../views/teacher/layout/TeacherLayout.vue";
+import TeacherDashboardView from "../views/teacher/TeacherDashboardView.vue";
 export default [
   {
-    path: "/reviewer",
-    component: () => import("@/layouts/ReviewerLayout.vue"),
+    path: "/teacher",
+    component: TeacherLayout,
     children: [
       {
-        path: "",
-        component: () => import("@/views/reviewer/ViewListCourses.vue"),
-        name: "courses",
-        children: [
-          {
-            path: "",
-            name:'course-list',
-            component: ()=>import("@/components/reviewer/ListCourses.vue"),
-          },
-          {
-            path: "exams/:id/:title",
-            name: "course-exams",
-            component: ()=>import("@/components/reviewer/ListExam.vue"),
-          },
-        ],
+        path: '',
+        component: TeacherDashboardView
       },
+      {
+        path: 'courses',
+        component: TeacherCoursesDashboardView
+      },
+      {
+        path: 'courses/details/:id',
+        component: TeacherCourseDetailsView,
+        props: true
+      },
+      {
+        path: 'courses/details/:course_id/set',
+        component: SetCourseSectionFormView,
+        props: true
+      },
+      {
+        path: 'courses/details/:course_id/set/:id',
+        component: SetCourseSectionFormView,
+        props: true
+      }
     ],
     meta: {
       requiresAuth: true,
-      roles: ["ROLE_REVIEWER"],
+      roles: ["ROLE_TEACHER"],
     },
   },
 ];

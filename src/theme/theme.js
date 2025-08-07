@@ -4,7 +4,9 @@ export default {
         siderToggleButtonColor: '#0D5A79', // Color de fondo del botón
         siderToggleButtonIconColor: '#f1f1f1', // Color del ícono (flecha)
         siderHoverColor: '#0D5A79', // Color al pasar el mouse
-        siderToggleButtonBorder: '2px solid '
+        siderToggleButtonBorder: '2px solid ',
+        siderColor: '#0d5a79',
+        headerColor: '#0d5a79'
     },
     Card: {
         borderRadius: '10px',
@@ -104,12 +106,20 @@ export default {
         itemBorderRadius: '50px'
     },
     Button: {
+        borderPressed: '1px solid #0D5A79',
+        borderFocus: '1px solid #0D5A79',
+        textColorFocus: '#1d8ec6',
+        textColorPressed: '#0D5A79',
+        rippleColor: '#1d8ec6',
+        borderHover: '1px solid #1d8ec6',
+        textColor: '#136c93',
+        textColorHover: '#1d8ec6',
         colorPrimary: '#0D5A79',
         colorHoverPrimary: '#187dac',
         colorPressedPrimary: '#136c93',
         colorFocusPrimary: '#136c93',
         borderPrimary: '#0D5A79',
-        borderHoverPrimary: '#0D5A79',
+        borderHoverPrimary: '#a0a1a2ff',
         borderPressedPrimary: '#0D5A79',
         borderFocusPrimary: '#0D5A79',
         colorDisabledPrimary: '#0D5A79',
@@ -126,5 +136,12 @@ export default {
         tabTextColorSegment: '#fff',
         tabTextColorActiveSegment: '#fff',
         tabTextColorHoverSegment: '#fff'
+    },
+    Divider: {
+        color: '#0D5A79'        
+    },
+    Upload: {
+        draggerBorder: '1px dashed #0D5A79',
+        draggerBorderHover: '1px dashed #1d8ec6'
     }
 }

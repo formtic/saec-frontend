@@ -52,9 +52,9 @@
 </template>
 <script setup>
 import { EditFilled, PeopleAltFilled, PersonAddFilled, SearchOutlined, TrendingDownFilled, TrendingUpFilled } from '@vicons/material';
-import { findAllDepartments } from '../../service/DepartmentService.js';
+import { findAllDepartments } from '../../service/DepartmentService';
 import { h, onMounted, ref, render } from 'vue';
-import { findAllJobs } from '../../service/jobService.js';
+import { findAllJobs } from '../../service/jobService';
 import FilterableTable from '../../components/admin/FilterableTable.vue';
 import { useRouter } from 'vue-router';
 import { filterEmployees } from '../../service/employeeService.js'
