@@ -74,7 +74,9 @@ const props = defineProps({
     id: String
 });
 const formRef = ref(null);
-const fileVideo = ref({});
+const fileVideo = ref({
+    file: null
+});
 const filePresentation = ref({
     file: null
 });
@@ -104,7 +106,6 @@ const rules = {
         {
             required: true,
             validator() {
-                console.log('+', filePresentation.value);
                 if (!filePresentation.value?.file) {
                     return new Error('Debe agregar una presentación en PDF');
                 }
@@ -165,7 +166,7 @@ const handleSubmit = () => {
 
 const handleFileChange = ({ file }, ref) => {
     ({
-        'video': () => fileVideo.value = file.status === 'removed' ? {} : file,
+        'video': () => fileVideo.value = file.status === 'removed' ? null : file.file,
         'presentation': () => filePresentation.value.file = file.status === 'removed' ? null : file.file,
     })[ref]?.();
     formRef.value?.validate();
