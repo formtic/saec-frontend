@@ -38,8 +38,7 @@ import { defineComponent, ref } from "vue";
 import { 
   NBreadcrumb, 
   NBreadcrumbItem, 
-  NIcon, 
-  NCard,
+  NIcon,
   NGrid,
   NGi,
   NDataTable,
@@ -59,7 +58,6 @@ export default defineComponent({
     NBreadcrumb,
     NBreadcrumbItem,
     NIcon,
-    NCard,
     NGrid,
     NGi,
     NDataTable,

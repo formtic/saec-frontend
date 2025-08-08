@@ -13,6 +13,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+import {NFlex, NText } from 'naive-ui';
 
 export default defineComponent({
     props: {

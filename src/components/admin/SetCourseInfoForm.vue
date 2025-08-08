@@ -20,7 +20,7 @@
 
 <script>
 import { defineComponent, onMounted, ref, inject, watch } from 'vue';
-import { NForm, NFormItem, NInput, NSelect, NSpace } from 'naive-ui';
+import { NFlex, NForm, NFormItem, NInput, NSelect, NSpace } from 'naive-ui';
 import { findAllByStatus } from '../../service/teacherService';
 import { updateInfo } from '../../service/courseService';
 export default defineComponent({
@@ -30,7 +30,8 @@ export default defineComponent({
         NFormItem,
         NInput,
         NSelect,
-        NSpace
+        NSpace,
+        NFlex
     },
     setup() {
         const course = inject('course');

@@ -28,7 +28,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { AddOutlined, CasesOutlined } from '@vicons/material';
-import { NBreadcrumb, NBreadcrumbItem, NIcon, NConfigProvider, NForm, NFormItem, NInput, NButton } from 'naive-ui';
+import { NBreadcrumb, NBreadcrumbItem, NIcon, NForm, NFormItem, NInput, NButton } from 'naive-ui';
 import { create } from '../../service/jobService.js';
 
 function validateName(rule, value) {

@@ -32,7 +32,7 @@
     </div>
 </template>
 <script>
-import { EditOutlined, MoreVertFilled } from '@vicons/material';
+import { EditOutlined } from '@vicons/material';
 import { defineComponent } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import draggable from 'vuedraggable'
@@ -60,7 +60,6 @@ export default defineComponent({
     },
     components: {
         draggable,
-        MoreVertFilled,
         EditOutlined
     }
 });

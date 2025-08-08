@@ -27,8 +27,7 @@
 
 
 <script setup>
-import { NCard, NButton, NIcon,NGrid,NGridItem,NSpace } from 'naive-ui'
-import { MoreVertFilled } from '@vicons/material'
+import { NCard,NGrid,NGridItem,NSpace } from 'naive-ui'
 
 defineProps({
   name: String,
