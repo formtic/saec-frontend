@@ -15,6 +15,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+import {NText } from 'naive-ui';
 
 export default defineComponent({
   name: 'SimpleItem',
@@ -29,7 +30,10 @@ export default defineComponent({
       type: String,
       default: '--.--'
     }
-  }
+  },
+  components: {
+    NText
+  },
 });
 </script>
 

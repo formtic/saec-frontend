@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { NConfigProvider, NLoadingBarProvider, useLoadingBar } from 'naive-ui';
+import { NConfigProvider, NLoadingBarProvider, useLoadingBar, NDialogProvider, NMessageProvider, NNotificationProvider } from 'naive-ui';
 import themeOverrides from './theme/theme.js';
 import { defineComponent, ref } from 'vue';
 import { registerLoadingBar } from './compose/utils/loadingBarAnimation.js';

@@ -66,7 +66,6 @@ import {
     NButton,
     NGrid,
     NGi,
-    NCard,
     NPagination,
     NFlex,
 } from "naive-ui";
@@ -85,7 +84,6 @@ export default defineComponent({
         NButton,
         NGrid,
         NGi,
-        NCard,
         NPagination,
         SearchFilled,
         BookFilled,

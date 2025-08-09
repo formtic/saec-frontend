@@ -66,7 +66,6 @@ import {
 } from "naive-ui";
 import SimpleCardItem from "../../components/common/listable/SimpleCardItem.vue";
 import { filter } from "../../service/courseAssigmentService";
-import router from "../../router/main.js";
 
 export default defineComponent({
     components: {

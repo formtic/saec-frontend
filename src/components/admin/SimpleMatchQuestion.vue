@@ -29,7 +29,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { NIcon, NInput, NButton } from "naive-ui";
-import { DeleteFilled, MenuFilled } from "@vicons/material";
+import { DeleteFilled } from "@vicons/material";
 
 export default defineComponent({
   name: "SimpleMatchQuestion",
@@ -37,8 +37,7 @@ export default defineComponent({
     NInput,
     NButton,
     NIcon,
-    DeleteFilled,
-    MenuFilled,
+    DeleteFilled
   },
   setup(_, { expose }) {  // <--- Aquí usamos expose en setup
     const items = ref([
@@ -100,8 +99,7 @@ export default defineComponent({
       removeItem,
       onInput,
       isValid,
-      DeleteFilled,
-      MenuFilled,
+      DeleteFilled
     };
   },
 });

@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, watch, toRefs } from "vue";
+import { ref, watch } from "vue";
 import { NInput, NText } from "naive-ui";
 
 // Recibe la pregunta completa como prop

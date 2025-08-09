@@ -59,8 +59,7 @@ import {
   NFormItem,
   NInput,
   NUpload,
-  NUploadDragger,
-  NRadio
+  NUploadDragger
 } from "naive-ui";
 import { DeleteFilled, AddCircleFilled } from "@vicons/material";
 
@@ -86,7 +85,6 @@ export default defineComponent({
     NUpload,
     NUploadDragger,
     AddCircleFilled,
-    NRadio,
     DeleteFilled,
     IdentifierQuestion,
     SimpleSelectionQuestion,
