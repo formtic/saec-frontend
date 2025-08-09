@@ -25,7 +25,7 @@
 <script setup>
 import { ref, defineProps, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { CasesOutlined, HomeFilled } from '@vicons/material';
+import { CasesOutlined } from '@vicons/material';
 import { NBreadcrumb, NBreadcrumbItem, NIcon, NForm, NFormItem, NInput, NButton } from 'naive-ui';
 import { findById, update } from '../../service/jobService.js';
 
